@@ -4,7 +4,7 @@ close all
 
 AIR_DENSITY = 1.225;        %kg/m^3
 HELIUM_DENSITY = 0.179;     %kg/m^3
-num_legs = 6;               %unitless
+num_legs = 1;               %unitless
 radius = 0.5;               %m
 skirt_height = radius / 2;  %m
 servo_mass = 0.009;         %kg
