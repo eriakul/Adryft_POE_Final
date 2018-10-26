@@ -36,3 +36,5 @@ end
 [hAx, leg_info, volume_info] = plotyy(radii, res, radii, volumes);
 ylabel(hAx(1), 'Leg Mass (g)');
 ylabel(hAx(2), 'Volume (m^3)');
+title('Payload Mass and Volume of Helium vs. Balloon Radius')
+xlabel('Balloon Radius (m)')
