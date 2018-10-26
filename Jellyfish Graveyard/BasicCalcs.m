@@ -4,7 +4,7 @@ close all
 
 AIR_DENSITY = 1.225;        %kg/m^3
 HELIUM_DENSITY = 0.179;     %kg/m^3
-num_legs = 6;               %unitless
+num_legs = 1;               %unitless
 radius = 0.5;               %m
 skirt_height = radius / 2;  %m
 servo_mass = 0.009;         %kg
@@ -36,3 +36,5 @@ end
 [hAx, leg_info, volume_info] = plotyy(radii, res, radii, volumes);
 ylabel(hAx(1), 'Leg Mass (g)');
 ylabel(hAx(2), 'Volume (m^3)');
+title('Payload Mass and Volume of Helium vs. Balloon Radius')
+xlabel('Balloon Radius (m)')
