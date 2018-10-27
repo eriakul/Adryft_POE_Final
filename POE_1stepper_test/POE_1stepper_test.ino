@@ -21,7 +21,8 @@ void setup() {
   Serial.begin(9600);           // set up Serial library at 9600 bps
   Serial.println("Stepper test!");
   // set stepper motor speeds
-  stepper.setSpeed(50);  
+  stepper.setSpeed(50);
+  stepper.move(24);  
 }
 
 void loop() {
