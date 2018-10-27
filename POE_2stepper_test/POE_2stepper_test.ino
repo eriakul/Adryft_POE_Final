@@ -40,6 +40,7 @@ void setup()
 void loop()
 {
     // Change direction at the limits
+    Serial.println(stepper1.distanceToGo());
     if (stepper1.distanceToGo() == 0)
   stepper1.moveTo(-stepper1.currentPosition());
     stepper1.run();
