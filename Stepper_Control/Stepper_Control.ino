@@ -7,6 +7,11 @@ AF_Stepper motor2(200, 2);
 const float GEAR_RATIO = -5;
 const float DEG_PER_STEP = 1.8;
 float Current_Pos = 0; 
+String readString;
+String radius1;
+String theta1;
+float radius2;
+float theta2;
 
 // you can change these to DOUBLE or INTERLEAVE or MICROSTEP!
 // wrappers for the first motor!
@@ -28,8 +33,8 @@ void backwardstep2() {
 AccelStepper stepper1(forwardstep1, backwardstep1);
 AccelStepper stepper2(forwardstep2, backwardstep2);
 
-float moveStep(radius, theta){
-  numStep = theta/(DEG_PER_STEP/GEAR_RATIO);
+float moveStep(float r, float t){
+  float numStep = t/(DEG_PER_STEP/GEAR_RATIO);
   return numStep;
 }
 
@@ -65,7 +70,7 @@ void loop()
       theta1 = readString.substring(commaIndex + 1);
       radius2 = radius1.toFloat();
       theta2 = theta1.toFloat();
-      stepper1.moveTo(moveSpeed(radius2, theta2));
+      stepper1.moveTo(moveStep(radius2, theta2));
       while (stepper1.distanceToGo()>0){
         stepper1.runSpeed();
       }
