@@ -38,8 +38,6 @@ class System:
         self.create_pegs()
         self.refresh_pegs()
 
-        self.last_peg_index = 0
-        self.histogram = {}
 
 
     def update_window(self):
@@ -79,10 +77,11 @@ class System:
         key = lambda pos: hypot(pos[0]-x, pos[1]-y))
 
         pygame.draw.line(self.screen, self.screen_properties["string_color"],
-                        last_peg, closest_peg, self.screen_properties["string_thickness"])
+                        self.current_peg, closest_peg, self.screen_properties["string_thickness"])
 
         self.current_peg = closest_peg
         self.refresh_pegs()
+        self.update_window()
 
     def draw_line_to(self, peg_index):
         last_peg = self.current_peg
@@ -121,11 +120,7 @@ class System:
         if next_peg == self.current_peg:
             return False
 
-        self.add_to_histogram(self.last_peg_index, next_peg)
-
         self.draw_line_to(next_peg)
-
-        self.last_peg_index = next_peg
 
         self.update_string_used(ImageProcessor.total_string_cost)
 
@@ -137,13 +132,14 @@ class System:
         self.histogram[frozenset([peg_1, peg_2])] = self.histogram.get(frozenset([peg_1, peg_2]), 0) + 1
 
 class ImageProcessor:
-    def __init__(self, file_name, peg_num = 36, string_thickness = 1, max_lines = 1000, real_radius = .75):
+    def __init__(self, file_name, peg_num = 36, string_thickness = 1, max_lines = 1000, real_radius = .75, max_overlap = 5):
         dir_path = os.path.dirname(os.path.realpath(__file__))
         self.peg_num = peg_num
         self.max_lines = max_lines
         self.string_thickness = string_thickness
         self.real_radius = real_radius
         self.total_string_cost = 0
+        self.max_overlap = max_overlap
 
 
         self.image = Image.open(dir_path+"/"+file_name)
@@ -226,6 +222,7 @@ class ImageProcessor:
         peg_combinations = combinations(range(self.peg_num), 2)
         self.line_dict = {}
         self.string_cost_dict = {}
+        self.histogram = {}
 
         for index_set in peg_combinations:
             peg_1 = self.pegs[index_set[0]]
@@ -238,6 +235,7 @@ class ImageProcessor:
 
             self.line_dict[frozenset([index_set[0], index_set[1]])] = [xs, ys]
             self.string_cost_dict[frozenset([index_set[0], index_set[1]])] = self.real_radius/(self.diameter/2)*length
+            self.histogram[frozenset([index_set[0], index_set[1]])] = 0
 
     def compute_best_path(self):
         best_line = 0
@@ -245,17 +243,22 @@ class ImageProcessor:
         for index in range(self.peg_num):
             if index == self.current_index or index in self.previous_pegs:
                 continue
-            line = self.line_dict[frozenset([self.current_index, index])]
-            line_fit = np.sum(self.np_image[line[1], line[0]])
-            if line_fit > best_line:
-                best_line = line_fit
-                best_index = index
+
+            if self.histogram[frozenset([self.current_index, index])] < self.max_overlap:
+                line = self.line_dict[frozenset([self.current_index, index])]
+                line_fit = np.sum(self.np_image[line[1], line[0]])
+                if line_fit > best_line:
+                    best_line = line_fit
+                    best_index = index
+
 
         return best_index
 
     def draw_line(self, peg_index):
         draw = ImageDraw.Draw(self.image)
         draw.line([self.pegs[self.current_index], self.pegs[peg_index]], fill=0, width = self.string_thickness)
+
+        self.add_to_histogram(self.current_index, peg_index)
 
         self.total_string_cost += self.string_cost_dict[frozenset([self.current_index, peg_index])]
 
@@ -284,6 +287,9 @@ class ImageProcessor:
         self.draw_line(best_peg)
         return best_peg
 
+    def add_to_histogram(self, peg_1, peg_2):
+        self.histogram[frozenset([peg_1, peg_2])] = self.histogram.get(frozenset([peg_1, peg_2]), 0) + 1
+
 
 
 
@@ -295,14 +301,16 @@ if __name__ == "__main__":
     string_thickness = 1
     max_string = 10000
     real_radius = .75
+    max_overlap = 3
 
     window_size = [1200, 800]
 
 
+
     stringomatic = System(window_size, peg_num = peg_num, string_thickness = string_thickness)
     done = False
-    image = ImageProcessor("pokeball.jpeg", peg_num = peg_num, string_thickness = string_thickness,
-                            real_radius = real_radius)
+    image = ImageProcessor("gaga.jpeg", peg_num = peg_num, string_thickness = string_thickness,
+                            real_radius = real_radius, max_overlap = 5)
     # peg_list = logo.find_peg_list()
     # print(peg_list)
     # stringomatic.draw_mesh(peg_list)
@@ -313,14 +321,15 @@ if __name__ == "__main__":
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 done = True
-                image.image.show()
-                print(stringomatic.histogram)
+                print(image.histogram)
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     done = True
-            if event.type == pygame.MOUSEBUTTONDOWN :
-                # stringomatic.process_click()
-                stringomatic.draw_mesh_live(image)
+                elif event.key == pygame.K_SPACE:
+                    check = not check
+
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                stringomatic.process_click()
 
         if image.total_string_cost < max_string and check:
             check = stringomatic.draw_mesh_live(image)
