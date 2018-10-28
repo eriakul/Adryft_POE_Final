@@ -11,6 +11,10 @@ import os
 
 class System:
     def __init__(self, window_size, peg_num = 36, string_thickness = 1, peg_size = 5):
+
+        self.font = pygame.font.SysFont('tlwgtypewriter', 30)
+        self.text_position = [window_size[0]//10, window_size[1]//10]
+
         self.peg_num = peg_num
         self.screen_properties = dict(
             board_color = pygame.Color(255, 255, 255, 255),
@@ -34,9 +38,12 @@ class System:
         self.create_pegs()
         self.refresh_pegs()
 
+        self.last_peg_index = 0
+        self.histogram = {}
+
 
     def update_window(self):
-        pass
+        pygame.display.flip()
 
     def create_pegs(self):
         angle_steps = 2*pi/self.peg_num
@@ -65,10 +72,9 @@ class System:
                             self.screen_properties["peg_highlight"],
                             self.current_peg,
                             self.screen_properties["peg_size"])
-        pygame.display.flip()
+
     def process_click(self):
         x, y = event.pos
-        last_peg = self.current_peg
         closest_peg = min(self.screen_properties["pegs"],
         key = lambda pos: hypot(pos[0]-x, pos[1]-y))
 
@@ -78,7 +84,21 @@ class System:
         self.current_peg = closest_peg
         self.refresh_pegs()
 
-    def draw_image(self, peg_list):
+    def draw_line_to(self, peg_index):
+        last_peg = self.current_peg
+        current_peg = self.screen_properties["pegs"][peg_index]
+        pygame.draw.line(self.screen, self.screen_properties["string_color"],
+                        last_peg, current_peg, self.screen_properties["string_thickness"])
+
+        self.current_peg = current_peg
+        self.refresh_pegs()
+
+    def update_string_used(self, string_used):
+        string_used = "{} ft".format(round(string_used, 1))
+        new_display = self.font.render(string_used, False, (255, 255, 255, 255), (0,0,0,0))
+        self.screen.blit(new_display, self.text_position)
+
+    def draw_mesh(self, peg_list):
         """Draws a mesh from peg to peg.
         peg_list -- list of consecutive pegs that need to be connected, number in list refers to peg number
         """
@@ -93,16 +113,42 @@ class System:
 
         self.current_peg = self.screen_properties["pegs"][peg_list[-1]] #last peg in list becomes the peg to start for process_click()
         self.refresh_pegs()
+        self.update_window()
+
+    def draw_mesh_live(self, ImageProcessor):
+        next_peg = ImageProcessor.find_next_peg()
+
+        if next_peg == self.current_peg:
+            return False
+
+        self.add_to_histogram(self.last_peg_index, next_peg)
+
+        self.draw_line_to(next_peg)
+
+        self.last_peg_index = next_peg
+
+        self.update_string_used(ImageProcessor.total_string_cost)
+
+        self.update_window()
+
+        return True
+
+    def add_to_histogram(self, peg_1, peg_2):
+        self.histogram[frozenset([peg_1, peg_2])] = self.histogram.get(frozenset([peg_1, peg_2]), 0) + 1
 
 class ImageProcessor:
-    def __init__(self, file_name, peg_num = 36, string_thickness = 1, max_lines = 1000):
+    def __init__(self, file_name, peg_num = 36, string_thickness = 1, max_lines = 1000, real_radius = .75):
         dir_path = os.path.dirname(os.path.realpath(__file__))
         self.peg_num = peg_num
         self.max_lines = max_lines
         self.string_thickness = string_thickness
+        self.real_radius = real_radius
+        self.total_string_cost = 0
+
 
         self.image = Image.open(dir_path+"/"+file_name)
         self.image_size = self.image.size
+        print("Original Image Size: ", self.image_size)
         self.diameter = floor(min(self.image_size))
 
         self.peg_list = []
@@ -114,6 +160,7 @@ class ImageProcessor:
         self.crop_image_to_square()
 
         self.turn_image_grayscale()
+        self.image.show()
         self.invert_image()
         self.crop_circle()
         self.create_pegs()
@@ -133,6 +180,11 @@ class ImageProcessor:
                         (self.image_size[0]+self.diameter)//2,
                         (self.image_size[1]+self.diameter)//2)
         self.image = self.image.crop(crop_rectangle)
+
+        # new_res = self.peg_num*2
+        # if self.diameter > new_res:
+        #     self.image = self.image.resize((new_res,new_res),Image.ANTIALIAS)
+        #     self.diameter = new_res
         self.image_size = self.image.size
         self.image_center = [self.image.size[0]//2, self.image.size[1]//2]
 
@@ -173,6 +225,7 @@ class ImageProcessor:
 
         peg_combinations = combinations(range(self.peg_num), 2)
         self.line_dict = {}
+        self.string_cost_dict = {}
 
         for index_set in peg_combinations:
             peg_1 = self.pegs[index_set[0]]
@@ -184,6 +237,7 @@ class ImageProcessor:
             ys = list(map(int, ys))
 
             self.line_dict[frozenset([index_set[0], index_set[1]])] = [xs, ys]
+            self.string_cost_dict[frozenset([index_set[0], index_set[1]])] = self.real_radius/(self.diameter/2)*length
 
     def compute_best_path(self):
         best_line = 0
@@ -202,6 +256,9 @@ class ImageProcessor:
     def draw_line(self, peg_index):
         draw = ImageDraw.Draw(self.image)
         draw.line([self.pegs[self.current_index], self.pegs[peg_index]], fill=0, width = self.string_thickness)
+
+        self.total_string_cost += self.string_cost_dict[frozenset([self.current_index, peg_index])]
+
         self.current_index = peg_index
         self.previous_pegs.append(peg_index)
         self.previous_pegs.pop(0)
@@ -212,38 +269,62 @@ class ImageProcessor:
         while line_num < self.max_lines:
             line_num +=1
             best_peg = self.compute_best_path()
+
+            if best_peg == self.peg_list[-1]:
+                break
+
             self.draw_line(best_peg)
             self.peg_list.append(best_peg)
 
+
         return self.peg_list
+
+    def find_next_peg(self):
+        best_peg = self.compute_best_path()
+        self.draw_line(best_peg)
+        return best_peg
+
 
 
 
 if __name__ == "__main__":
 
-    peg_num = 200
+    pygame.init()
+
+    peg_num = 90
     string_thickness = 1
-    max_lines = 1000
+    max_string = 10000
+    real_radius = .75
 
     window_size = [1200, 800]
 
-    pygame.init()
+
     stringomatic = System(window_size, peg_num = peg_num, string_thickness = string_thickness)
     done = False
-    logo = ImageProcessor("olinlogo.jpeg", peg_num = peg_num, string_thickness = string_thickness, max_lines = max_lines)
-    peg_list = logo.find_peg_list()
-    print(peg_list)
-    stringomatic.draw_image(peg_list)
+    image = ImageProcessor("pokeball.jpeg", peg_num = peg_num, string_thickness = string_thickness,
+                            real_radius = real_radius)
+    # peg_list = logo.find_peg_list()
+    # print(peg_list)
+    # stringomatic.draw_mesh(peg_list)
 
-
+    check = True #checks if string art is complete
 
     while not done:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 done = True
+                image.image.show()
+                print(stringomatic.histogram)
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     done = True
             if event.type == pygame.MOUSEBUTTONDOWN :
-                stringomatic.process_click()
-        sleep(.05)
+                # stringomatic.process_click()
+                stringomatic.draw_mesh_live(image)
+
+        if image.total_string_cost < max_string and check:
+            check = stringomatic.draw_mesh_live(image)
+        else:
+            sleep(.1)
+
+        # print(image.total_string_cost)
