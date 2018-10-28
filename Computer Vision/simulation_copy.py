@@ -94,7 +94,31 @@ class System:
         self.current_peg = self.screen_properties["pegs"][peg_list[-1]] #last peg in list becomes the peg to start for process_click()
         self.refresh_pegs()
 
+class generate_array:
+    """
+    Genereate a list of integers that refers to the number of the peg.
+    """
+    def __init__(self, number_of_pegs, length_of_generated_list, difference, peg_to_start = 0):
+        self.number_of_pegs = number_of_pegs
+        self.lenght = length_of_generated_list
+        self.difference = difference
+        self.generated_list = [peg_to_start]
+        self.current_peg = peg_to_start
 
+    def create_list(self):
+        """Create list of peg array that can be used in class System.draw_mesh() to draw a draw_mesh
+        """
+        for i in range(self.lenght):
+            self.current_peg += self.difference
+            self.generated_list.append(self.current_peg)
+
+        for j in range(len(self.generated_list)):
+             self.generated_list[j] = self.generated_list[j] % self.number_of_pegs
+
+        return self.generated_list
+
+    def __str__(self):
+        return str(self.generated_list)
 
 
 
@@ -105,8 +129,10 @@ if __name__ == "__main__":
 
     pygame.init()
     hello = System(window_size, peg_num = 36)
+    peg_list = generate_array(hello.peg_num, length_of_generated_list = 100, difference = 13)
+    hello.draw_mesh(peg_list.create_list())
+
     done = False
-    hello.draw_mesh([3,15,8,35,10,5,29,4,19,23,6,25,14,11])
 
     while not done:
 
