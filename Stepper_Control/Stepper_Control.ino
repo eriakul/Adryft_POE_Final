@@ -1,11 +1,12 @@
 // Stepper_Control combines serial port communication and stepper motor control. This is our main arduino script. 
 // Import stepper motor libraries
 #include <AccelStepper.h>
-#include <AFMotor.h>
 
 // Create two adafruit stepper motors, one on each port
-AF_Stepper motor1(200, 1);
-AF_Stepper motor2(200, 2);
+// Create AccelStepper object for stepper driver with Step and Direction pins
+AccelStepper stepper1(1, 54, 55); // pin 54 = step, pin 55 = direction (changes theta)
+AccelStepper stepper2(1, 60, 61); // pin 60 = step, pin 61 = direction (changes r and used for string wrap)
+
 // Create constant variables regarding mechanical system and stepper deg/step
 const float GEAR_RATIO = -5; // negative since gear spins opposite direction to motor
 const float DEG_PER_STEP = 1.8; // obtained from NEMA stepper motor spec sheet
@@ -16,27 +17,6 @@ String radius1;
 String theta1;
 float radius2;
 float theta2;
-
-// Forward and Backward functions for stepper motors
-// Can change these to DOUBLE or INTERLEAVE or MICROSTEP!
-// Wrappers for the first motor!
-void forwardstep1() {  
-  motor1.onestep(FORWARD, SINGLE);
-}
-void backwardstep1() {  
-  motor1.onestep(BACKWARD, SINGLE);
-}
-// Wrappers for the second motor!
-void forwardstep2() {  
-  motor2.onestep(FORWARD, SINGLE);
-}
-void backwardstep2() {  
-  motor2.onestep(BACKWARD, SINGLE);
-}
-
-// Motor shield has two motor ports, wrap them in two AccelStepper objects
-AccelStepper stepper1(forwardstep1, backwardstep1); // changes theta
-AccelStepper stepper2(forwardstep2, backwardstep2); // changes r and used for string wrap
 
 // moveStep takes in polar coordinate and calculates how many steps stepper1 should take 
 float moveStep(float radius, float theta){
