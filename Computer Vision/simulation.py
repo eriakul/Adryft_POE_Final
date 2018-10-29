@@ -12,6 +12,7 @@ import os
 class System:
     def __init__(self, window_size, peg_num = 36, string_thickness = 1, peg_size = 5):
 
+        self.window_size = window_size
         self.font = pygame.font.SysFont('tlwgtypewriter', 30)
         self.text_position = [window_size[0]//10, window_size[1]//10]
 
@@ -42,6 +43,7 @@ class System:
 
     def update_window(self):
         pygame.display.flip()
+
 
     def create_pegs(self):
         angle_steps = 2*pi/self.peg_num
@@ -130,6 +132,10 @@ class System:
 
     def add_to_histogram(self, peg_1, peg_2):
         self.histogram[frozenset([peg_1, peg_2])] = self.histogram.get(frozenset([peg_1, peg_2]), 0) + 1
+    def add_image_information(self, ImageProcessor):
+        data = "{} pegs : {} ft radius : {} max-overlap".format(self.peg_num, ImageProcessor.real_radius, ImageProcessor.max_overlap)
+        new_display = self.font.render(data, False, (255, 255, 255, 255), (0,0,0,0))
+        self.screen.blit(new_display, [int(.1/10*self.window_size[0]), int(0/10*self.window_size[1])])
 
 class ImageProcessor:
     def __init__(self, file_name, peg_num = 36, string_thickness = 1, max_lines = 1000, real_radius = .75, max_overlap = 5):
@@ -215,7 +221,6 @@ class ImageProcessor:
     def show_pegs(self):
         draw = ImageDraw.Draw(self.image)
         draw.point(self.pegs, fill=255)
-        self.image.show()
 
     def compute_lines(self):
 
@@ -284,7 +289,8 @@ class ImageProcessor:
 
     def find_next_peg(self):
         best_peg = self.compute_best_path()
-        self.draw_line(best_peg)
+        if best_peg != self.current_index:
+            self.draw_line(best_peg)
         return best_peg
 
     def add_to_histogram(self, peg_1, peg_2):
@@ -297,11 +303,13 @@ if __name__ == "__main__":
 
     pygame.init()
 
+    file_name = "pokeball.jpeg"
+
     peg_num = 90
     string_thickness = 1
-    max_string = 10000
+    max_string = 3000
     real_radius = .75
-    max_overlap = 3
+    max_overlap = 2
 
     window_size = [1200, 800]
 
@@ -309,8 +317,10 @@ if __name__ == "__main__":
 
     stringomatic = System(window_size, peg_num = peg_num, string_thickness = string_thickness)
     done = False
-    image = ImageProcessor("gaga.jpeg", peg_num = peg_num, string_thickness = string_thickness,
+    image = ImageProcessor(file_name, peg_num = peg_num, string_thickness = string_thickness,
                             real_radius = real_radius, max_overlap = 5)
+
+    stringomatic.add_image_information(image)
     # peg_list = logo.find_peg_list()
     # print(peg_list)
     # stringomatic.draw_mesh(peg_list)
@@ -321,7 +331,7 @@ if __name__ == "__main__":
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 done = True
-                print(image.histogram)
+                pygame.image.save(stringomatic.screen, file_name +" result")
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     done = True
