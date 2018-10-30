@@ -4,7 +4,7 @@ from time import sleep
 from operator import itemgetter
 
 class System:
-    def __init__(self, window_size, peg_num = 36, string_thickness = 1, peg_size = 5):
+    def __init__(self, window_size, peg_num = 48, string_thickness = 1, peg_size = 5):
         self.peg_num = peg_num
 
         self.screen_properties = dict(
