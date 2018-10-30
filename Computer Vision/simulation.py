@@ -323,12 +323,12 @@ if __name__ == "__main__":
                             real_radius = real_radius, max_overlap = 5)
 
     stringomatic.add_image_information(image)
+
     # peg_list = logo.find_peg_list()
     # print(peg_list)
     # stringomatic.draw_mesh(peg_list)
 
     check = True #checks if string art is complete
-
     while not done:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
