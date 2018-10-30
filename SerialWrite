@@ -1,0 +1,42 @@
+# SerialWrite
+
+# Import libraries to connect python script with arduino serial monitor
+import serial
+import numpy as np
+import re  
+import time 
+
+# NOTE: While this is running, you can not re-program the Arduino. You must exit 
+# this Python program before downloading a sketch to the Arduino.
+
+# Set the name of the serial port
+arduinoComPort = "COM5"
+
+# Set the baud rate
+# NOTE: The baudRate for the sending and receiving programs must be the same!
+baudRate = 9600
+
+# Open the serial port
+serialPort = serial.Serial(arduinoComPort, baudRate, timeout=1)
+# Keep reading in each line in the Serial until the user initiates
+# KeyboardInterrupt with CTRL-C
+try:
+  while True:
+    # Write to serial port   
+    setTempCar1 = 63
+    serialPort.flush()
+    setTemp1 = str(setTempCar1)
+    setTemp1 = setTemp1.encode()
+    print("Python value sent: ")
+    print(setTemp1)
+    serialPort.write(setTemp1)
+    time.sleep(1)
+
+    # Serial read section
+    msg = serialPort.readline().decode()
+    print ("Message from arduino: ")
+    print (msg)
+
+# Completed when CTRL-C pressed
+except KeyboardInterrupt:
+  print("Completed!")
