@@ -88,8 +88,10 @@ class System:
     def draw_line_to(self, peg_index):
         last_peg = self.current_peg
         current_peg = self.screen_properties["pegs"][peg_index]
-        pygame.draw.line(self.screen, self.screen_properties["string_color"],
-                        last_peg, current_peg, self.screen_properties["string_thickness"])
+        # pygame.draw.line(self.screen, self.screen_properties["string_color"],
+        #                 last_peg, current_peg, self.screen_properties["string_thickness"])
+        pygame.draw.aaline(self.screen, self.screen_properties["string_color"],
+                        last_peg, current_peg, True)
 
         self.current_peg = current_peg
         self.refresh_pegs()
@@ -303,11 +305,11 @@ if __name__ == "__main__":
 
     pygame.init()
 
-    file_name = "pokeball.jpeg"
+    file_name = "mcdonalds.jpeg"
 
     peg_num = 90
     string_thickness = 1
-    max_string = 3000
+    max_string = 2000
     real_radius = .75
     max_overlap = 2
 
@@ -331,7 +333,8 @@ if __name__ == "__main__":
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 done = True
-                pygame.image.save(stringomatic.screen, file_name +" result")
+                file_name = file_name.split(".")[0] + "_{}_{}".format(peg_num, real_radius).replace(".", "")
+                pygame.image.save(stringomatic.screen, file_name +"_result")
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     done = True

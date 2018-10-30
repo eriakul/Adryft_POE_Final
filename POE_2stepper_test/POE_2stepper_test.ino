@@ -28,13 +28,13 @@ AccelStepper stepper2(forwardstep2, backwardstep2);
 
 void setup()
 {  
-    stepper1.setMaxSpeed(200.0);
-    stepper1.setAcceleration(100.0);
+    stepper1.setSpeed(50);
+    //stepper1.setAcceleration(100.0);
     stepper1.moveTo(24);
     
-    stepper2.setMaxSpeed(300.0);
-    stepper2.setAcceleration(100.0);
-    //stepper2.moveTo(1000000);
+    stepper2.setSpeed(50);
+    //stepper2.setAcceleration(100.0);
+    stepper2.moveTo(24);
     
 }
 
@@ -44,12 +44,13 @@ void loop()
     Serial.println(stepper1.distanceToGo());
     if (stepper1.distanceToGo() == 0)
   stepper1.moveTo(-stepper1.currentPosition());
-    stepper1.run();
-    //stepper2.run();
+    stepper1.runSpeed();
+    stepper2.runSpeed();
+    
     //stepper2 blocking (set target position and wait until motor achieves it)
-    stepper2.runToNewPosition(0);
-    stepper2.runToNewPosition(500);
-    stepper2.runToNewPosition(100);
-    stepper2.runToNewPosition(120);
+    //stepper2.runToNewPosition(0);
+    //stepper2.runToNewPosition(500);
+    //stepper2.runToNewPosition(100);
+    //stepper2.runToNewPosition(120);
     // there are also examples for overshoot testing
 }
