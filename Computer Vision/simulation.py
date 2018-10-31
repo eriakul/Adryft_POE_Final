@@ -155,7 +155,6 @@ class ImageProcessor:
         print("Original Image Size: ", self.image_size)
         self.diameter = floor(min(self.image_size))
 
-        self.peg_list = []
         self.pegs = []
         self.previous_pegs = list([0 for i in range(peg_num//3)])
         self.current_index = 0
@@ -276,18 +275,19 @@ class ImageProcessor:
 
     def find_peg_list(self):
         line_num = 0
+        peg_list = [0]
         while line_num < self.max_lines:
             line_num +=1
             best_peg = self.compute_best_path()
 
-            if best_peg == self.peg_list[-1]:
+            if best_peg == peg_list[-1]:
                 break
 
             self.draw_line(best_peg)
-            self.peg_list.append(best_peg)
+            peg_list.append(best_peg)
 
 
-        return self.peg_list
+        return peg_list
 
     def find_next_peg(self):
         best_peg = self.compute_best_path()
@@ -305,7 +305,7 @@ if __name__ == "__main__":
 
     pygame.init()
 
-    file_name = "mcdonalds.jpeg"
+    file_name = "pokeball.jpeg"
 
     peg_num = 90
     string_thickness = 1
@@ -324,7 +324,7 @@ if __name__ == "__main__":
 
     stringomatic.add_image_information(image)
 
-    # peg_list = logo.find_peg_list()
+    # peg_list = image.find_peg_list()
     # print(peg_list)
     # stringomatic.draw_mesh(peg_list)
 
@@ -348,5 +348,3 @@ if __name__ == "__main__":
             check = stringomatic.draw_mesh_live(image)
         else:
             sleep(.1)
-
-        # print(image.total_string_cost)
