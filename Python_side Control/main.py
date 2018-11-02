@@ -1,7 +1,8 @@
 from src.simulation import *
 from src.compute_directions import *
+import sys
 
-if __name__ = "__main__":
+if __name__ == "__main__":
 
     if len(sys.argv) == 2:
         if sys.argv[1] == 'custom':
@@ -11,7 +12,7 @@ if __name__ = "__main__":
             max_string = input("Spool Length: ")
             real_radius = input("Board Radius: ")
             max_overlap = input("Max Overlap: ")
-            arduinoComPort = "COM5"
+            arduinoComPort = "COM6"
             baudRate = 9600
             window_size = [1200, 800]
         else:
@@ -28,7 +29,7 @@ if __name__ = "__main__":
         real_radius = 1
         max_overlap = 2
         window_size = [1200, 800]
-        arduinoComPort = "COM5"
+        arduinoComPort = "COM6"
         baudRate = 9600
 
     pygame.init()
@@ -63,7 +64,8 @@ if __name__ = "__main__":
             if check:
                 peg_loc = peg_locations[next_peg]
                 current_location, commands = loop_around_peg(current_location, peg_loc, half_step, real_board_radius)
-                for i in commands:
+                for command in commands:
+                    send_command_and_receive_response(command, serial)
 
 
 

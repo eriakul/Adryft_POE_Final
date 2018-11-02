@@ -92,7 +92,6 @@ def send_command_and_receive_response(command, serial_port):
     print("Python value sent: ", msg_send)
     serialPort.write(msg_send)
     response = None
-    while response != "done":
+    while response != "Task Completed!":
         msg = serial_port.readline().decode()
-        print ("Message from arduino: ")
-        print (msg)
+        print("Message from arduino: ", msg)
