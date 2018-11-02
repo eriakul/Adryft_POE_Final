@@ -1,3 +1,5 @@
+#C:\Users\elu\Documents\_Code\Adryft_POE_Final\Python_side Control
+
 from src.simulation import *
 from src.compute_directions import *
 import sys
@@ -12,7 +14,6 @@ if __name__ == "__main__":
             max_string = input("Spool Length: ")
             real_radius = input("Board Radius: ")
             max_overlap = input("Max Overlap: ")
-            arduinoComPort = "COM6"
             baudRate = 9600
             window_size = [1200, 800]
         else:
@@ -29,9 +30,9 @@ if __name__ == "__main__":
         real_radius = 1
         max_overlap = 2
         window_size = [1200, 800]
-        arduinoComPort = "COM6"
         baudRate = 9600
 
+    arduinoComPort = "COM7"
     pygame.init()
 
     stringomatic = System(window_size, peg_num = peg_num, string_thickness = string_thickness)
@@ -63,9 +64,9 @@ if __name__ == "__main__":
             check, next_peg = stringomatic.draw_mesh_live(image)
             if check:
                 peg_loc = peg_locations[next_peg]
-                current_location, commands = loop_around_peg(current_location, peg_loc, half_step, real_board_radius)
+                current_location, commands = loop_around_peg(current_location, peg_loc, half_step, real_radius)
                 for command in commands:
-                    send_command_and_receive_response(command, serial)
+                    send_command_and_receive_response(command, serial_port)
 
 
 

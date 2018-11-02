@@ -33,7 +33,7 @@ void loop() {
   
   Xaxis.setStepsPerRevolution(3200);
   Xaxis.setSpeedInRevolutionsPerSecond(1);
-  Xaxis.setAccelerationInRevolutionsPerSecondPerSecond(1);
+  Xaxis.setAccelerationInRevolutionsPerSecondPerSecond(1); //why is acceleration 1 shouldn't it be 0 to be have constant speed?
   Xaxis.setupRelativeMoveInRevolutions(1);
 //  Xaxis.moveRelativeInRevolutions(1);
   
