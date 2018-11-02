@@ -3,10 +3,10 @@
 # Import libraries to connect python script with arduino serial monitor
 import serial
 import numpy as np
-import re  
-import time 
+import re
+import time
 
-# NOTE: While this is running, you can not re-program the Arduino. You must exit 
+# NOTE: While this is running, you can not re-program the Arduino. You must exit
 # this Python program before downloading a sketch to the Arduino.
 
 # Set the name of the serial port
@@ -22,7 +22,7 @@ serialPort = serial.Serial(arduinoComPort, baudRate, timeout=1)
 # KeyboardInterrupt with CTRL-C
 try:
   while True:
-    # Write to serial port   
+    # Write to serial port
     coordinate = [10, 3.1415]
     serialPort.flush()
     radius = str(coordinate[0])

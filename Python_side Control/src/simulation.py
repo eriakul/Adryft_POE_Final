@@ -122,7 +122,7 @@ class System:
         next_peg = ImageProcessor.find_next_peg()
 
         if next_peg == self.current_peg:
-            return False
+            return False, 0
 
         self.draw_line_to(next_peg)
 
@@ -130,7 +130,7 @@ class System:
 
         self.update_window()
 
-        return True
+        return True, next_peg
 
     def add_to_histogram(self, peg_1, peg_2):
         self.histogram[frozenset([peg_1, peg_2])] = self.histogram.get(frozenset([peg_1, peg_2]), 0) + 1
@@ -307,10 +307,10 @@ if __name__ == "__main__":
 
     file_name = "pokeball.jpeg"
 
-    peg_num = 90
+    peg_num = 45
     string_thickness = 1
     max_string = 2000
-    real_radius = .75
+    real_radius = 1
     max_overlap = 2
 
     window_size = [1200, 800]
@@ -320,7 +320,7 @@ if __name__ == "__main__":
     stringomatic = System(window_size, peg_num = peg_num, string_thickness = string_thickness)
     done = False
     image = ImageProcessor(file_name, peg_num = peg_num, string_thickness = string_thickness,
-                            real_radius = real_radius, max_overlap = 5)
+                            real_radius = real_radius, max_overlap = max_overlap)
 
     stringomatic.add_image_information(image)
 
