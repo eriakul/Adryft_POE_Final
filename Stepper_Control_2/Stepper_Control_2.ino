@@ -6,6 +6,9 @@ const int RADIUS_TO_DEGREE = 360;
 const int MOTOR_STEP_PIN_X = 60;
 const int MOTOR_DIRECTION_PIN_X = 61;
 const int STEPPER_ENABLE_PIN_X = 56;
+const int MOTOR_STEP_PIN_Y = 60;
+const int MOTOR_DIRECTION_PIN_Y = 61;
+const int STEPPER_ENABLE_PIN_Y = 56;
 
 // Create two adafruit stepper motors, one on each port
 // Create AccelStepper object for stepper driver with Step and Direction pins
@@ -38,21 +41,21 @@ void wrapString(){
 void setup()
 {  
     // Set stepper motor speeds
-    pinMode(STEPPER_ENABLE_PIN_X, OUTPUT);
-    digitalWrite(STEPPER_ENABLE_PIN_X,LOW);
-    stepper1.connectToPins(MOTOR_STEP_PIN_X, MOTOR_DIRECTION_PIN_X);
+    pinMode(STEPPER_ENABLE_PIN_Y, OUTPUT);
+    digitalWrite(STEPPER_ENABLE_PIN_Y,LOW);
+    stepper1.connectToPins(MOTOR_STEP_PIN_Y, MOTOR_DIRECTION_PIN_Y);
     // Set up serial port
     Serial.begin(9600);  
 }
 
 void loop()
 {
-  if(!Serial.available()) {} // Do nothing if no message from python
+  while(!Serial.available()) {} // Do nothing if no message from python
   // Serial read section
-  if (Serial.available())
-  {
+  while(Serial.available()){
+    delay(30);
     if (Serial.available() > 0)
-    {
+  {
       // Read in python message
       readString = Serial.readString();
       // Separate polar coordinate into radius and theta values
@@ -66,27 +69,35 @@ void loop()
       // Set stepper1's target position according to theta value
       stepper1.setStepsPerRevolution(3200);
       stepper1.setSpeedInRevolutionsPerSecond(1);
-//      stepper1.setAccelerationInRevolutionsPerSecondPerSecond(1);
+  //      stepper1.setAccelerationInRevolutionsPerSecondPerSecond(1);
       stepper1.setupRelativeMoveInRevolutions(moveRevolutions(radius2, theta2));
      while(!stepper1.motionComplete())
     {
       stepper1.processMovement();
     }
       // Wrap string around peg
-//      wrapString();
-
+  //      wrapString();
+  
   // If message received from python and motor finished moving, send return message to python
-    Serial.println(theta1);  
-//    String radius3 = String(radius2*2);
-//    String theta3 = String(theta2*2);
-//    Serial.print(radius3); //see what was received
-//    Serial.print(",");
-//    Serial.println(theta3);
-
-  delay(2000);
-  Serial.flush(); //waits for transmission of outgoing serial data to complete
+    //Serial.println(theta1);  
+  //    String radius3 = String(radius2*2);
+  //    String theta3 = String(theta2*2);
+  //    Serial.print(radius3); //see what was received
+  //    Serial.print(",");
+  //    Serial.println(theta3);
+  
+  //delay(2000);
+  //Serial.flush(); //waits for transmission of outgoing serial data to complete
     }
   }
 
+  if (readString.length() > 0)
+  {
+    Serial.println("Task Completed");
+    readString = "";  
+  }
+
+  //delay(500);
+  Serial.flush();
 
 }

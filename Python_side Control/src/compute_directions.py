@@ -84,15 +84,19 @@ def process_peg_list(peg_num, peg_list, real_board_radius):
 
 
 def send_command_and_receive_response(command, serial_port):
-    serial_port.flush()
-    radius = str(command[0])
-    theta = str(command[1])
-    msg_send = radius + "," + theta
-    msg_send = msg_send.encode() #'utf-8'
+    no_response = True
     response = None
-    serial_port.write(msg_send)
-    print("Python value sent: ", msg_send)
-    time.sleep(.5)
-    while not response:
+    while no_response:
+        serial_port.flush()
+        radius = str(command[0])
+        theta = str(command[1])
+        msg_send = radius + "," + theta
+        msg_send = msg_send.encode() #'utf-8'
+        serial_port.write(msg_send)
+        print("Python value sent: ", msg_send)
+        time.sleep(10)
         response = serial_port.readline().decode()
-        print("Message from arduino: ", response)
+        if response is not None and len(response) > 0:
+            print("Message from arduino: ", response)
+            no_response = False
+            response = None

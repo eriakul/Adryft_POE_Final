@@ -31,22 +31,27 @@ void loop() {
 //  Xaxis.setAccelerationInStepsPerSecondPerSecond(100);
 //  Xaxis.moveRelativeInSteps(-200);
   
-  Xaxis.setStepsPerRevolution(3200);
+  Xaxis.setStepsPerRevolution(200);
   Xaxis.setSpeedInRevolutionsPerSecond(1);
   Xaxis.setAccelerationInRevolutionsPerSecondPerSecond(1); //why is acceleration 1 shouldn't it be 0 to be have constant speed?
   Xaxis.setupRelativeMoveInRevolutions(1);
 //  Xaxis.moveRelativeInRevolutions(1);
   
-  Yaxis.setStepsPerRevolution(3200);
-  Yaxis.setSpeedInRevolutionsPerSecond(1);
-  Yaxis.setAccelerationInRevolutionsPerSecondPerSecond(1);
-  Yaxis.setupRelativeMoveInRevolutions(1);
-//  Yaxis.moveRelativeInRevolutions(1);
+  //Yaxis.setStepsPerRevolution(3200);
+  //Yaxis.setSpeedInRevolutionsPerSecond(1);
+  //Yaxis.setAccelerationInRevolutionsPerSecondPerSecond(1);
+  //Yaxis.setupRelativeMoveInRevolutions(1);
+  //Yaxis.moveRelativeInRevolutions(1);
 //  delay(500);
 //  Xaxis.moveRelativeInRevolutions(-1.5);
-    while((!Yaxis.motionComplete()) || (!Xaxis.motionComplete()))
+//    while((!Yaxis.motionComplete()) || (!Xaxis.motionComplete()))
+//    {
+//      Yaxis.processMovement();
+//      Xaxis.processMovement();
+//    }
+
+      while(!Xaxis.motionComplete())
     {
-      Yaxis.processMovement();
       Xaxis.processMovement();
     }
 }
