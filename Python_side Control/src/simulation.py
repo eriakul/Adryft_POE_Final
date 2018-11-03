@@ -10,7 +10,11 @@ import os
 
 
 class System:
+
+    """ System is a class that processes the live Pygame display of the string art simulator."""
+
     def __init__(self, window_size, peg_num = 36, string_thickness = 1, peg_size = 5):
+        """Initializes Pygame window with given settings."""
 
         self.window_size = window_size
         self.font = pygame.font.SysFont('tlwgtypewriter', 30)
@@ -140,32 +144,34 @@ class System:
         self.screen.blit(new_display, [int(.1/10*self.window_size[0]), int(0/10*self.window_size[1])])
 
 class ImageProcessor:
+    """This class takes an image and does the computing to determine where to draw the lines."""
+
     def __init__(self, file_name, peg_num = 36, string_thickness = 1, max_lines = 1000, real_radius = .75, max_overlap = 5):
-        dir_path = os.path.dirname(os.path.realpath(__file__))
         self.peg_num = peg_num
         self.max_lines = max_lines
         self.string_thickness = string_thickness
         self.real_radius = real_radius
-        self.total_string_cost = 0
+        self.total_string_cost = 0 #How much string we've used so far in feet
         self.max_overlap = max_overlap
 
-
+        dir_path = os.path.dirname(os.path.realpath(__file__))
         self.image = Image.open(dir_path+"/"+file_name)
         self.image_size = self.image.size
         print("Original Image Size: ", self.image_size)
         self.diameter = floor(min(self.image_size))
 
         self.pegs = []
-        self.previous_pegs = list([0 for i in range(peg_num//3)])
+        self.previous_pegs = list([0 for i in range(peg_num//5)])
         self.current_index = 0
 
 
         self.crop_image_to_square()
 
         self.turn_image_grayscale()
-        self.image.show()
         self.invert_image()
         self.crop_circle()
+        self.original = ImageOps.invert(self.image)
+        self.original.show()
         self.create_pegs()
         # self.show_pegs()
 
@@ -173,9 +179,17 @@ class ImageProcessor:
 
         self.compute_lines()
 
+        self.create_blank_image()
+
 
         # self.image_center = [floor(self.image_size[0]/2), floor(self.image_size[1]/2)]
         # print("Image Center: ", self.image_center)
+    def create_blank_image(self):
+        self.comparison_image = Image.new('L', self.image_size, 255)
+
+    def draw_line_on_comparison(self, peg_index):
+        draw = ImageDraw.Draw(self.comparison_image)
+        draw.line([self.pegs[self.current_index], self.pegs[peg_index]], fill=0, width = self.string_thickness)
 
     def crop_image_to_square(self):
         crop_rectangle =((self.image_size[0]-self.diameter)//2,
@@ -264,6 +278,8 @@ class ImageProcessor:
         draw = ImageDraw.Draw(self.image)
         draw.line([self.pegs[self.current_index], self.pegs[peg_index]], fill=0, width = self.string_thickness)
 
+        self.draw_line_on_comparison(peg_index)
+
         self.add_to_histogram(self.current_index, peg_index)
 
         self.total_string_cost += self.string_cost_dict[frozenset([self.current_index, peg_index])]
@@ -272,6 +288,7 @@ class ImageProcessor:
         self.previous_pegs.append(peg_index)
         self.previous_pegs.pop(0)
         self.np_image = np.asarray(self.image.getdata(),dtype=np.float64).reshape((self.image.size[1], self.image.size[0]))
+
 
     def find_peg_list(self):
         line_num = 0
@@ -297,6 +314,10 @@ class ImageProcessor:
 
     def add_to_histogram(self, peg_1, peg_2):
         self.histogram[frozenset([peg_1, peg_2])] = self.histogram.get(frozenset([peg_1, peg_2]), 0) + 1
+
+    def compare_with_original(self):
+        original = self.original
+        comparison = self.comparison_image
 
 
 
@@ -340,6 +361,7 @@ if __name__ == "__main__":
                     done = True
                 elif event.key == pygame.K_SPACE:
                     check = not check
+                    image.comparison_image.show()
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 stringomatic.process_click()
