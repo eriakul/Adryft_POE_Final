@@ -90,10 +90,9 @@ def send_command_and_receive_response(command, serial_port):
     msg_send = radius + "," + theta
     msg_send = msg_send.encode() #'utf-8'
     response = None
+    serial_port.write(msg_send)
+    print("Python value sent: ", msg_send)
+    time.sleep(.5)
     while not response:
-        serial_port.flush()
-        serial_port.write(msg_send)
-        print("Python value sent: ", msg_send)
-        time.sleep(.5)
         response = serial_port.readline().decode()
         print("Message from arduino: ", response)
