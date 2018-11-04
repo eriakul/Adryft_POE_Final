@@ -320,6 +320,42 @@ class ImageProcessor:
         comparison = self.comparison_image
 
 
+    def mean_squared_error(self):
+    """
+    Calculate the mean squared error of two images.
+    The mean squared value is the difference of all pixels (comparing the two images) added up und divided by the total amount of pixelsself.
+
+    imageA -- PIL image object (should be square)
+    imageB -- PIL image object (should be square)
+    """
+    imageA = self.original
+    imageB = self.comparison_image
+    
+    #prepare the two pictures to compare:
+    #monochrome, same size
+    imageA = imageA.convert('L')      ###
+    imageB = imageB.convert('L')      ###
+    #same size
+    imageA.thumbnail(size, Image.ANTIALIAS)
+    imageB.thumbnail(size, Image.ANTIALIAS)
+
+    imageA.show()
+    imageB.show()
+
+    a = np.array(imageA)
+    b = np.array(imageB)
+    # the 'Mean Squared Error' between the two images is the
+	# sum of the squared difference between the two images;
+	# NOTE: the two images must have the same dimension
+    err = np.sum((a.astype("float")-b.astype("float"))**2)
+    err /= float(a.shape[0] * b.shape[1])
+    # return the MSE, the lower the error, the more "similar"
+    #print(err)
+	# the two images are
+    return err
+
+
+
 
 
 if __name__ == "__main__":
