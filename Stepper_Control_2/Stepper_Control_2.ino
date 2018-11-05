@@ -25,6 +25,7 @@ String radius1;
 String theta1;
 float radius2;
 float theta2;
+String coordinatesIndex[5];
 
 // moveStep takes in polar coordinate and calculates how many steps stepper1 should take 
 float moveRevolutions(float radius, float theta){
@@ -58,46 +59,40 @@ void loop()
   {
       // Read in python message
       readString = Serial.readString();
+      String getCoordinates = readString;
       // Separate polar coordinate into radius and theta values
-      int commaIndex = readString.indexOf(',');
-      radius1 = readString.substring(0, commaIndex);
-      theta1 = readString.substring(commaIndex + 1);
-      
-      // Convert strings to float
-      radius2 = radius1.toFloat();
-      theta2 = theta1.toFloat();
-      // Set stepper1's target position according to theta value
-      stepper1.setStepsPerRevolution(3200);
-      stepper1.setSpeedInRevolutionsPerSecond(1);
-  //      stepper1.setAccelerationInRevolutionsPerSecondPerSecond(1);
-      stepper1.setupRelativeMoveInRevolutions(moveRevolutions(radius2, theta2));
-     while(!stepper1.motionComplete())
+      for( int i = 0; i <= 4; i++){
+        int colonIndex = getCoordinates.indexOf(';');
+        String coordinate = getCoordinates.substring(0, colonIndex);
+        coordinatesIndex[i] = coordinate;
+        getCoordinates = getCoordinates.substring(colonIndex+1);
+      }
+      for( int i =0; i<= 4; i++){
+        int commaIndex = coordinatesIndex[i].indexOf(',');
+        radius1 = coordinatesIndex[i].substring(0, commaIndex);
+        theta1 = coordinatesIndex[i].substring(commaIndex+1);
+        // Convert strings to float
+        radius2 = radius1.toFloat();
+        theta2 = theta1.toFloat();
+        // Set stepper1's target position according to theta value
+        stepper1.setStepsPerRevolution(3200);
+        stepper1.setSpeedInRevolutionsPerSecond(1);
+        stepper1.setupRelativeMoveInRevolutions(moveRevolutions(radius2, theta2));
+       while(!stepper1.motionComplete())
+      {
+        stepper1.processMovement();
+      }
+      }
+    }
+  
+    if (readString.length() > 0)
     {
-      stepper1.processMovement();
+      Serial.print(theta1);
+      Serial.println("Task Completed");
+      readString = "";  
     }
-      // Wrap string around peg
-  //      wrapString();
   
-  // If message received from python and motor finished moving, send return message to python
-    //Serial.println(theta1);  
-  //    String radius3 = String(radius2*2);
-  //    String theta3 = String(theta2*2);
-  //    Serial.print(radius3); //see what was received
-  //    Serial.print(",");
-  //    Serial.println(theta3);
-  
-  //delay(2000);
-  //Serial.flush(); //waits for transmission of outgoing serial data to complete
-    }
+    //delay(500);
+    Serial.flush();
   }
-
-  if (readString.length() > 0)
-  {
-    Serial.println("Task Completed");
-    readString = "";  
-  }
-
-  //delay(500);
-  Serial.flush();
-
 }

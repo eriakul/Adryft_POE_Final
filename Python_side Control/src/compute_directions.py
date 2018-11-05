@@ -91,6 +91,7 @@ def send_command_and_receive_response(command, serial_port):
         radius = str(command[0])
         theta = str(command[1])
         msg_send = radius + "," + theta
+        msg_send = msg_send + ";"+ msg_send + ";"+  msg_send + ";"+  msg_send + ";" + msg_send
         msg_send = msg_send.encode() #'utf-8'
         serial_port.write(msg_send)
         print("Python value sent: ", msg_send)
