@@ -5,6 +5,8 @@ from operator import itemgetter
 import numpy as np
 from PIL import Image, ImageDraw, ImageOps
 from itertools import combinations
+from bokeh.layouts import gridplot
+from bokeh.plotting import figure, show, output_file, show
 #pip install Pillow==3.1.2
 import os
 
@@ -134,7 +136,7 @@ class System:
 
         self.update_window()
 
-        image.mean_squared_error()
+        ImageProcessor.mean_squared_error()
 
         return True, next_peg
 
@@ -184,7 +186,10 @@ class ImageProcessor:
         self.create_blank_image()
 
         self.M2Error_list = [] #attribute to save mean_squared_error in list
-        self.number_of_string = 0
+        self.plot_steps = 0
+
+        self.error_plot = figure( title="Image Error")
+        self.error_plot.xaxis.axis_label = 'String Used'
 
         # self.image_center = [floor(self.image_size[0]/2), floor(self.image_size[1]/2)]
         # print("Image Center: ", self.image_center)
@@ -328,9 +333,9 @@ class ImageProcessor:
         imageB -- PIL image object (should be square)"""
 
         size = size
-        self.number_of_string += 1
+        self.plot_steps += 1
 
-        if self.number_of_string % 10 == 0:
+        if self.plot_steps % 10 == 0:
 
             imageA = self.original
             imageB = self.comparison_image
@@ -356,9 +361,15 @@ class ImageProcessor:
             ###print(err)
         	# the two images are
 
-            self.M2Error_list.append([self.number_of_string, err]) #saves error dat in list with numver of string
+            self.M2Error_list.append([self.total_string_cost, err]) #saves error data in list with number of string
             print("M2Error = ", err)
-            return err
+
+    def plot_mean_squared_error(self):
+        xs = [i[0] for i in self.M2Error_list]
+        ys = [i[1] for i in self.M2Error_list]
+        self.error_plot.line(xs, ys, color='#A6CEE3', legend='Error')
+        show(self.error_plot)
+
 
 
 
@@ -368,11 +379,11 @@ if __name__ == "__main__":
 
     pygame.init()
 
-    file_name = "face.png"
+    file_name = "pokeball.jpeg"
 
     peg_num = 45
     string_thickness = 1
-    max_string = 2000
+    max_string = 1200
     real_radius = 1
     max_overlap = 2
 
@@ -403,7 +414,9 @@ if __name__ == "__main__":
                     done = True
                 elif event.key == pygame.K_SPACE:
                     check = not check
-                    image.comparison_image.show()
+                    if not check:
+                        image.comparison_image.show()
+                        image.plot_mean_squared_error()
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 stringomatic.process_click()
