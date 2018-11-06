@@ -3,6 +3,7 @@
 from src.simulation import *
 from src.compute_directions import *
 import sys
+import time
 
 if __name__ == "__main__":
 
@@ -32,7 +33,7 @@ if __name__ == "__main__":
         window_size = [1200, 800]
         baudRate = 9600
 
-    arduinoComPort = "COM7"
+    arduinoComPort = "COM6"
     pygame.init()
 
     stringomatic = System(window_size, peg_num = peg_num, string_thickness = string_thickness)
@@ -44,7 +45,12 @@ if __name__ == "__main__":
     current_location = [0,0] #r, theta (degrees)
     peg_locations = list([360/peg_num* i for i in range(peg_num)])
 
+    # Set up serial port and send initialization message
     serial_port = serial.Serial(arduinoComPort, baudRate, timeout=1)
+    msg_send = "Initializing"
+    msg_send = msg_send.encode() #'utf-8'
+    serial_port.write(msg_send)
+    time.sleep(1)
 
     check = True #checks if string art is complete
     done = False #checks if pygame window should be open

@@ -9,6 +9,9 @@ const int STEPPER_ENABLE_PIN_X = 56;
 const int MOTOR_STEP_PIN_Y = 60;
 const int MOTOR_DIRECTION_PIN_Y = 61;
 const int STEPPER_ENABLE_PIN_Y = 56;
+// const int MOTOR_STEP_PIN_Z = ?;
+// const int MOTOR_DIRECTION_PIN_Z = ?;
+// const int STEPPER_ENABLE_PIN_Z = ?;
 
 // Create two adafruit stepper motors, one on each port
 // Create AccelStepper object for stepper driver with Step and Direction pins
@@ -25,7 +28,6 @@ String radius1;
 String theta1;
 float radius2;
 float theta2;
-String coordinatesIndex[5];
 
 // moveStep takes in polar coordinate and calculates how many steps stepper1 should take 
 float moveRevolutions(float radius, float theta){
@@ -56,32 +58,23 @@ void loop()
   while(Serial.available()){
     delay(30);
     if (Serial.available() > 0)
-  {
+    {
       // Read in python message
       readString = Serial.readString();
-      String getCoordinates = readString;
       // Separate polar coordinate into radius and theta values
-      for( int i = 0; i <= 4; i++){
-        int colonIndex = getCoordinates.indexOf(';');
-        String coordinate = getCoordinates.substring(0, colonIndex);
-        coordinatesIndex[i] = coordinate;
-        getCoordinates = getCoordinates.substring(colonIndex+1);
-      }
-      for( int i =0; i<= 4; i++){
-        int commaIndex = coordinatesIndex[i].indexOf(',');
-        radius1 = coordinatesIndex[i].substring(0, commaIndex);
-        theta1 = coordinatesIndex[i].substring(commaIndex+1);
-        // Convert strings to float
-        radius2 = radius1.toFloat();
-        theta2 = theta1.toFloat();
-        // Set stepper1's target position according to theta value
-        stepper1.setStepsPerRevolution(3200);
-        stepper1.setSpeedInRevolutionsPerSecond(1);
-        stepper1.setupRelativeMoveInRevolutions(moveRevolutions(radius2, theta2));
+      int commaIndex = readString.indexOf(',');
+      radius1 = readString.substring(0, commaIndex);
+      theta1 = readString.substring(commaIndex+1);
+      // Convert strings to float
+      radius2 = radius1.toFloat();
+      theta2 = theta1.toFloat();
+      // Set stepper1's target position according to theta value
+      stepper1.setStepsPerRevolution(3200);
+      stepper1.setSpeedInRevolutionsPerSecond(1);
+      stepper1.setupRelativeMoveInRevolutions(moveRevolutions(radius2, theta2));
        while(!stepper1.motionComplete())
       {
         stepper1.processMovement();
-      }
       }
     }
   
