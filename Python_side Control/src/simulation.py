@@ -134,6 +134,8 @@ class System:
 
         self.update_window()
 
+        image.mean_squared_error()
+
         return True, next_peg
 
     def add_to_histogram(self, peg_1, peg_2):
@@ -181,6 +183,8 @@ class ImageProcessor:
 
         self.create_blank_image()
 
+        self.M2Error_list = [] #attribute to save mean_squared_error in list
+        self.number_of_string = 0
 
         # self.image_center = [floor(self.image_size[0]/2), floor(self.image_size[1]/2)]
         # print("Image Center: ", self.image_center)
@@ -316,40 +320,45 @@ class ImageProcessor:
         self.histogram[frozenset([peg_1, peg_2])] = self.histogram.get(frozenset([peg_1, peg_2]), 0) + 1
 
 
-    def mean_squared_error(self):
+    def mean_squared_error(self, size = (400, 400)):
         """Calculate the mean squared error of two images.
         The mean squared value is the difference of all pixels (comparing the two images) added up und divided by the total amount of pixelsself.
 
         imageA -- PIL image object (should be square)
         imageB -- PIL image object (should be square)"""
-        
-        imageA = self.original
-        imageB = self.comparison_image
 
-        #prepare the two pictures to compare:
-        #monochrome, same size
-        imageA = imageA.convert('L')      ###
-        imageB = imageB.convert('L')      ###
-        #same size
-        imageA.thumbnail(size, Image.ANTIALIAS)
-        imageB.thumbnail(size, Image.ANTIALIAS)
+        size = size
+        self.number_of_string += 1
 
-        imageA.show()
-        imageB.show()
+        if self.number_of_string % 10 == 0:
+
+            imageA = self.original
+            imageB = self.comparison_image
+
+            #prepare the two pictures to compare:
+            #monochrome, same size
+            imageA = imageA.convert('L')      ###
+            imageB = imageB.convert('L')      ###
+            #same size
+            imageA.thumbnail(size, Image.ANTIALIAS)
+            imageB.thumbnail(size, Image.ANTIALIAS)
 
 
-        #Convert PIL.image object into a numpy.array - needs to be numpy the "astype" attribute
-        a = np.array(imageA)
-        b = np.array(imageB)
-        # the 'Mean Squared Error' between the two images is the
-    	# sum of the squared difference between the two images;
-    	# NOTE: the two images must have the same dimension
-        err = np.sum((a.astype("float")-b.astype("float"))**2)
-        err /= float(a.shape[0] * b.shape[1])
-        # return the MSE, the lower the error, the more "similar"
-        ###print(err)
-    	# the two images are
-        return err
+            #Convert PIL.image object into a numpy.array - needs to be numpy the "astype" attribute
+            a = np.array(imageA)
+            b = np.array(imageB)
+            # the 'Mean Squared Error' between the two images is the
+        	# sum of the squared difference between the two images;
+        	# NOTE: the two images must have the same dimension
+            err = np.sum((a.astype("float")-b.astype("float"))**2)
+            err /= float(a.shape[0] * b.shape[1])
+            # return the MSE, the lower the error, the more "similar"
+            ###print(err)
+        	# the two images are
+
+            self.M2Error_list.append([self.number_of_string, err]) #saves error dat in list with numver of string
+            print("M2Error = ", err)
+            return err
 
 
 
