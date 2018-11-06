@@ -368,7 +368,7 @@ if __name__ == "__main__":
 
     pygame.init()
 
-    file_name = "pokeball.jpeg"
+    file_name = "face.png"
 
     peg_num = 45
     string_thickness = 1
