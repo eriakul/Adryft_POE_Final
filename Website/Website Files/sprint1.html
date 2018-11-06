@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<!--[if lt IE 8 ]><html class="no-js ie ie7" lang="en"> <![endif]-->
+<!--[if IE 8 ]><html class="no-js ie ie8" lang="en"> <![endif]-->
+<!--[if IE 9 ]><html class="no-js ie ie9" lang="en"> <![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!--><html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+
+   <!--- Basic Page Needs
+   ================================================== -->
+   <meta charset="utf-8">
+	<title>Sprint 1</title>
+	<meta name="description" content="">
+	<meta name="author" content="">
+
+   <!-- Mobile Specific Metas
+   ================================================== -->
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<!-- CSS
+    ================================================== -->
+   <link rel="stylesheet" href="sprint_css/base.css">
+	<link rel="stylesheet" href="sprint_css/main.css">
+   <link rel="stylesheet" href="sprint_css/media-queries.css">
+
+   <!-- Script
+   =================================================== -->
+	<script src="sprint_js/modernizr.js"></script>
+
+   <!-- Favicons
+	=================================================== -->
+	<link rel="shortcut icon" href="favicon.png" >
+
+</head>
+
+<body>
+
+   <div id="top"></div>
+   <div id="preloader">
+	   <div id="status">
+         <img src="sprint_images/loader.gif" height="60" width="60" alt="">
+         <div class="loader">Loading...</div>
+      </div>
+   </div>
+
+   <!-- Header
+   =================================================== -->
+   <header id="main-header">
+
+   	<div class="row header-inner">
+
+	      <div class="logo">
+	         <a href="index.html">Adryft.</a>
+	      </div>
+
+	      <nav id="nav-wrap">
+
+	         <a class="mobile-btn" href="#nav-wrap" title="Show navigation">
+	         	<span class='menu-text'>Show Menu</span>
+	         	<span class="menu-icon"></span>
+	         </a>
+         	<a class="mobile-btn" href="#" title="Hide navigation">
+         		<span class='menu-text'>Hide Menu</span>
+         		<span class="menu-icon"></span>
+         	</a>
+
+	         <ul id="nav" class="nav">
+	            <li><a href="index.html#home">Home.</a></li>
+		         <li class="current"><a href="sprint1.html">Sprint 1</a></li>
+	            <li><a href="sprint2.html">Sprint 2</a></li>
+              <li><a href="sprint3.html">Sprint 3</a></li>
+	         </ul>
+
+	      </nav> <!-- /nav-wrap -->
+
+	   </div> <!-- /header-inner -->
+
+   </header>
+
+
+   <!-- Page Title
+   ================================================== -->
+   <section id="page-title">
+
+		<div class="row">
+
+			<div class="twelve columns">
+
+				<h1>Sprint<span> 1 </span></h1>
+
+			</div>
+
+		</div> <!-- /row -->
+
+   </section> <!-- /page-title -->
+
+
+   <!-- Content
+   ================================================== -->
+   <section id="content">
+
+   	<div class="row portfolio-content">
+
+	   	<div class="entry tab-whole nine columns centered">
+
+	         <header class="entry-header">
+
+					<h1 class="entry-title">
+							Week 1 and Week 2.
+					</h1>
+
+				</header>
+
+				<div class="entry-content">
+					<p>At the beginning of the first sprint, Team Adryft crafted this project proposal:</p>
+
+                 <aside class="pull-quote">
+                  <blockquote>
+                    <p>
+                      Our goal is to create a light-weight buoyant robotic jellyfish that reacts to objects within its proximity.
+                      Tentatively, our plan is to use a helium-filled balloon as the primary source of lift for the robot. The weight limitations for the mechanical and electrical components will be one of our biggest challenges. Integrating substantial software will be another challenge because it depends on a functioning mechanical system.  We plan to control the jellyfish with actuated tentacles. Our source of inspiration is Festo’s flying jellyfish. </p>
+                 </blockquote>
+               </aside>
+
+          <p>
+            Our team jumped into the project bright-eyed and excited. We welcomed the
+            engineering constraints and challenges we would encounter while fabricating a "lighter-than-air" robot.
+          </p>
+          <p>
+            Our MVP would have moving tentacles made with light and efficient shape-memory-alloys!
+            It would have a camera and react to human faces with computer vision!
+          </p>
+
+          <div class="row add-bottom">
+
+		         <div class="tab-whole three columns">
+                <img src="sprint_images/sprint1/image2.png">
+			      </div>
+
+		         <div class="tab-whole three columns">
+                <img src="sprint_images/sprint1/image9.gif">
+			      </div>
+
+		         <div class="tab-whole three columns">
+				        <img src="sprint_images/sprint1/image10.jpg">
+			      </div>
+
+		         <div class="tab-whole three columns">
+				        <img src="sprint_images/sprint1/image11.gif">
+			      </div>
+
+		      </div>
+
+          <p>
+            However, as we researched materials and simulated relevant mechanics in Matlab, we realized that
+            our project was way too overscoped and <bold>expensive</bold> for a 6-week POE project.
+          </p>
+
+          <p>
+            Here's a quick breakdown of why we decided to move away from the jellyfish idea:
+          </p>
+
+          <ul class="disc">
+           <li>shape-memory alloys require too much voltage to be effective</li>
+           <li>SMAs don't contract enough</li>
+           <li>we would need a meter-wide balloon and $113 of helium to lift 1 pound of electonics</li>
+        </ul>
+
+        <h5>Pivot! The Stringomatic is Born!</h5>
+
+        <p>
+          Our team returned to the planning board and revisited another idea we were
+          all excited about. We rewrote our project proposal:
+        </p>
+
+        <aside class="pull-quote">
+         <blockquote>
+           <p>Develop an integrated and precise CNC string art system with significant mechanical and software components that outputs visually appealing art pieces.</p>
+        </blockquote>
+      </aside>
+
+      <p>
+        Our project was inspired by hand-made, string paintings made by artists.
+      </p>
+
+
+      <img src="sprint_images/sprint1/image3.png">
+      <img src="sprint_images/sprint1/image5.png">
+
+
+      <p>
+        Since we were already 2-weeks into the POE project, we knew we were more constrained on time than before.
+        We agreed upon an achievable minimal viable product: CNC machine that can simply wrap string around posts with known locations.
+      </p>
+
+      <p>
+        Jumping right into the project, we discussed, debated then decided on a rotating mechanism for the CNC.
+        The CNC would operate in polar units rather than cartesian coordinates. Right before the day of the first
+        sprint review, we created a CAD model of what the machine would potentially look like.
+      </p>
+
+      <img src="sprint_images/sprint1/image4.png" >
+
+      <p>
+        So, we've got a month left to bring this string art machine to life. Wish us luck!
+      </p>
+
+				</div>
+
+				<div class="pagenav group">
+		  			  <span class="prev"><a href="#" rel="prev">Previous</a></span>
+		  			<span class="next"><a href="sprint2.html" rel="next">Next</a></span>
+	  			</div>
+
+	      </div> <!-- /entry -->
+
+	   </div> <!-- /portfolio-content -->
+
+   </section> <!-- /content -->
+
+
+   <!-- Footer
+   ================================================== -->
+   <footer>
+
+      <div class="row">
+
+         <div id="go-top">
+            <a class="smoothscroll" title="Back to Top" href="#top"><span>Top</span><i class="fa fa-long-arrow-up"></i></a>
+         </div>
+
+      </div> <!-- /row -->
+
+   </footer> <!-- /footer -->
+
+
+   <!-- Java Script
+   ================================================== -->
+   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+   <script>window.jQuery || document.write('<script src="sprint_js/jquery-1.10.2.min.js"><\/script>')</script>
+   <script type="text/javascript" src="sprint_js/jquery-migrate-1.2.1.min.js"></script>
+   <script src="sprint_js/jquery.flexslider.js"></script>
+   <script src="sprint_js/jquery.fittext.js"></script>
+   <script src="sprint_js/backstretch.js"></script>
+   <script src="sprint_js/waypoints.js"></script>
+   <script src="sprint_js/main.js"></script>
+
+</body>
+
+</html>
