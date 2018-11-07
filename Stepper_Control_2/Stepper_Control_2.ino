@@ -3,15 +3,15 @@
 #include <SpeedyStepper.h>
 
 const int RADIUS_TO_DEGREE = 360;
-const int MOTOR_STEP_PIN_X = 60;
-const int MOTOR_DIRECTION_PIN_X = 61;
-const int STEPPER_ENABLE_PIN_X = 56;
-const int MOTOR_STEP_PIN_Y = 60;
+//const int MOTOR_STEP_PIN_X = 60;
+//const int MOTOR_DIRECTION_PIN_X = 61;
+//const int STEPPER_ENABLE_PIN_X = 56;
+const int MOTOR_STEP_PIN_Y = 60; // for theta motor
 const int MOTOR_DIRECTION_PIN_Y = 61;
 const int STEPPER_ENABLE_PIN_Y = 56;
-// const int MOTOR_STEP_PIN_Z = ?;
-// const int MOTOR_DIRECTION_PIN_Z = ?;
-// const int STEPPER_ENABLE_PIN_Z = ?;
+const int MOTOR_STEP_PIN_Z = 46; // for radius motor
+const int MOTOR_DIRECTION_PIN_Z = 48;
+const int STEPPER_ENABLE_PIN_Z = 62;
 
 // Create two adafruit stepper motors, one on each port
 // Create AccelStepper object for stepper driver with Step and Direction pins
@@ -21,6 +21,7 @@ SpeedyStepper stepper2;
 // Create constant variables regarding mechanical system and stepper deg/step
 const float GEAR_RATIO = -5; // negative since gear spins opposite direction to motor
 const float DEG_PER_STEP = 1.8; // obtained from NEMA stepper motor spec sheet
+const float INCH_TO_MM = 25.4; // multiply inch by this constant to get mm
 // Create variables for serial communication and computation
 float Current_Pos = 0; 
 String readString;
@@ -29,12 +30,17 @@ String theta1;
 float radius2;
 float theta2;
 
-// moveStep takes in polar coordinate and calculates how many steps stepper1 should take 
-float moveRevolutions(float radius, float theta){
+// moveStep takes in theta value and calculates how many relative revolutions stepper1 should make 
+float moveRevolutions(float theta){
   // divide theta by deg/step to get number of steps 
   // negative corresponds to CCW and positive stands for CW
   float numRevo = theta/(RADIUS_TO_DEGREE/GEAR_RATIO);
   return numRevo;
+}
+
+// moveRadius takes in radius value and calculates how many mm (relative) stepper2 should move
+float moveRadius(float radius){
+  return radius*INCH_TO_MM;
 }
 
 void wrapString(){
@@ -43,10 +49,16 @@ void wrapString(){
 
 void setup()
 {  
-    // Set stepper motor speeds
+    // Set stepper motors
+    // theta = stepper1
     pinMode(STEPPER_ENABLE_PIN_Y, OUTPUT);
     digitalWrite(STEPPER_ENABLE_PIN_Y,LOW);
     stepper1.connectToPins(MOTOR_STEP_PIN_Y, MOTOR_DIRECTION_PIN_Y);
+    // radius = stepper2
+    pinMode(STEPPER_ENABLE_PIN_Z, OUTPUT);
+    digitalWrite(STEPPER_ENABLE_PIN_Z,LOW);
+    stepper2.connectToPins(MOTOR_STEP_PIN_Z, MOTOR_DIRECTION_PIN_Z);
+    
     // Set up serial port
     Serial.begin(9600);  
 }
@@ -71,10 +83,18 @@ void loop()
       // Set stepper1's target position according to theta value
       stepper1.setStepsPerRevolution(3200);
       stepper1.setSpeedInRevolutionsPerSecond(1);
-      stepper1.setupRelativeMoveInRevolutions(moveRevolutions(radius2, theta2));
+      stepper1.setupRelativeMoveInRevolutions(moveRevolutions(theta2));
        while(!stepper1.motionComplete())
       {
         stepper1.processMovement();
+      }
+      // Move stepper2
+      stepper2.setStepsPerMillimeter(100); // set the number of steps per millimeter
+      stepper2.setSpeedInMillimetersPerSecond(20); // set the speed in mm/sec
+      stepper2.setupRelativeMoveInMillimeters(moveRadius(radius2)); // move relative mm
+      while(!stepper2.motionComplete())
+      {
+        stepper2.processMovement();
       }
     }
   
