@@ -340,7 +340,7 @@ a.btn-border.btn-grey {
 .btn-orange,
 a.inverse.btn-orange,
 .inverse a.btn-orange {
-    background-color: #ef7c46;
+    background-color: #f26522;
 }
 
 .btn.btn-orange {
@@ -351,7 +351,7 @@ a.inverse.btn-orange,
 .btn-nav.btn-orange:hover,
 .btn-orange:focus,
 .btn-nav.btn-orange:focus {
-    background-color: #ec6120;
+    background-color: #f26522;
 }
 
 .btn.btn-orange:hover,

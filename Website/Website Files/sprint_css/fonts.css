@@ -4,6 +4,13 @@
  * Raleway
 ================================================================================ */
 @font-face {
+    font-family: 'montserrat-light';
+    src: url('fonts/montserrat/Montserrat-Light.otf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
     font-family: 'raleway-thin';
     src: url('fonts/raleway/raleway-thin-webfont.eot');
     src: url('fonts/raleway/raleway-thin-webfont.eot?#iefix') format('embedded-opentype'),
@@ -168,5 +175,3 @@
     font-weight: normal;
     font-style: normal;
 }
-
-
