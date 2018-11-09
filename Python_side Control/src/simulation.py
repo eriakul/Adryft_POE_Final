@@ -379,11 +379,11 @@ if __name__ == "__main__":
 
     pygame.init()
 
-    file_name = "test_pic.png"
+    file_name = "pokeball.jpeg"
 
-    peg_num = 330   
+    peg_num = 90
     string_thickness = 1
-    max_string = 1200
+    max_string = 3000
     real_radius = 1
     max_overlap = 2
 
@@ -408,7 +408,7 @@ if __name__ == "__main__":
             if event.type == pygame.QUIT:
                 done = True
                 file_name = file_name.split(".")[0] + "_{}_{}".format(peg_num, real_radius).replace(".", "")
-                pygame.image.save(stringomatic.screen, file_name +"_result")
+                pygame.image.save(stringomatic.screen, file_name +"_result.jpeg")
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     done = True
