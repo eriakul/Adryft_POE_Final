@@ -39,6 +39,7 @@ time.sleep(1)
 
 #Send wrap commands in form "r,theta;r,theta;r,theta:r,theta;r,theta;r,theta_current"
 wrap_commands = create_wrap_commands(half_step, real_radius)
+wrap_commands = "W" + wrap_commands
 wrap_commands = wrap_commands.encode() #'utf-8'
 serial_port.write(wrap_commands)
 time.sleep(1)

@@ -21,12 +21,13 @@ def create_wrap_commands(half_step, r):
     factor = .1
     turn = 2*half_step
 
-    string = "{},{};{},{};{},{}:{},{};{},{};{},{}".format( r*factor, 0,
-                                                           0, turn,
-                                                           -r*factor, 0,
-                                                           -r*factor, 0,
-                                                          0, turn,
-                                                          r*factor, 0)
+    string = "{};{};{};{};{};{};".format(
+                                           r*factor,
+                                           turn,
+                                           -r*factor,
+                                           -r*factor,
+                                           turn,
+                                           r*factor)
     return string
 
 
