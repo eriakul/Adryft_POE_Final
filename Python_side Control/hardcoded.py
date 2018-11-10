@@ -56,7 +56,7 @@ while not done:
             stringomatic.draw_line_to(next_peg)
             stringomatic.update_window()
             peg_loc = peg_locations[next_peg]
-            print("Projected peg location: {}".format(next_peg))
+            print("Projected peg location: {}".format(peg_loc))
             current_location, commands = loop_around_peg(current_location, peg_loc, half_step, real_radius)
             print("Projected commands: {}".format(commands))
             print("Projected final location: {}".format(current_location))
