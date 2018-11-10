@@ -15,12 +15,12 @@ peg_list = [20, 25]
 peg_num = 48
 string_thickness = 1
 max_string = 2000
-real_radius = 1
+real_radius = 11
 max_overlap = 2
 window_size = [1200, 800]
 baudRate = 9600
 
-arduinoComPort = "COM6"
+arduinoComPort = "COM7"
 pygame.init()
 
 stringomatic = System(window_size, peg_num = peg_num, string_thickness = string_thickness)
@@ -29,7 +29,7 @@ half_step = 180/peg_num
 current_location = [0,0] #r, theta (degrees)
 peg_locations = list([360/peg_num* i for i in range(peg_num)])
 
-Set up serial port and send initialization message
+# Set up serial port and send initialization message
 serial_port = serial.Serial(arduinoComPort, baudRate, timeout=1)
 msg_send = "Initializing"
 msg_send = msg_send.encode() #'utf-8'
