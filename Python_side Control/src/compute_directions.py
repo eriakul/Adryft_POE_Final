@@ -33,7 +33,7 @@ def loop_around_peg(current_location, peg_location, half_step, r):
             tL = min(target_location_B, key = lambda loc: abs(loc - loc_B0))
             dtheta = tL-loc_B0
             dr_in = r*.9 - current_location[0]
-            dr_out = r*.2
+            dr_out = r*.7
             dr_back = -1*dr_out
 
         else:
@@ -41,7 +41,7 @@ def loop_around_peg(current_location, peg_location, half_step, r):
             tL = min(target_location_B, key = lambda loc: abs(loc - loc_B180))
             dtheta = tL - loc_B180
             dr_in = r*-.9 - current_location[-0]
-            dr_out = r*-.2
+            dr_out = r*-.7
             dr_back = -1*dr_out
 
 

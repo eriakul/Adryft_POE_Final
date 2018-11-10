@@ -19,9 +19,10 @@ SpeedyStepper stepper1;
 SpeedyStepper stepper2;
 
 // Create constant variables regarding mechanical system and stepper deg/step
-const float GEAR_RATIO = -5; // negative since gear spins opposite direction to motor
+const float GEAR_RATIO = -4.69; // negative since gear spins opposite direction to motor
 const float DEG_PER_STEP = 1.8; // obtained from NEMA stepper motor spec sheet
 const float INCH_TO_MM = 25.4; // multiply inch by this constant to get mm
+const float MM_OFFSET = 1.25; // divide expected distance by constant to account for offset
 // Create variables for serial communication and computation
 float Current_Pos = 0; 
 String readString;
@@ -82,7 +83,8 @@ void loop()
       theta2 = theta1.toFloat();
       // Set stepper1's target position according to theta value
       stepper1.setStepsPerRevolution(3200);
-      stepper1.setSpeedInRevolutionsPerSecond(1);
+      stepper1.setSpeedInRevolutionsPerSecond(0.3);
+      stepper1.setAccelerationInRevolutionsPerSecondPerSecond(0.3);
       stepper1.setupRelativeMoveInRevolutions(moveRevolutions(theta2));
        while(!stepper1.motionComplete())
       {
@@ -90,8 +92,9 @@ void loop()
       }
       // Move stepper2
       stepper2.setStepsPerMillimeter(100); // set the number of steps per millimeter
-      stepper2.setSpeedInMillimetersPerSecond(20); // set the speed in mm/sec
-      stepper2.setupRelativeMoveInMillimeters(moveRadius(radius2)); // move relative mm
+      stepper2.setSpeedInMillimetersPerSecond(40); // set the speed in mm/sec
+      stepper2.setAccelerationInMillimetersPerSecondPerSecond(30); // set the acceleration in mm/sec^2
+      stepper2.setupRelativeMoveInMillimeters(moveRadius(radius2)/MM_OFFSET); // move relative mm
       while(!stepper2.motionComplete())
       {
         stepper2.processMovement();
