@@ -9,13 +9,13 @@ def get_next_peg(peg_list):
     return True, peg_list.pop(0)
 
 
-peg_list = [20, 25]
+peg_list = [20, 37]
 
 
 peg_num = 48
 string_thickness = 1
 max_string = 2000
-real_radius = 11
+real_radius = 1
 max_overlap = 2
 window_size = [1200, 800]
 baudRate = 9600
@@ -35,6 +35,14 @@ msg_send = "Initializing"
 msg_send = msg_send.encode() #'utf-8'
 serial_port.write(msg_send)
 time.sleep(1)
+
+
+#Send wrap commands in form "r,theta;r,theta;r,theta:r,theta;r,theta;r,theta_current"
+wrap_commands = create_wrap_commands(half_step, real_radius)
+wrap_commands = wrap_commands.encode() #'utf-8'
+serial_port.write(wrap_commands)
+time.sleep(1)
+
 
 check = True #checks if string art is complete
 done = False #checks if pygame window should be open
