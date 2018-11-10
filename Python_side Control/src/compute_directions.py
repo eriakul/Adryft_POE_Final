@@ -31,7 +31,7 @@ def loop_around_peg(current_location, peg_location, half_step, r):
         if min([abs(loc - loc_B0) for loc in target_location_B]) <= min([abs(loc - loc_B180) for loc in target_location_B]):
             direction = "North"
             tL = min(target_location_B, key = lambda loc: abs(loc - loc_B0))
-            dtheta = loc_B0 - tL
+            dtheta = tL-loc_B0
             dr_in = r*.9 - current_location[0]
             dr_out = r*.2
             dr_back = -1*dr_out
@@ -39,7 +39,7 @@ def loop_around_peg(current_location, peg_location, half_step, r):
         else:
             direction = "South"
             tL = min(target_location_B, key = lambda loc: abs(loc - loc_B180))
-            dtheta = loc_B180 - tL
+            dtheta = tL - loc_B180
             dr_in = r*-.9 - current_location[-0]
             dr_out = r*-.2
             dr_back = -1*dr_out
@@ -53,7 +53,7 @@ def loop_around_peg(current_location, peg_location, half_step, r):
         commands.append(command)
         current_location = update_current_location(current_location, command)
 
-        command = [0, -2*half_step]
+        command = [0, 2*half_step]
         commands.append(command)
         current_location = update_current_location(current_location, command)
 

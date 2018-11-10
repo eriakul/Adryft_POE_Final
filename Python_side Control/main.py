@@ -25,7 +25,7 @@ if __name__ == "__main__":
         ##### EDIT SETTINGS HERE #######
 
         file_name = "pokeball.jpeg"
-        peg_num = 45
+        peg_num = 48
         string_thickness = 1
         max_string = 2000
         real_radius = 1
@@ -72,6 +72,7 @@ if __name__ == "__main__":
                 peg_loc = peg_locations[next_peg]
                 current_location, commands = loop_around_peg(current_location, peg_loc, half_step, real_radius)
                 for command in commands:
+                    print("Sent: {}".format(command))
                     send_command_and_receive_response(command, serial_port)
 
 
