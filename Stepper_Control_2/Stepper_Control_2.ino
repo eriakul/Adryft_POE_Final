@@ -18,11 +18,11 @@ SpeedyStepper stepper1;
 SpeedyStepper stepper2;
 
 // Create constant variables regarding mechanical system and stepper deg/step
-const int RADIANS_TO_DEGREE = 360; // degrees in one revolution 
+const int REV_TO_DEGREE = 360; // degrees in one revolution 
 const float GEAR_RATIO = -4.69; // negative since gear spins opposite direction to motor
 const float DEG_PER_STEP = 1.8; // obtained from NEMA stepper motor spec sheet
 const float FEET_TO_MM = 25.4*12; // multiply feet by this constant to get mm
-const float MM_OFFSET = 1.25; // divide expected distance by constant to account for offset
+const float STEPS_PER_MM = 100/1.25; // divide expected distance by constant to account for offset
 //const float DEG_PER_STEP = 1.8; // obtained from NEMA stepper motor spec sheet
 const float DEG_PER_PEG = 7.5; // degree per peg to wrap string around
 
@@ -48,60 +48,50 @@ float direction2;
 float moveRevolutions(float theta){
   // divide theta by deg/step to get number of steps 
   // negative corresponds to CCW and positive stands for CW
-  float numRevo = theta/(RADIANS_TO_DEGREE/GEAR_RATIO);
+  float numRevo = theta/(REV_TO_DEGREE/GEAR_RATIO);
   return numRevo;
 }
 
 // moveRadius takes in radius value and calculates how many mm (relative) stepper2 should move
 float moveRadius(float radius){
-  return radius*FEET_TO_MM;
+  return (radius*FEET_TO_MM);
 }
 
 // function to call motors to wrap string around the peg
 void wrapString(String direction){
   if (direction.equals("N")){
-      stepper2.setupRelativeMoveInMillimeters(WrapCoordinates[0]/MM_OFFSET); // move relative mm out from origin
+      stepper2.setupRelativeMoveInMillimeters(moveRadius(WrapCoordinates[0])); // move relative mm out from origin
       while(!stepper2.motionComplete())
       {
         stepper2.processMovement();
       }
-      stepper1.setupRelativeMoveInRevolutions(WrapCoordinates[1]/RADIANS_TO_DEGREE); // move relative revolution counter clockwise 
+      stepper1.setupRelativeMoveInRevolutions(moveRevolutions(WrapCoordinates[1])); // move relative revolution counter clockwise 
       while(!stepper1.motionComplete())
       {
         stepper1.processMovement();
       }
-      stepper2.setupRelativeMoveInMillimeters(WrapCoordinates[2]/MM_OFFSET); // move relative mm in towards origin
+      stepper2.setupRelativeMoveInMillimeters(moveRadius(WrapCoordinates[2])); // move relative mm in towards origin
       while(!stepper2.motionComplete())
       {
         stepper2.processMovement();
       }
-//      stepper1.setupRelativeMoveInRevolutions(WrapCoordinates[3]/RADIANS_TO_DEGREE); // move relative revolution clockwise
-//      while(!stepper1.motionComplete())
-//      {
-//        stepper1.processMovement();
-//      }
   }
   else if (direction.equals("S")){
-      stepper2.setupRelativeMoveInMillimeters(WrapCoordinates[3]/MM_OFFSET); // move relative mm out from origin
+      stepper2.setupRelativeMoveInMillimeters(moveRadius(WrapCoordinates[3])); // move relative mm out from origin
       while(!stepper2.motionComplete())
       {
         stepper2.processMovement();
       }
-      stepper1.setupRelativeMoveInRevolutions(WrapCoordinates[4]/RADIANS_TO_DEGREE); // move relative revolution counter clockwise 
+      stepper1.setupRelativeMoveInRevolutions(moveRevolutions(WrapCoordinates[4])); // move relative revolution counter clockwise 
       while(!stepper1.motionComplete())
       {
         stepper1.processMovement();
       }
-      stepper2.setupRelativeMoveInMillimeters(WrapCoordinates[5]/MM_OFFSET); // move relative mm in towards origin
+      stepper2.setupRelativeMoveInMillimeters(moveRadius(WrapCoordinates[5])); // move relative mm in towards origin
       while(!stepper2.motionComplete())
       {
         stepper2.processMovement();
       }
-//      stepper1.setupRelativeMoveInRevolutions(WrapCoordinates[7]/RADIANS_TO_DEGREE); // move relative revolution clockwise
-//      while(!stepper1.motionComplete())
-//      {
-//        stepper1.processMovement();
-//      }
   }
 }
 
@@ -133,7 +123,7 @@ void loop()
       readString = Serial.readString();
       // Separate polar coordinate into radius and theta values
       int WrapCommandsIndex = readString.indexOf('W');
-      if ( WrapCommandsIndex>=0 ){
+      if ( WrapCommandsIndex >= 0 ){
         String WrapCommands = readString.substring(WrapCommandsIndex+1); 
         for(int i = 0; i < 6; i++){
           int colonIndex = WrapCommands.indexOf(';');
@@ -142,35 +132,37 @@ void loop()
           WrapCommands = WrapCommands.substring(colonIndex+1);
         }
       }
-      String commands = readString;
-      int commaIndex = commands.indexOf(',');
-      radius1 = commands.substring(0, commaIndex);
-      commaIndex = commands.indexOf(',');
-      theta1 = commands.substring(0,commaIndex);
-      direction1 = commands.substring(commaIndex+1);
-      // Convert strings to float
-      radius2 = radius1.toFloat();
-      theta2 = theta1.toFloat();
-      // Set stepper1's target position according to theta value
-      stepper1.setStepsPerRevolution(3200);
-      stepper1.setSpeedInRevolutionsPerSecond(0.3);
-      stepper1.setAccelerationInRevolutionsPerSecondPerSecond(0.3);
-      stepper1.setupRelativeMoveInRevolutions(moveRevolutions(theta2));
-      while(!stepper1.motionComplete())
-      {
-        stepper1.processMovement();
+      else{
+        String commands = readString;
+        int commaIndex = commands.indexOf(',');
+        radius1 = commands.substring(0, commaIndex);
+        commaIndex = commands.indexOf(',');
+        theta1 = commands.substring(0,commaIndex);
+        direction1 = commands.substring(commaIndex+1);
+        // Convert strings to float
+        radius2 = radius1.toFloat();
+        theta2 = theta1.toFloat();
+        // Set stepper1's target position according to theta value
+        stepper1.setStepsPerRevolution(3200);
+        stepper1.setSpeedInRevolutionsPerSecond(0.3);
+        stepper1.setAccelerationInRevolutionsPerSecondPerSecond(0.3);
+        stepper1.setupRelativeMoveInRevolutions(moveRevolutions(theta2));
+        while(!stepper1.motionComplete())
+        {
+          stepper1.processMovement();
+        }
+        // Move stepper2
+        stepper2.setStepsPerMillimeter(STEPS_PER_MM); // set the number of steps per millimeter
+        stepper2.setSpeedInMillimetersPerSecond(50); // set the speed in mm/sec
+        stepper2.setAccelerationInMillimetersPerSecondPerSecond(40); // set the acceleration in mm/sec^2
+  //      stepper2.setupRelativeMoveInMillimeters(-moveRadius(radius2)); // move relative mm
+  //      while(!stepper1.motionComplete()||!stepper2.motionComplete())
+  //      {
+  //        stepper2.processMovement();
+  //        stepper1.processMovement();
+  //      }
+        wrapString(direction1);
       }
-      // Move stepper2
-      stepper2.setStepsPerMillimeter(100); // set the number of steps per millimeter
-      stepper2.setSpeedInMillimetersPerSecond(50); // set the speed in mm/sec
-      stepper2.setAccelerationInMillimetersPerSecondPerSecond(40); // set the acceleration in mm/sec^2
-//      stepper2.setupRelativeMoveInMillimeters(-moveRadius(radius2)/MM_OFFSET); // move relative mm
-//      while(!stepper1.motionComplete()||!stepper2.motionComplete())
-//      {
-//        stepper2.processMovement();
-//        stepper1.processMovement();
-//      }
-      wrapString(direction1);
     }
   
     if (readString.length() > 0)
