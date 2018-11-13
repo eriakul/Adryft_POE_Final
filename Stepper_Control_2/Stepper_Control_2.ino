@@ -29,10 +29,6 @@ const float DEG_PER_PEG = 7.5; // degree per peg to wrap string around
 
 // Create constant variables read from python for wrapping string
 float WrapCoordinates[6]; 
-float wRadius1;
-float wTheta1;
-float wRadius2;
-float wTheta2;
 
 // Create variables for serial communication and computation
 float Current_Pos = 0; 
@@ -58,9 +54,9 @@ float moveRadius(float radius){
 }
 
 // function to call motors to wrap string around the peg
-void wrapString(String direction){
-  if (direction.equals("N")){
-      stepper_r.setupRelativeMoveInMillimeters(moveRadius(WrapCoordinates[0])); // move relative mm out from origin
+void wrapString(String direction1){
+  if (direction1.equals("N")){
+      stepper_r.setupRelativeMoveInMillimeters(-moveRadius(WrapCoordinates[0])); // move relative mm out from origin
       while(!stepper_r.motionComplete())
       {
         stepper_r.processMovement();
@@ -70,14 +66,14 @@ void wrapString(String direction){
       {
         stepper_t.processMovement();
       }
-      stepper_r.setupRelativeMoveInMillimeters(moveRadius(WrapCoordinates[2])); // move relative mm in towards origin
+      stepper_r.setupRelativeMoveInMillimeters(-moveRadius(WrapCoordinates[2])); // move relative mm in towards origin
       while(!stepper_r.motionComplete())
       {
         stepper_r.processMovement();
       }
   }
-  else if (direction.equals("S")){
-      stepper_r.setupRelativeMoveInMillimeters(moveRadius(WrapCoordinates[3])); // move relative mm out from origin
+  else if (direction1.equals("S")){
+      stepper_r.setupRelativeMoveInMillimeters(-moveRadius(WrapCoordinates[3])); // move relative mm out from origin
       while(!stepper_r.motionComplete())
       {
         stepper_r.processMovement();
@@ -87,7 +83,7 @@ void wrapString(String direction){
       {
         stepper_t.processMovement();
       }
-      stepper_r.setupRelativeMoveInMillimeters(moveRadius(WrapCoordinates[5])); // move relative mm in towards origin
+      stepper_r.setupRelativeMoveInMillimeters(-moveRadius(WrapCoordinates[5])); // move relative mm in towards origin
       while(!stepper_r.motionComplete())
       {
         stepper_r.processMovement();
@@ -118,10 +114,10 @@ void setup()
     stepper_r.setAccelerationInMillimetersPerSecondPerSecond(40); // set the acceleration in mm/sec^2
 
     // home the motor by moving until the homing sensor is activated, then set the position to zero
-    pinMode(R_LIMIT_SWITCH_OUTPUT, INPUT);
-    Serial.println("HOMING");
-    stepper_r.moveToHomeInMillimeters(-1, 20, 250, R_LIMIT_SWITCH_OUTPUT);
-    Serial.println("Found Home");
+//    pinMode(R_LIMIT_SWITCH_OUTPUT, INPUT);
+//    Serial.println("HOMING");
+//    stepper_r.moveToHomeInMillimeters(-1, 20, 250, R_LIMIT_SWITCH_OUTPUT);
+//    Serial.println("Found Home");
     
     // Set up serial port
     Serial.begin(9600);  
@@ -152,6 +148,7 @@ void loop()
         String commands = readString;
         int commaIndex = commands.indexOf(',');
         radius1 = commands.substring(0, commaIndex);
+        commands = commands.substring(commaIndex+1);
         commaIndex = commands.indexOf(',');
         theta1 = commands.substring(0,commaIndex);
         direction1 = commands.substring(commaIndex+1);
@@ -160,10 +157,10 @@ void loop()
         theta2 = theta1.toFloat();
         // Set stepper_t's target position according to theta value
         stepper_t.setupRelativeMoveInRevolutions(moveRevolutions(theta2));
-        while(!stepper_t.motionComplete())
-        {
-          stepper_t.processMovement();
-        }
+//        while(!stepper_t.motionComplete())
+//        {
+//          stepper_t.processMovement();
+//        }
         // Move stepper_r
         stepper_r.setupRelativeMoveInMillimeters(-moveRadius(radius2)); // move relative mm
         while(!stepper_t.motionComplete()||!stepper_r.motionComplete())

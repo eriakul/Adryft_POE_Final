@@ -55,9 +55,11 @@ def loop_around_peg(current_location, peg_location, half_step, r):
             direction = "S"
             tL = min(target_location_B, key = lambda loc: abs(loc - loc_B180))
             dtheta = tL - loc_B180
+            dr_in = -r*.90 - current_location[0] #!!
 
 
-        command = [dr_in, dtheta]
+
+        command = [dr_in, dtheta, direction]
         commands.append(command)
         current_location = update_current_location(current_location, command)
         #take into account wrap movement

@@ -20,7 +20,7 @@ max_overlap = 2
 window_size = [1200, 800]
 baudRate = 9600
 
-arduinoComPort = "COM7"
+arduinoComPort = "COM6"
 pygame.init()
 
 stringomatic = System(window_size, peg_num = peg_num, string_thickness = string_thickness)
@@ -29,6 +29,8 @@ half_step = 180/peg_num
 current_location = [0,0] #r, theta (degrees)
 peg_locations = list([360/peg_num* i for i in range(peg_num)])
 
+
+print("Sending Initialization Message")
 # Set up serial port and send initialization message
 serial_port = serial.Serial(arduinoComPort, baudRate, timeout=1)
 msg_send = "Initializing"
@@ -36,14 +38,21 @@ msg_send = msg_send.encode() #'utf-8'
 serial_port.write(msg_send)
 time.sleep(1)
 
-
+print("Sending Wrap Commands")
 #Send wrap commands in form "r,theta;r,theta;r,theta:r,theta;r,theta;r,theta_current"
 wrap_commands = create_wrap_commands(half_step, real_radius)
 wrap_commands = "W" + wrap_commands
 wrap_commands = wrap_commands.encode() #'utf-8'
 serial_port.write(wrap_commands)
-time.sleep(1)
+no_response = True
+while no_response:
+    time.sleep(1)
+    response = serial_port.readline().decode()
+    if response is not None and len(response) > 0:
+        print("Message from arduino: ", response)
+        no_response = False
 
+print("Wrap Commands Sent")
 
 check = True #checks if string art is complete
 done = False #checks if pygame window should be open
