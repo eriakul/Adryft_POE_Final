@@ -12,11 +12,12 @@ const int STEPPER_ENABLE_PIN_Y = 56;
 const int MOTOR_STEP_PIN_Z = 46; // for radius motor
 const int MOTOR_DIRECTION_PIN_Z = 48;
 const int STEPPER_ENABLE_PIN_Z = 62;
+const int R_LIMIT_SWITCH_OUTPUT = 32;   // Theta Limit Swtich
 
 // Create two adafruit stepper motors, one on each port
 // Create AccelStepper object for stepper driver with Step and Direction pins
-SpeedyStepper stepper1;
-SpeedyStepper stepper2;
+SpeedyStepper stepper_t;
+SpeedyStepper stepper_r;
 
 // Create constant variables regarding mechanical system and stepper deg/step
 const float GEAR_RATIO = -4.69; // negative since gear spins opposite direction to motor
@@ -32,7 +33,7 @@ String theta1;
 float radius2;
 float theta2;
 
-// moveStep takes in theta value and calculates how many relative revolutions stepper1 should make 
+// moveStep takes in theta value and calculates how many relative revolutions stepper_t should make 
 float moveRevolutions(float theta){
   // divide theta by deg/step to get number of steps 
   // negative corresponds to CCW and positive stands for CW
@@ -40,49 +41,66 @@ float moveRevolutions(float theta){
   return numRevo;
 }
 
-// moveRadius takes in radius value and calculates how many mm (relative) stepper2 should move
+// moveRadius takes in radius value and calculates how many mm (relative) stepper_r should move
 float moveRadius(float radius){
   return radius*INCH_TO_MM;
 }
 
 void wrapString(){
   // function to call the top motor to wrap string around the peg
-      stepper2.setupRelativeMoveInMillimeters(50/MM_OFFSET); // move relative mm out from origin
-      while(!stepper2.motionComplete())
+      stepper_r.setupRelativeMoveInMillimeters(50/MM_OFFSET); // move relative mm out from origin
+      while(!stepper_r.motionComplete())
       {
-        stepper2.processMovement();
+        stepper_r.processMovement();
       }
-      stepper1.setupRelativeMoveInRevolutions(DEG_PER_PEG/RADIANS_TO_DEGREE); // move relative revolution counter clockwise 
-      while(!stepper1.motionComplete())
+      stepper_t.setupRelativeMoveInRevolutions(DEG_PER_PEG/RADIANS_TO_DEGREE); // move relative revolution counter clockwise 
+      while(!stepper_t.motionComplete())
       {
-        stepper1.processMovement();
+        stepper_t.processMovement();
       }
-      stepper2.setupRelativeMoveInMillimeters(-50/MM_OFFSET); // move relative mm in towards origin
-      while(!stepper2.motionComplete())
+      stepper_r.setupRelativeMoveInMillimeters(-50/MM_OFFSET); // move relative mm in towards origin
+      while(!stepper_r.motionComplete())
       {
-        stepper2.processMovement();
+        stepper_r.processMovement();
       }
-      stepper1.setupRelativeMoveInRevolutions(-DEG_PER_PEG/RADIANS_TO_DEGREE); // move relative revolution clockwise
-      while(!stepper1.motionComplete())
+      stepper_t.setupRelativeMoveInRevolutions(-DEG_PER_PEG/RADIANS_TO_DEGREE); // move relative revolution clockwise
+      while(!stepper_t.motionComplete())
       {
-        stepper1.processMovement();
+        stepper_t.processMovement();
       }
 }
 
 void setup()
 {  
     // Set stepper motors
-    // theta = stepper1
+    // theta = stepper_t
     pinMode(STEPPER_ENABLE_PIN_Y, OUTPUT);
     digitalWrite(STEPPER_ENABLE_PIN_Y,LOW);
-    stepper1.connectToPins(MOTOR_STEP_PIN_Y, MOTOR_DIRECTION_PIN_Y);
-    // radius = stepper2
+    stepper_t.connectToPins(MOTOR_STEP_PIN_Y, MOTOR_DIRECTION_PIN_Y);
+    // radius = stepper_r
     pinMode(STEPPER_ENABLE_PIN_Z, OUTPUT);
     digitalWrite(STEPPER_ENABLE_PIN_Z,LOW);
-    stepper2.connectToPins(MOTOR_STEP_PIN_Z, MOTOR_DIRECTION_PIN_Z);
+    stepper_r.connectToPins(MOTOR_STEP_PIN_Z, MOTOR_DIRECTION_PIN_Z);
+    
+    pinMode(R_LIMIT_SWITCH_OUTPUT, INPUT);
     
     // Set up serial port
-    Serial.begin(9600);  
+    Serial.begin(9600);
+
+    stepper_t.setStepsPerRevolution(3200);
+    stepper_t.setSpeedInRevolutionsPerSecond(0.3);
+    stepper_t.setAccelerationInRevolutionsPerSecondPerSecond(0.3);
+    stepper_r.setStepsPerMillimeter(100); // set the number of steps per millimeter
+    stepper_r.setSpeedInMillimetersPerSecond(40); // set the speed in mm/sec
+    stepper_r.setAccelerationInMillimetersPerSecondPerSecond(30); // set the acceleration in mm/sec^2
+
+    Serial.println("HOMING");
+//    for (int i = 0; i < 30; i++) {
+//     Serial.println(digitalRead(R_LIMIT_SWITCH_OUTPUT));
+//     delay(1000);
+//    }
+    stepper_r.moveToHomeInMillimeters(-1, 20, 250, R_LIMIT_SWITCH_OUTPUT);
+    Serial.println("found home");
 }
 
 void loop()
@@ -102,23 +120,18 @@ void loop()
       // Convert strings to float
       radius2 = radius1.toFloat();
       theta2 = theta1.toFloat();
-      // Set stepper1's target position according to theta value
-      stepper1.setStepsPerRevolution(3200);
-      stepper1.setSpeedInRevolutionsPerSecond(0.3);
-      stepper1.setAccelerationInRevolutionsPerSecondPerSecond(0.3);
-      stepper1.setupRelativeMoveInRevolutions(moveRevolutions(theta2));
-       while(!stepper1.motionComplete())
+      // Set stepper_t's target position according to theta value
+      
+      stepper_t.setupRelativeMoveInRevolutions(moveRevolutions(theta2));
+       while(!stepper_t.motionComplete())
       {
-        stepper1.processMovement();
+        stepper_t.processMovement();
       }
-      // Move stepper2
-      stepper2.setStepsPerMillimeter(100); // set the number of steps per millimeter
-      stepper2.setSpeedInMillimetersPerSecond(40); // set the speed in mm/sec
-      stepper2.setAccelerationInMillimetersPerSecondPerSecond(30); // set the acceleration in mm/sec^2
-//      stepper2.setupRelativeMoveInMillimeters(moveRadius(radius2)/MM_OFFSET); // move relative mm
-//      while(!stepper2.motionComplete())
+      // Move stepper_r
+//      stepper_r.setupRelativeMoveInMillimeters(moveRadius(radius2)/MM_OFFSET); // move relative mm
+//      while(!stepper_r.motionComplete())
 //      {
-//        stepper2.processMovement();
+//        stepper_r.processMovement();
 //      }
        wrapString(); //wrap string around peg
     }
