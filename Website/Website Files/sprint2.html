@@ -117,7 +117,30 @@
         string-art theme if they have time before POE ends...   </p>
         <p>So, this is what we got done these past two weeks! Boy has it been a sprint.</p>
         <h5>Hardware</h5>
-					<p>TODO: Written stuff</p>
+					<p>We refined the CAD that was completed at the very end of last week. Besides removing the pegs in the middle of the disk (a decision we made to simplify
+            the stringing process for our MVP), many of the adjustments were small tweaks to make the system fit together better.</p>
+
+          <img src="sprint_images/sprint2/image15.png">
+
+          <p>We planned to have our machine powered by 2 stepper motors. One to move the string manipulator with a belt, and the other to turn a gear to rotate
+          the circular board. We ran into some trouble getting the gears to fit together accurately. These were remedied with slight adjustments and reprints.</p>
+
+          <p>On the electrical side, we tested stepper motors with an Arduino Uno and Adafruit Motorshield but the board would over heat and the motors would jitter.
+          We found that a RAMPS 1.4 Controller on an Arduino Mega2560 board worked much more smoothly.</p>
+
+          <p>The RAMPS 1.4 Controller Board: </p>
+          <img src="sprint_images/sprint2/image18.jpg">
+
+        <h5>Software</h5>
+        <p>Within the Arduino control code of the system, we tested our motors with the AccelMotor library but later found that SpeedyStepper library,
+        made by xyz suited our needs much better because xyz.  </p>
+        <p>We also created a string art simulator in Pygame to test our image processing algorithm. The simulator processes a normal image into one drawn by criss-crossing
+        straight lines. This is an example of one of our outputs: </p>
+        <img src="sprint_images/sprint2/image14.jpg">
+        <p>Our image processing is a calculated with a greedy algorithm, which means that every line drawn by the string is the most optimal at that given time. It does not
+        take into consideration what the end picture will look like. </p>
+        <img src="sprint_images/sprint2/greedy.png">
+
 				</div>
 
 				<div class="entry-content-media">
