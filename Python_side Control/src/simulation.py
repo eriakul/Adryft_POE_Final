@@ -79,17 +79,17 @@ class System:
                             self.current_peg,
                             self.screen_properties["peg_size"])
 
-    def process_click(self):
-        x, y = event.pos
-        closest_peg = min(self.screen_properties["pegs"],
-        key = lambda pos: hypot(pos[0]-x, pos[1]-y))
-
-        pygame.draw.line(self.screen, self.screen_properties["string_color"],
-                        self.current_peg, closest_peg, self.screen_properties["string_thickness"])
-
-        self.current_peg = closest_peg
-        self.refresh_pegs()
-        self.update_window()
+    # def process_click(self):
+    #     x, y = event.pos
+    #     closest_peg = min(self.screen_properties["pegs"],
+    #     key = lambda pos: hypot(pos[0]-x, pos[1]-y))
+    #
+    #     pygame.draw.line(self.screen, self.screen_properties["string_color"],
+    #                     self.current_peg, closest_peg, self.screen_properties["string_thickness"])
+    #
+    #     self.current_peg = closest_peg
+    #     self.refresh_pegs()
+    #     self.update_window()
 
     def draw_line_to(self, peg_index):
         last_peg = self.current_peg
