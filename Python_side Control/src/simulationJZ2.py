@@ -172,6 +172,7 @@ class ImageProcessor:
             self.image.show()
 
         self.np_image = np.asmatrix(self.image.getdata(),dtype=np.float64).reshape(self.image_size[0], self.image_size[1])
+        self.np_image = np.flipud(self.np_image)
         self.pegs = []
         self.create_pegs()
         self.pixel_x_coors, self.pixel_y_coors = self.create_pixel_to_inch_mesh()
@@ -233,9 +234,9 @@ class ImageProcessor:
         norms = np.linalg.norm(pixel_vectors - np.multiply(v_hat.T, np.dot(v_hat, pixel_vectors)), axis=0)
         norms = norms.reshape((n, n))
 
-        valid_points = (norms < self.string_thickness)
+        valid_points = (norms < self.string_thickness*2)
         fitness = np.sum(self.np_image[valid_points])
-        if self.debug:
+        if self.debug or fitness == 0:
             for i, peg in enumerate(self.pegs):
                 if i == peg1 or i == peg2:
                     plt.plot(peg[0], peg[1], 'ro')
@@ -244,6 +245,7 @@ class ImageProcessor:
 
             plt.contourf(self.pixel_x_coors, self.pixel_y_coors, norms, 20, cmap=plt.cm.viridis)
             cbar = plt.colorbar()
+            plt.contour(self.pixel_x_coors, self.pixel_y_coors, self.np_image, 2)
             plt.axis("equal")
             plt.show()
 
@@ -267,4 +269,4 @@ class ImageProcessor:
         pass
 
 if __name__ == "__main__":
-    test = ImageProcessor(file_name="nike.jpeg", debug=True)
+    test = ImageProcessor(file_name="nike.jpeg", debug=False)
