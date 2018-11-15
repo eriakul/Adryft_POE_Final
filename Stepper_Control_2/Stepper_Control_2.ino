@@ -113,9 +113,9 @@ void setup()
     stepper_r.setStepsPerMillimeter(STEPS_PER_MM); // set the number of steps per millimeter
     stepper_r.setSpeedInMillimetersPerSecond(50); // set the speed in mm/sec
     stepper_r.setAccelerationInMillimetersPerSecondPerSecond(40); // set the acceleration in mm/sec^2
-    delay(100);
-    
-    
+//    delay(100);
+//    
+//    
 //    stepper_r.setupRelativeMoveInMillimeters(RADIUS_IN_MM/1.038); // move relative mm
 //    while(!stepper_r.motionComplete())
 //    {
@@ -134,7 +134,6 @@ void setup()
 
 void loop()
 {
-//  exit(0);
   while(!Serial.available()) {} // Do nothing if no message from python
   // Serial read section
   while(Serial.available()){
@@ -167,10 +166,6 @@ void loop()
         theta2 = theta1.toFloat();
         // Set stepper_t's target position according to theta value
         stepper_t.setupRelativeMoveInRevolutions(moveRevolutions(theta2));
-//        while(!stepper_t.motionComplete())
-//        {
-//          stepper_t.processMovement();
-//        }
         // Move stepper_r
         stepper_r.setupRelativeMoveInMillimeters(-moveRadius(radius2)); // move relative mm
         while(!stepper_t.motionComplete()||!stepper_r.motionComplete())
@@ -184,11 +179,9 @@ void loop()
   
     if (readString.length() > 0)
     {
-      Serial.print(theta1);
       Serial.println("Task Completed");
       readString = "";  
     }
-    //delay(500);
     Serial.flush();
   }
 }
