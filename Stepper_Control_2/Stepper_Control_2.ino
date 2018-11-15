@@ -51,7 +51,7 @@ float moveRevolutions(float theta){
 
 // moveRadius takes in radius value and calculates how many mm (relative) stepper_r should move
 float moveRadius(float radius){
-  return (radius*FEET_TO_MM);
+  return (radius*FEET_TO_MM/1.038);
 }
 
 // function to call motors to wrap string around the peg
@@ -115,11 +115,12 @@ void setup()
     stepper_r.setAccelerationInMillimetersPerSecondPerSecond(40); // set the acceleration in mm/sec^2
     delay(100);
     
-    stepper_r.setupRelativeMoveInMillimeters(RADIUS_IN_MM); // move relative mm
-    while(!stepper_r.motionComplete())
-    {
-      stepper_r.processMovement();
-    }
+    
+//    stepper_r.setupRelativeMoveInMillimeters(RADIUS_IN_MM/1.038); // move relative mm
+//    while(!stepper_r.motionComplete())
+//    {
+//      stepper_r.processMovement();
+//    }
 
     // home the motor by moving until the homing sensor is activated, then set the position to zero
 //    pinMode(R_LIMIT_SWITCH_OUTPUT, INPUT);
@@ -133,7 +134,7 @@ void setup()
 
 void loop()
 {
-  exit(0);
+//  exit(0);
   while(!Serial.available()) {} // Do nothing if no message from python
   // Serial read section
   while(Serial.available()){

@@ -20,7 +20,7 @@ max_overlap = 2
 window_size = [1200, 800]
 baudRate = 9600
 
-arduinoComPort = "COM6"
+arduinoComPort = "COM7"
 pygame.init()
 
 stringomatic = System(window_size, peg_num = peg_num, string_thickness = string_thickness)
