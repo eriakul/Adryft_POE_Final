@@ -26,6 +26,7 @@ const float FEET_TO_MM = 25.4*12; // multiply feet by this constant to get mm
 const float STEPS_PER_MM = 100/1.25; // divide expected distance by constant to account for offset
 //const float DEG_PER_STEP = 1.8; // obtained from NEMA stepper motor spec sheet
 const float DEG_PER_PEG = 7.5; // degree per peg to wrap string around
+const float RADIUS_IN_MM = 329.406; // distance from end of r axis to center
 
 // Create constant variables read from python for wrapping string
 float WrapCoordinates[6]; 
@@ -112,6 +113,13 @@ void setup()
     stepper_r.setStepsPerMillimeter(STEPS_PER_MM); // set the number of steps per millimeter
     stepper_r.setSpeedInMillimetersPerSecond(50); // set the speed in mm/sec
     stepper_r.setAccelerationInMillimetersPerSecondPerSecond(40); // set the acceleration in mm/sec^2
+    delay(100);
+    
+    stepper_r.setupRelativeMoveInMillimeters(RADIUS_IN_MM); // move relative mm
+    while(!stepper_r.motionComplete())
+    {
+      stepper_r.processMovement();
+    }
 
     // home the motor by moving until the homing sensor is activated, then set the position to zero
 //    pinMode(R_LIMIT_SWITCH_OUTPUT, INPUT);
@@ -125,6 +133,7 @@ void setup()
 
 void loop()
 {
+  exit(0);
   while(!Serial.available()) {} // Do nothing if no message from python
   // Serial read section
   while(Serial.available()){
