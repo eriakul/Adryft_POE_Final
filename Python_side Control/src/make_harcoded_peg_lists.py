@@ -20,7 +20,17 @@ class plg():
             curr_peg = self.peg(2*fourth-start)
             peg_list.append(curr_peg)
             start-=1
-
         return peg_list
+
+    def spiral(self, steps = 50):
+        peg_list = []
+        curr_peg = 0
+        step = 0
+        for i in range(steps):
+            curr_peg = self.peg(curr_peg + step)
+            peg_list.append(curr_peg)
+            step+=1
+        return peg_list
+
 gen = plg()
-print(gen.heart())
+print(gen.spiral())
