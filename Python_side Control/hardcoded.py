@@ -9,8 +9,8 @@ def get_next_peg(peg_list):
     return True, peg_list.pop(0)
 
 
-peg_list = [20, 37]
-#peg_list = [20, 40, 50, 10, 0]
+#peg_list = [20, 37]
+peg_list = [20, 40, 30, 10, 0]
 #peg_list = [0, 1, 3, 6, 10, 15, 21, 28, 36, 45, 7, 18, 30, 43, 9, 24, 40, 9, 27, 46, 18, 39, 13, 36, 12, 37, 15, 42, 22, 3, 33, 16, 48, 33, 19, 6, 42, 31, 21, 12, 4, 45, 39, 34, 30, 27, 25, 24, 24, 25]
 
 peg_num = 48
@@ -40,7 +40,7 @@ serial_port.write(msg_send)
 time.sleep(1)
 
 print("Sending Wrap Commands")
-#Send wrap commands in form "r,theta;r,theta;r,theta:r,theta;r,theta;r,theta_current"
+#Send wrap commands in form "r;theta;r;r;theta;r;"
 wrap_commands = create_wrap_commands(half_step, real_radius)
 wrap_commands = "W" + wrap_commands
 wrap_commands = wrap_commands.encode() #'utf-8'

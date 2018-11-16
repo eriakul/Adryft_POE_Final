@@ -54,6 +54,15 @@ float moveRadius(float radius){
   return (radius*FEET_TO_MM/1.038);
 }
 
+// function to move r motors to center 
+void toCenter(){
+    stepper_r.setupRelativeMoveInMillimeters(RADIUS_IN_MM/1.038); // move relative mm
+    while(!stepper_r.motionComplete())
+    {
+      stepper_r.processMovement();
+    }
+}
+
 // function to call motors to wrap string around the peg
 void wrapString(String direction1){
   if (direction1.equals("N")){
@@ -111,18 +120,10 @@ void setup()
 
     //set up speed and acceleartion for stepper_r
     stepper_r.setStepsPerMillimeter(STEPS_PER_MM); // set the number of steps per millimeter
-    stepper_r.setSpeedInMillimetersPerSecond(50); // set the speed in mm/sec
-    stepper_r.setAccelerationInMillimetersPerSecondPerSecond(40); // set the acceleration in mm/sec^2
-//    delay(100);
-//    
-//    
-//    stepper_r.setupRelativeMoveInMillimeters(RADIUS_IN_MM/1.038); // move relative mm
-//    while(!stepper_r.motionComplete())
-//    {
-//      stepper_r.processMovement();
-//    }
+    stepper_r.setSpeedInMillimetersPerSecond(70); // set the speed in mm/sec
+    stepper_r.setAccelerationInMillimetersPerSecondPerSecond(50); // set the acceleration in mm/sec^2
 
-    // home the motor by moving until the homing sensor is activated, then set the position to zero
+// home the motor by moving until the homing sensor is activated, then set the position to zero
 //    pinMode(R_LIMIT_SWITCH_OUTPUT, INPUT);
 //    Serial.println("HOMING");
 //    stepper_r.moveToHomeInMillimeters(-1, 20, 250, R_LIMIT_SWITCH_OUTPUT);
@@ -152,6 +153,7 @@ void loop()
           WrapCoordinates[i] = StrCoordinate.toFloat();
           WrapCommands = WrapCommands.substring(colonIndex+1);
         }
+        toCenter();
       }
       else{
         String commands = readString;
