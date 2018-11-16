@@ -20,7 +20,7 @@ SpeedyStepper stepper_r;
 
 // Create constant variables regarding mechanical system and stepper deg/step
 const int REV_TO_DEGREE = 360; // degrees in one revolution 
-const float GEAR_RATIO = -4.69; // negative since gear spins opposite direction to motor
+const float GEAR_RATIO = -79/13*1.1429; // negative since gear spins opposite direction to motor
 const float DEG_PER_STEP = 1.8; // obtained from NEMA stepper motor spec sheet
 const float FEET_TO_MM = 25.4*12; // multiply feet by this constant to get mm
 const float STEPS_PER_MM = 100/1.25; // divide expected distance by constant to account for offset
@@ -115,13 +115,19 @@ void setup()
 
     //set up speed and acceleartion for stepper_t
     stepper_t.setStepsPerRevolution(3200);
-    stepper_t.setSpeedInRevolutionsPerSecond(0.3);
-    stepper_t.setAccelerationInRevolutionsPerSecondPerSecond(0.3);
+    stepper_t.setSpeedInRevolutionsPerSecond(0.7);
+    stepper_t.setAccelerationInRevolutionsPerSecondPerSecond(1);
 
     //set up speed and acceleartion for stepper_r
     stepper_r.setStepsPerMillimeter(STEPS_PER_MM); // set the number of steps per millimeter
-    stepper_r.setSpeedInMillimetersPerSecond(70); // set the speed in mm/sec
-    stepper_r.setAccelerationInMillimetersPerSecondPerSecond(50); // set the acceleration in mm/sec^2
+    stepper_r.setSpeedInMillimetersPerSecond(80); // set the speed in mm/sec
+    stepper_r.setAccelerationInMillimetersPerSecondPerSecond(100); // set the acceleration in mm/sec^2
+
+//    stepper_t.setupRelativeMoveInRevolutions(-moveRevolutions(360)); // move relative mm
+//    while(!stepper_t.motionComplete())
+//    {
+//      stepper_t.processMovement();
+//    }
 
 // home the motor by moving until the homing sensor is activated, then set the position to zero
 //    pinMode(R_LIMIT_SWITCH_OUTPUT, INPUT);
@@ -130,6 +136,7 @@ void setup()
 //    Serial.println("Found Home");
     
     // Set up serial port
+ 
     Serial.begin(9600);  
 }
 

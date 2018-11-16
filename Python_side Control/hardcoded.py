@@ -10,8 +10,8 @@ def get_next_peg(peg_list):
 
 
 #peg_list = [20, 37]
-peg_list = [20, 40, 30, 10, 0]
-#peg_list = [0, 1, 3, 6, 10, 15, 21, 28, 36, 45, 7, 18, 30, 43, 9, 24, 40, 9, 27, 46, 18, 39, 13, 36, 12, 37, 15, 42, 22, 3, 33, 16, 48, 33, 19, 6, 42, 31, 21, 12, 4, 45, 39, 34, 30, 27, 25, 24, 24, 25]
+#peg_list = [20, 40, 30, 10, 0]
+peg_list = [1, 3, 6, 10, 15, 21, 28, 36, 45, 7, 18, 30, 43, 9, 24, 40, 9, 27, 46, 18, 39, 13, 36, 12, 37, 15, 42, 22, 3, 33, 16, 48, 33, 19, 6, 42, 31, 21, 12, 4, 45, 39, 34, 30, 27, 25, 24, 24, 25]
 
 peg_num = 48
 string_thickness = 1
@@ -21,7 +21,7 @@ max_overlap = 2
 window_size = [1200, 800]
 baudRate = 9600
 
-arduinoComPort = "COM7"
+arduinoComPort = "COM6"
 pygame.init()
 
 stringomatic = System(window_size, peg_num = peg_num, string_thickness = string_thickness)
