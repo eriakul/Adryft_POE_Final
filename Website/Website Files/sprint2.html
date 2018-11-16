@@ -112,7 +112,7 @@
 
 				<div class="entry-content">
 					<p class="lead">After pivoting away from the "lighter than air" jellyfish project
-            at the end of the last sprint, Team Adryft head-first into its brand new idea. The five members
+            at the end of the last sprint, Team Adryft leaps head-first into its brand new idea. The five members
           agreed to keep the team's original name "Adryft" and planned to somehow make it fit the
         string-art theme if they have time before POE ends...   </p>
         <p>So, this is what we got done these past two weeks! Boy has it been a sprint.</p>
@@ -133,22 +133,31 @@
 
         <h5>Software</h5>
         <p>Within the Arduino control code of the system, we tested our motors with the AccelMotor library but later found that SpeedyStepper library,
-        made by xyz suited our needs much better because xyz.  </p>
+        made by Stan suited our needs much better and had better documentation.  </p>
         <p>We also created a string art simulator in Pygame to test our image processing algorithm. The simulator processes a normal image into one drawn by criss-crossing
         straight lines. This is an example of one of our outputs: </p>
         <img src="sprint_images/sprint2/image14.jpg">
         <p>Our image processing is a calculated with a greedy algorithm, which means that every line drawn by the string is the most optimal at that given time. It does not
-        take into consideration what the end picture will look like. </p>
+        take into consideration what the end picture will look like. For each step, the algorithm draws the line across the board that covers the most "dark"
+        values in the picture.</p>
+
         <img src="sprint_images/sprint2/greedy.png">
 
+        <p>A problem we ran into was that the algorithm didn't know when to <b>stop</b>. It would keep drawing lines across the board until the virtual length of string
+        ran out.</p>
+        <img src="sprint_images/sprint2/image13.png">
+
+        <p>The image processing algorithm can be found on our <a href="https://github.com/eriakul/Adryft_POE_Final">Github</a>.</p>
+
 				</div>
 
-				<div class="entry-content-media">
-					<div class="post-thumb">
-						<img src="TODO: sprint_images/sprint2/image_name.jpg">
-					</div>
-				</div>
+        <h5>Putting It All Together</h5>
+        <p>By the end of the week, we were ready to bring our finished components together. The pieces on the CAD were 3D-printed and lasercut, the stepper-motors were communicating with
+            the Arduino code, and the Python code could tell us which pegs to loop strings around. Anyway, to get straight to it, take a look at this!</p>
 
+          <img src="sprint_images/sprint2/image20.gif">
+
+          <p>That's all for Sprint 2. See you next Sprint!</p>
 				<div class="pagenav group">
 		  			  <span class="prev"><a href="sprint2.html" rel="prev">Previous</a></span>
 		  			<span class="next"><a href="sprint3.html" rel="next">Next</a></span>
