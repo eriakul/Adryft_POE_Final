@@ -8,8 +8,10 @@ from itertools import combinations
 from bokeh.layouts import gridplot
 from bokeh.plotting import figure, show, output_file, show
 import matplotlib.pyplot as plt
+from matplotlib import collections as mc
 #pip install Pillow==3.1.2
 import os
+import pdb
 
 
 class System:
@@ -151,34 +153,49 @@ class System:
 class ImageProcessor:
     """This class takes an image and does the computing to determine where to draw the lines."""
 
-    def __init__(self, file_name, num_pegs = 48, string_thickness = 0.01, max_length = 1500, radius = 11, debug = False):
+    def __init__(self, file_name, num_pegs = 48, string_thickness = 0.05, max_length = 3000, radius = 11, max_image_size = 512, debug = False):
         self.num_pegs = num_pegs                    #unitless
-        self.max_length = max_length                #feet
+        self.max_length = max_length * 12           #feet -> inches
         self.string_thickness = string_thickness    #inches
         self.radius = radius                        #inches
         self.total_string_cost = 0 #How much string we've used so far in feet
         self.debug = debug
-
+        self.max_image_size = max_image_size
+        self.file_name = file_name
         dir_path = os.path.dirname(os.path.realpath(__file__))
         # Open image in grayscale
-        self.image = Image.open(dir_path+"/"+file_name).convert('L')
+        self.image = Image.open(dir_path+"/"+self.file_name).convert('L')
         self.original_image_size = self.image.size
+        self.resize_image()
         self.crop_image_to_square()
         self.image_size = self.image.size
         self.crop_image_to_circle()
         print("Original Image Size: ", self.original_image_size)
         print("New Image Size: ", self.image_size)
-        if debug:
+        if self.debug:
             self.image.show()
 
         self.np_image = np.asmatrix(self.image.getdata(),dtype=np.float64).reshape(self.image_size[0], self.image_size[1])
         self.np_image = np.flipud(self.np_image)
+        self.np_image = 255 - self.np_image
+        if self.debug:
+            plt.imshow(np.flipud(self.np_image))
+            plt.show()
         self.pegs = []
         self.create_pegs()
         self.pixel_x_coors, self.pixel_y_coors = self.create_pixel_to_inch_mesh()
 
-        self.calc_all_paths()
+        self.calc_all_paths([1000*12, 1500*12, 2000*12, 2500*12, 3000*12])
 
+    def resize_image(self):
+        if max(self.original_image_size) > self.max_image_size:
+            scaling_factor = self.max_image_size / max(self.original_image_size)
+            new_size = (floor(scaling_factor * self.original_image_size[0]),
+                        floor(scaling_factor * self.original_image_size[1]))
+            self.image = self.image.resize(new_size, Image.ANTIALIAS)
+            self.image.save(self.file_name)
+        if self.debug:
+            self.image.show()
     def crop_image_to_square(self):
         """ Transforms image into square the size of the smallest dimension """
         crop_size = floor(min(self.original_image_size))
@@ -216,6 +233,8 @@ class ImageProcessor:
         """
         xs = np.linspace(-self.radius, self.radius, self.image_size[0])
         ys = np.linspace(-self.radius, self.radius, self.image_size[1])
+        self.inch_per_pixel =  self.radius * 2 / self.image_size[0]
+        print("Inch per pixel: ", self.inch_per_pixel)
         return np.meshgrid(xs, ys)
 
     def calc_fitness(self, peg1, peg2):
@@ -225,18 +244,28 @@ class ImageProcessor:
 
         string_vector = peg2_pos - peg1_pos
         v_hat = string_vector / np.linalg.norm(string_vector)
+        # unit vector perpendicular to the string vector
+        v_hat_perp = (v_hat * np.asmatrix([[0, -1], [1, 0]]))
         n = self.pixel_x_coors.shape[1]
+        # pixel_points has size (2 x n^2)
         pixel_points = np.concatenate((self.pixel_x_coors.reshape((1, n**2)),
                                 self.pixel_y_coors.reshape((1, n**2))), axis=0)
 
-
+        # # matrix transformation that projects points onto a defined line
+        # projection = np.array([[v_hat_perp[0, 0]**2, v_hat_perp[0, 0] * v_hat_perp[0, 1]],
+        #                         [v_hat_perp[0, 0] * v_hat_perp[0, 1], v_hat_perp[0, 1]**2]])
+        # # vectors from every pixel to the first peg
         pixel_vectors = pixel_points - (peg1_pos.T * np.ones((1, n**2)))
-        norms = np.linalg.norm(pixel_vectors - np.multiply(v_hat.T, np.dot(v_hat, pixel_vectors)), axis=0)
-        norms = norms.reshape((n, n))
+        # #
+        # norms = np.multiply(projection, pixel_vectors)
+        # norms = norms.reshape((n, n))
+        norms = v_hat_perp * np.asmatrix(pixel_vectors)
+        norms = np.abs(norms.reshape((n, n)))
 
-        valid_points = (norms < self.string_thickness*2)
+        #TODO: replace *7 with half the pixel-inch conversion factor
+        valid_points = (norms < self.inch_per_pixel / 1.8)
         fitness = np.sum(self.np_image[valid_points])
-        if self.debug or fitness == 0:
+        if self.debug:
             for i, peg in enumerate(self.pegs):
                 if i == peg1 or i == peg2:
                     plt.plot(peg[0], peg[1], 'ro')
@@ -252,7 +281,7 @@ class ImageProcessor:
             print("Fitness is: ", fitness)
         return fitness
 
-    def calc_all_paths(self):
+    def calc_all_paths(self, max_lengths):
         """ Look at all possible paths and evaulate the "fitness" of each """
         self.line_list = []
         peg_combinations = combinations(range(self.num_pegs), 2)
@@ -261,6 +290,50 @@ class ImageProcessor:
             fitness = self.calc_fitness(peg1, peg2)
             self.line_list.append((fitness, peg1, peg2))
             print(fitness)
+        self.line_list = sorted(self.line_list)
+        fig, ax = plt.subplots()
+        ax.axis([-self.radius, self.radius, -self.radius, self.radius])
+        for i, peg in enumerate(self.pegs):
+            if i == peg1 or i == peg2:
+                plt.plot(peg[0], peg[1], 'ko')
+            else:
+                plt.plot(peg[0], peg[1], 'ko')
+
+        length_used = 0
+        index = 1
+        line_list = []
+        for max_length in max_lengths:
+            while length_used < max_length:
+                peg1_points = self.pegs[self.line_list[-index][1]]
+                peg2_points = self.pegs[self.line_list[-index][2]]
+                if self.debug:
+                    print(self.line_list[index])
+                    print("peg 1: ", self.pegs[self.line_list[-index][1]])
+                    print("peg 2: ", self.pegs[self.line_list[-index][2]])
+                    print("fitness is: ", self.line_list[-index][0])
+                    ax.plot((peg1_points[0], peg2_points[0]), (peg1_points[1], peg2_points[1]), 'k-', linewidth=self.string_thickness/self.inch_per_pixel)
+                    plt.pause(0.001)
+                    plt.axis("equal")
+                    # pdb.set_trace()
+                line_list.append([(peg1_points[0], peg1_points[1]), (peg2_points[0], peg2_points[1])])
+                index += 1
+                length_used += ((peg1_points[0] - peg2_points[0])**2 + (peg1_points[1] - peg2_points[1])**2)**0.5
+                print(length_used)
+
+
+            plt.show()
+            fig, ax = plt.subplots()
+            ax.axis([-self.radius, self.radius, -self.radius, self.radius])
+            for i, peg in enumerate(self.pegs):
+                if i == peg1 or i == peg2:
+                    plt.plot(peg[0], peg[1], 'ko')
+                else:
+                    plt.plot(peg[0], peg[1], 'ko')
+            plt.axis("equal")
+            lc = mc.LineCollection(line_list, colors='k', linewidths=self.string_thickness/self.inch_per_pixel)
+            ax.add_collection(lc)
+            # plt.contour(self.pixel_x_coors, self.pixel_y_coors, self.np_image, 2)
+            plt.show()
 
     def calc_optimal_path(self):
         """ Pick the best paths in the right order to minimize string used """
@@ -269,4 +342,4 @@ class ImageProcessor:
         pass
 
 if __name__ == "__main__":
-    test = ImageProcessor(file_name="nike.jpeg", debug=False)
+    test = ImageProcessor(file_name="Data/storm.jpeg", debug=False)
