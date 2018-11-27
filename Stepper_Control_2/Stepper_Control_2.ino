@@ -56,7 +56,7 @@ float moveRadius(float radius){
 
 // function to move r motors to center 
 void toCenter(){
-    stepper_r.setupRelativeMoveInMillimeters(RADIUS_IN_MM/1.038); // move relative mm
+    stepper_r.setupRelativeMoveInMillimeters(RADIUS_IN_MM/1.05); // move relative mm
     while(!stepper_r.motionComplete())
     {
       stepper_r.processMovement();
@@ -129,15 +129,22 @@ void setup()
 //      stepper_t.processMovement();
 //    }
 
-// home the motor by moving until the homing sensor is activated, then set the position to zero
-//    pinMode(R_LIMIT_SWITCH_OUTPUT, INPUT);
-//    Serial.println("HOMING");
-//    stepper_r.moveToHomeInMillimeters(-1, 20, 250, R_LIMIT_SWITCH_OUTPUT);
-//    Serial.println("Found Home");
-    
     // Set up serial port
- 
     Serial.begin(9600);  
+
+// home the motor by moving until the homing sensor is activated, then set the position to zero
+    pinMode(R_LIMIT_SWITCH_OUTPUT, INPUT_PULLUP);
+    // Serial.println("HOMING");
+    
+//    while(digitalRead(R_LIMIT_SWITCH_OUTPUT) == 1){
+//      Serial.println("Not yet");
+//      delay(500);
+//    }
+      
+    stepper_r.moveToHomeInMillimeters(-1, 20, 250, R_LIMIT_SWITCH_OUTPUT);
+    //delay(100);
+    // Serial.println("Found home");
+   
 }
 
 void loop()
