@@ -13,147 +13,10 @@ from matplotlib import collections as mc
 import os
 import pdb
 
-
-class System:
-
-    """ System is a class that processes the live Pygame display of the string art simulator."""
-
-    def __init__(self, window_size, peg_num = 36, string_thickness = 1, peg_size = 5):
-        """Initializes Pygame window with given settings."""
-
-        self.window_size = window_size
-        self.font = pygame.font.SysFont('tlwgtypewriter', 30)
-        self.text_position = [window_size[0]//10, window_size[1]//10]
-
-        self.peg_num = peg_num
-        self.screen_properties = dict(
-            board_color = pygame.Color(255, 255, 255, 255),
-            board_radius = floor(window_size[1]/2*.9),
-            center = [window_size[0]//2, window_size[1]//2],
-            pegs = [],
-            peg_size = peg_size,
-            peg_color = pygame.Color(100, 100, 100, 255),
-            peg_highlight = pygame.Color(100, 255, 255, 255),
-            string_color = pygame.Color(0, 0, 0, 255),
-            string_thickness = string_thickness
-            )
-
-        self.screen = pygame.display.set_mode(window_size)
-        pygame.display.set_caption("String Art Simulation")
-        pygame.draw.circle(self.screen,
-                            self.screen_properties["board_color"],
-                            self.screen_properties["center"],
-                            self.screen_properties["board_radius"])
-        pygame.display.flip()
-        self.create_pegs()
-        self.refresh_pegs()
-
-
-
-    def update_window(self):
-        pygame.display.flip()
-
-
-    def create_pegs(self):
-        angle_steps = 2*pi/self.peg_num
-        peg_locations = []
-        radius = self.screen_properties["board_radius"]
-        center_x = self.screen_properties["center"][0]
-        center_y = self.screen_properties["center"][1]
-        for i in range(self.peg_num):
-            theta = 3/2*pi +i*angle_steps
-            x_delta = radius*cos(theta)
-            y_delta = radius*sin(theta)
-            location = [floor(center_x + x_delta), floor(center_y + y_delta)]
-            peg_locations.append(location)
-
-        self.screen_properties["pegs"] = peg_locations
-        self.current_peg = self.screen_properties["pegs"][0]
-
-    def refresh_pegs(self):
-        for location in self.screen_properties["pegs"]:
-            pygame.draw.circle(self.screen,
-                                self.screen_properties["peg_color"],
-                                location,
-                                self.screen_properties["peg_size"])
-        #highlight current peg
-        pygame.draw.circle(self.screen,
-                            self.screen_properties["peg_highlight"],
-                            self.current_peg,
-                            self.screen_properties["peg_size"])
-
-    # def process_click(self):
-    #     x, y = event.pos
-    #     closest_peg = min(self.screen_properties["pegs"],
-    #     key = lambda pos: hypot(pos[0]-x, pos[1]-y))
-    #
-    #     pygame.draw.line(self.screen, self.screen_properties["string_color"],
-    #                     self.current_peg, closest_peg, self.screen_properties["string_thickness"])
-    #
-    #     self.current_peg = closest_peg
-    #     self.refresh_pegs()
-    #     self.update_window()
-
-    def draw_line_to(self, peg_index):
-        last_peg = self.current_peg
-        current_peg = self.screen_properties["pegs"][peg_index]
-        # pygame.draw.line(self.screen, self.screen_properties["string_color"],
-        #                 last_peg, current_peg, self.screen_properties["string_thickness"])
-        pygame.draw.aaline(self.screen, self.screen_properties["string_color"],
-                        last_peg, current_peg, True)
-
-        self.current_peg = current_peg
-        self.refresh_pegs()
-
-    def update_string_used(self, string_used):
-        string_used = "{} ft".format(round(string_used, 1))
-        new_display = self.font.render(string_used, False, (255, 255, 255, 255), (0,0,0,0))
-        self.screen.blit(new_display, self.text_position)
-
-    def draw_mesh(self, peg_list):
-        """Draws a mesh from peg to peg.
-        peg_list -- list of consecutive pegs that need to be connected, number in list refers to peg number
-        """
-        #Iterate through peg_list and draw lines from peg to peg
-        for i in range(len(peg_list) - 1):
-            from_peg = peg_list[i] #starting point of line
-            to_peg = peg_list[i + 1] #end point of line
-
-            pygame.draw.line(self.screen, self.screen_properties["string_color"],
-                            self.screen_properties["pegs"][from_peg], self.screen_properties["pegs"][to_peg], self.screen_properties["string_thickness"])
-
-
-        self.current_peg = self.screen_properties["pegs"][peg_list[-1]] #last peg in list becomes the peg to start for process_click()
-        self.refresh_pegs()
-        self.update_window()
-
-    def draw_mesh_live(self, ImageProcessor):
-        next_peg = ImageProcessor.find_next_peg()
-
-        if next_peg == self.current_peg:
-            return False, 0
-
-        self.draw_line_to(next_peg)
-
-        self.update_string_used(ImageProcessor.total_string_cost)
-
-        self.update_window()
-
-        ImageProcessor.mean_squared_error()
-
-        return True, next_peg
-
-    def add_to_histogram(self, peg_1, peg_2):
-        self.histogram[frozenset([peg_1, peg_2])] = self.histogram.get(frozenset([peg_1, peg_2]), 0) + 1
-    def add_image_information(self, ImageProcessor):
-        data = "{} pegs : {} ft radius : {} max-overlap".format(self.peg_num, ImageProcessor.radius, ImageProcessor.max_overlap)
-        new_display = self.font.render(data, False, (255, 255, 255, 255), (0,0,0,0))
-        self.screen.blit(new_display, [int(.1/10*self.window_size[0]), int(0/10*self.window_size[1])])
-
 class ImageProcessor:
     """This class takes an image and does the computing to determine where to draw the lines."""
 
-    def __init__(self, file_name, num_pegs = 48, string_thickness = 0.05, max_length = 3000, radius = 11, max_image_size = 512, debug = False):
+    def __init__(self, file_name, num_pegs = 96, string_thickness = 0.05, max_length = 3000, radius = 11, max_image_size = 512, debug = False):
         self.num_pegs = num_pegs                    #unitless
         self.max_length = max_length * 12           #feet -> inches
         self.string_thickness = string_thickness    #inches
@@ -185,7 +48,12 @@ class ImageProcessor:
         self.create_pegs()
         self.pixel_x_coors, self.pixel_y_coors = self.create_pixel_to_inch_mesh()
 
-        self.calc_all_paths([1000*12, 1500*12, 2000*12, 2500*12, 3000*12])
+        self.calc_all_paths()
+        self.calc_usable_points(500*12)
+        self.calc_usable_points(1000*12)
+        self.calc_usable_points(1500*12)
+        self.calc_usable_points(2000*12)
+        self.calc_usable_points(2500*12)
 
     def resize_image(self):
         if max(self.original_image_size) > self.max_image_size:
@@ -250,15 +118,8 @@ class ImageProcessor:
         # pixel_points has size (2 x n^2)
         pixel_points = np.concatenate((self.pixel_x_coors.reshape((1, n**2)),
                                 self.pixel_y_coors.reshape((1, n**2))), axis=0)
-
-        # # matrix transformation that projects points onto a defined line
-        # projection = np.array([[v_hat_perp[0, 0]**2, v_hat_perp[0, 0] * v_hat_perp[0, 1]],
-        #                         [v_hat_perp[0, 0] * v_hat_perp[0, 1], v_hat_perp[0, 1]**2]])
-        # # vectors from every pixel to the first peg
+        # vectors from every pixel to the first peg
         pixel_vectors = pixel_points - (peg1_pos.T * np.ones((1, n**2)))
-        # #
-        # norms = np.multiply(projection, pixel_vectors)
-        # norms = norms.reshape((n, n))
         norms = v_hat_perp * np.asmatrix(pixel_vectors)
         norms = np.abs(norms.reshape((n, n)))
 
@@ -281,65 +142,109 @@ class ImageProcessor:
             print("Fitness is: ", fitness)
         return fitness
 
-    def calc_all_paths(self, max_lengths):
+    def calc_all_paths(self):
         """ Look at all possible paths and evaulate the "fitness" of each """
-        self.line_list = []
+        self.all_lines = []
         peg_combinations = combinations(range(self.num_pegs), 2)
         for combo in peg_combinations:
             peg1, peg2 = combo;
             fitness = self.calc_fitness(peg1, peg2)
-            self.line_list.append((fitness, peg1, peg2))
+            self.all_lines.append((fitness, peg1, peg2))
             print(fitness)
-        self.line_list = sorted(self.line_list)
-        fig, ax = plt.subplots()
-        ax.axis([-self.radius, self.radius, -self.radius, self.radius])
-        for i, peg in enumerate(self.pegs):
-            if i == peg1 or i == peg2:
-                plt.plot(peg[0], peg[1], 'ko')
-            else:
-                plt.plot(peg[0], peg[1], 'ko')
+        self.all_lines = sorted(self.all_lines, reverse=True)
 
-        length_used = 0
-        index = 1
-        line_list = []
-        for max_length in max_lengths:
-            while length_used < max_length:
-                peg1_points = self.pegs[self.line_list[-index][1]]
-                peg2_points = self.pegs[self.line_list[-index][2]]
-                if self.debug:
-                    print(self.line_list[index])
-                    print("peg 1: ", self.pegs[self.line_list[-index][1]])
-                    print("peg 2: ", self.pegs[self.line_list[-index][2]])
-                    print("fitness is: ", self.line_list[-index][0])
-                    ax.plot((peg1_points[0], peg2_points[0]), (peg1_points[1], peg2_points[1]), 'k-', linewidth=self.string_thickness/self.inch_per_pixel)
-                    plt.pause(0.001)
-                    plt.axis("equal")
-                    # pdb.set_trace()
-                line_list.append([(peg1_points[0], peg1_points[1]), (peg2_points[0], peg2_points[1])])
-                index += 1
-                length_used += ((peg1_points[0] - peg2_points[0])**2 + (peg1_points[1] - peg2_points[1])**2)**0.5
-                print(length_used)
-
-
-            plt.show()
-            fig, ax = plt.subplots()
-            ax.axis([-self.radius, self.radius, -self.radius, self.radius])
-            for i, peg in enumerate(self.pegs):
-                if i == peg1 or i == peg2:
-                    plt.plot(peg[0], peg[1], 'ko')
-                else:
-                    plt.plot(peg[0], peg[1], 'ko')
-            plt.axis("equal")
-            lc = mc.LineCollection(line_list, colors='k', linewidths=self.string_thickness/self.inch_per_pixel)
-            ax.add_collection(lc)
-            # plt.contour(self.pixel_x_coors, self.pixel_y_coors, self.np_image, 2)
-            plt.show()
-
-    def calc_optimal_path(self):
+    def calc_usable_points(self, max_length):
         """ Pick the best paths in the right order to minimize string used """
         # Returns: list of tuples. Each tuple contains a peg combo
         # (from_peg, to_peg)
-        pass
+        line_collection = []
+        self.usable_lines = set([])
+        length_used = 0
+        index = 0
+        if self.debug:
+            fig, ax = plt.subplots()
+            ax.axis([-self.radius, self.radius, -self.radius, self.radius])
+            for i, peg in enumerate(self.pegs):
+                plt.plot(peg[0], peg[1], 'ko')
+        while length_used < max_length:
+            fitness = self.all_lines[index][0]
+            peg1 = self.all_lines[index][1]
+            peg2 = self.all_lines[index][2]
+            peg1_points = self.pegs[peg1]
+            peg2_points = self.pegs[peg2]
+            if self.debug:
+                print(self.all_lines[index])
+                print("peg 1: ", self.pegs[peg1])
+                print("peg 2: ", self.pegs[peg2])
+                print("fitness is: ", fitness)
+                ax.plot((peg1_points[0], peg2_points[0]), (peg1_points[1], peg2_points[1]), 'k-', linewidth=self.string_thickness/self.inch_per_pixel)
+                plt.pause(0.001)
+                plt.axis("equal")
+                # pdb.set_trace()
+            index += 1
+            length_used += ((peg1_points[0] - peg2_points[0])**2 + (peg1_points[1] - peg2_points[1])**2)**0.5
+            print(length_used)
+            self.usable_lines.add(frozenset([peg1, peg2]))
+            line_collection.append([(peg1_points[0], peg1_points[1]), (peg2_points[0], peg2_points[1])])
+            index += 1
+
+        if self.debug: plt.show()
+
+        fig, ax = plt.subplots()
+        ax.axis([-self.radius, self.radius, -self.radius, self.radius])
+        for peg in self.pegs:
+            plt.plot(peg[0], peg[1], 'ko')
+
+        plt.axis("equal")
+        lc = mc.LineCollection(line_collection, colors='k', linewidths=self.string_thickness/self.inch_per_pixel)
+        ax.add_collection(lc)
+        plt.show()
+
+    def calc_optimal_path(self, max_length):
+        self.calc_usable_points(max_length)
+        self.peg_histogram = {}
+        self.final_peg_list = []
+        self.additional_length = 0
+        for peg_number in range(self.num_pegs):
+            # Get number of connections per peg
+            self.peg_histogram[peg_number] = len([peg_number for combo in self.usable_lines if peg_number in combo])
+        peg_histogram_list = sorted(self.peg_histogram.items(), key=lambda x: x[1], reverse=True)
+        curr_peg = peg_histogram_list[0][0]
+        total_lines = len(self.usable_lines)
+        print(total_lines, 'TOTAL LINES')
+        sleep(3)
+        while sum(self.peg_histogram.values()) > 0:
+            index = 0
+            next_peg = None
+            while next_peg is None:
+                if frozenset([curr_peg, peg_histogram_list[index][0]]) in self.usable_lines:
+                    next_peg = peg_histogram_list[index][0]
+                    assert next_peg is not None
+                    direct = 1
+                    if self.debug: print('direct')
+                elif index == len(peg_histogram_list) - 1:
+                    if curr_peg == peg_histogram_list[0][0]:
+                        next_peg = peg_histogram_list[1][0]
+                    else:
+                        next_peg = peg_histogram_list[0][0]
+                    direct = 0
+                    if self.debug: print('not direct')
+                else:
+                    index += 1
+                    if self.debug: print('nada')
+            self.final_peg_list.append((curr_peg, next_peg, direct))
+            self.peg_histogram[curr_peg] -= 1
+            self.peg_histogram[next_peg] -= 1
+            if direct:
+                self.usable_lines.remove(frozenset([curr_peg, next_peg]))
+            else:
+                self.additional_length += abs(next_peg - curr_peg) / self.num_pegs * 2 * pi * self.radius
+            print(len(self.final_peg_list)/total_lines * 100, '% COMPLETE')
+            peg_histogram_list = sorted(self.peg_histogram.items(), key=lambda x: x[1], reverse=True)
+            curr_peg = next_peg
+
+        print(self.additional_length)
+        print(self.final_peg_list  )
 
 if __name__ == "__main__":
-    test = ImageProcessor(file_name="Data/storm.jpeg", debug=False)
+    test = ImageProcessor(file_name="Data/yinyang.jpeg", debug=False)
