@@ -8,7 +8,13 @@ class plg():
         else:
             return num
 
-
+    def cardioid(self, steps = 50):
+        order = 2
+        peg_list = []
+        start = 0
+        for i in range(steps):
+            peg_list.append(round(order * i % self.peg_num))
+        return peg_list
 
     def heart(self):
         peg_list = []
@@ -33,4 +39,4 @@ class plg():
         return peg_list
 
 gen = plg()
-print(gen.spiral())
+print(gen.cardioid())
