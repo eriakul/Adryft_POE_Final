@@ -9,6 +9,7 @@ from bokeh.layouts import gridplot
 from bokeh.plotting import figure, show, output_file, show
 import matplotlib.pyplot as plt
 from matplotlib import collections as mc
+
 #pip install Pillow==3.1.2
 import os
 import pdb
@@ -16,7 +17,7 @@ import pdb
 class ImageProcessor:
     """This class takes an image and does the computing to determine where to draw the lines."""
 
-    def __init__(self, file_name, num_pegs = 96, string_thickness = 0.05, max_length = 3000, radius = 11, max_image_size = 512, debug = False):
+    def __init__(self, file_name, num_pegs = 200, string_thickness = 0.05, max_length = 3000, radius = 11, max_image_size = 512, debug = False):
         self.num_pegs = num_pegs                    #unitless
         self.max_length = max_length * 12           #feet -> inches
         self.string_thickness = string_thickness    #inches
@@ -48,12 +49,17 @@ class ImageProcessor:
         self.create_pegs()
         self.pixel_x_coors, self.pixel_y_coors = self.create_pixel_to_inch_mesh()
 
+        self.create_cardioid(2000, 0.5)
         self.calc_all_paths()
-        self.calc_usable_points(500*12)
-        self.calc_usable_points(1000*12)
-        self.calc_usable_points(1500*12)
-        self.calc_usable_points(2000*12)
-        self.calc_usable_points(2500*12)
+        self.calc_optimal_path(1500 * 12)
+        self.calc_optimal_path(2000 * 12)
+        self.calc_optimal_path(2500 * 12)
+        self.calc_optimal_path(3000 * 12)
+        # self.calc_usable_points(500*12)
+        # self.calc_usable_points(1000*12)
+        # self.calc_usable_points(1500*12)
+        # self.calc_usable_points(2000*12)
+        # self.calc_usable_points(2500*12)
 
     def resize_image(self):
         if max(self.original_image_size) > self.max_image_size:
@@ -161,44 +167,28 @@ class ImageProcessor:
         self.usable_lines = set([])
         length_used = 0
         index = 0
-        if self.debug:
-            fig, ax = plt.subplots()
-            ax.axis([-self.radius, self.radius, -self.radius, self.radius])
-            for i, peg in enumerate(self.pegs):
-                plt.plot(peg[0], peg[1], 'ko')
         while length_used < max_length:
             fitness = self.all_lines[index][0]
             peg1 = self.all_lines[index][1]
             peg2 = self.all_lines[index][2]
             peg1_points = self.pegs[peg1]
             peg2_points = self.pegs[peg2]
-            if self.debug:
-                print(self.all_lines[index])
-                print("peg 1: ", self.pegs[peg1])
-                print("peg 2: ", self.pegs[peg2])
-                print("fitness is: ", fitness)
-                ax.plot((peg1_points[0], peg2_points[0]), (peg1_points[1], peg2_points[1]), 'k-', linewidth=self.string_thickness/self.inch_per_pixel)
-                plt.pause(0.001)
-                plt.axis("equal")
-                # pdb.set_trace()
             index += 1
             length_used += ((peg1_points[0] - peg2_points[0])**2 + (peg1_points[1] - peg2_points[1])**2)**0.5
             print(length_used)
             self.usable_lines.add(frozenset([peg1, peg2]))
-            line_collection.append([(peg1_points[0], peg1_points[1]), (peg2_points[0], peg2_points[1])])
-            index += 1
-
-        if self.debug: plt.show()
-
-        fig, ax = plt.subplots()
-        ax.axis([-self.radius, self.radius, -self.radius, self.radius])
-        for peg in self.pegs:
-            plt.plot(peg[0], peg[1], 'ko')
-
-        plt.axis("equal")
-        lc = mc.LineCollection(line_collection, colors='k', linewidths=self.string_thickness/self.inch_per_pixel)
-        ax.add_collection(lc)
-        plt.show()
+        #     line_collection.append([(peg1_points[0], peg1_points[1]), (peg2_points[0], peg2_points[1])])
+        #     index += 1
+        #
+        # fig, ax = plt.subplots()
+        # ax.axis([-self.radius, self.radius, -self.radius, self.radius])
+        # for peg in self.pegs:
+        #     plt.plot(peg[0], peg[1], 'ko')
+        #
+        # plt.axis("equal")
+        # lc = mc.LineCollection(line_collection, colors='k', linewidths=self.string_thickness/self.inch_per_pixel)
+        # ax.add_collection(lc)
+        # plt.show()
 
     def calc_optimal_path(self, max_length):
         self.calc_usable_points(max_length)
@@ -244,7 +234,35 @@ class ImageProcessor:
             curr_peg = next_peg
 
         print(self.additional_length)
-        print(self.final_peg_list  )
+        print(self.final_peg_list)
+        self.plot_path()
+
+    def create_cardioid(self, num_lines, order):
+        self.final_peg_list = []
+        curr_peg = 1
+        for line in range(num_lines):
+            next_peg = floor(curr_peg * order % self.num_pegs)
+            self.final_peg_list.append((curr_peg, next_peg, 1))
+            self.final_peg_list.append((curr_peg, curr_peg + 1, 0))
+            curr_peg = (curr_peg + 1) % self.num_pegs
+        self.plot_path()
+
+    def plot_path(self):
+        line_collection = []
+        for line in self.final_peg_list:
+            if line[2]:
+                peg1_points = self.pegs[line[0]]
+                peg2_points = self.pegs[line[1]]
+                line_collection.append([(peg1_points[0], peg1_points[1]), (peg2_points[0], peg2_points[1])])
+
+        fig, ax = plt.subplots()
+        ax.axis([-self.radius, self.radius, -self.radius, self.radius])
+        for i, peg in enumerate(self.pegs):
+            plt.plot(peg[0], peg[1], 'ko')
+        plt.axis("equal")
+        lc = mc.LineCollection(line_collection, colors='k', linewidths=self.string_thickness/self.inch_per_pixel)
+        ax.add_collection(lc)
+        plt.show()
 
 if __name__ == "__main__":
-    test = ImageProcessor(file_name="Data/yinyang.jpeg", debug=False)
+    test = ImageProcessor(file_name="Data/face2.jpeg", debug=False)
