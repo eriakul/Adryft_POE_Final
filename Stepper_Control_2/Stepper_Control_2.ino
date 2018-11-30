@@ -58,7 +58,7 @@ float moveRadius(float radius){
 
 // function to move r motors to center 
 void toCenter(){
-    stepper_r.setupRelativeMoveInMillimeters(RADIUS_IN_MM/1.05); // move relative mm
+    stepper_r.setupRelativeMoveInMillimeters(RADIUS_IN_MM/1.06); // move relative mm
     while(!stepper_r.motionComplete())
     {
       stepper_r.processMovement();
@@ -84,21 +84,41 @@ void wrapString(String direction1, float theta){
         stepper_r.processMovement();
       }
 
-      // Wrap around outside if theta > 0
+      //Wrap again for good measure
+      stepper_t.setupRelativeMoveInRevolutions(-moveRevolutions(WrapCoordinates[1])); // move relative revolution counter clockwise 
+      while(!stepper_t.motionComplete())
+      {
+        stepper_t.processMovement();
+      }
       stepper_r.setupRelativeMoveInMillimeters(-moveRadius(WrapCoordinates[0])); // move relative mm out from origin
       while(!stepper_r.motionComplete())
       {
         stepper_r.processMovement();
       }
-      stepper_t.setupRelativeMoveInRevolutions(moveRevolutions(theta)); // move relative revolution counter clockwise 
+      stepper_t.setupRelativeMoveInRevolutions(moveRevolutions(WrapCoordinates[1])); // move relative revolution counter clockwise 
       while(!stepper_t.motionComplete())
       {
         stepper_t.processMovement();
       }
-      stepper_r.setupRelativeMoveInMillimeters(-moveRadius(WrapCoordinates[2])); // move relative mm in towards origin
-      while(!stepper_r.motionComplete())
-      {
-        stepper_r.processMovement();
+
+      if(theta != 0){
+        stepper_t.setupRelativeMoveInRevolutions(moveRevolutions(theta)); // move relative revolution counter clockwise 
+        while(!stepper_t.motionComplete())
+        {
+          stepper_t.processMovement();
+        }
+        stepper_r.setupRelativeMoveInMillimeters(-moveRadius(WrapCoordinates[2])); // move relative mm in towards origin
+        while(!stepper_r.motionComplete())
+        {
+          stepper_r.processMovement();
+        }
+      }
+      else{
+        stepper_r.setupRelativeMoveInMillimeters(-moveRadius(WrapCoordinates[2])); // move relative mm in towards origin
+        while(!stepper_r.motionComplete())
+        {
+          stepper_r.processMovement();
+        }
       }
       
   }
@@ -119,12 +139,25 @@ void wrapString(String direction1, float theta){
         stepper_r.processMovement();
       }
 
-      // Wrap around outside if theta > 0
+      // Wrap again for good measure
+      stepper_t.setupRelativeMoveInRevolutions(-moveRevolutions(WrapCoordinates[4])); // move relative revolution counter clockwise 
+      while(!stepper_t.motionComplete())
+      {
+        stepper_t.processMovement();
+      }
       stepper_r.setupRelativeMoveInMillimeters(-moveRadius(WrapCoordinates[3])); // move relative mm out from origin
       while(!stepper_r.motionComplete())
       {
         stepper_r.processMovement();
       }
+      stepper_t.setupRelativeMoveInRevolutions(moveRevolutions(WrapCoordinates[4])); // move relative revolution counter clockwise 
+      while(!stepper_t.motionComplete())
+      {
+        stepper_t.processMovement();
+      }
+
+      if(theta != 0){
+      // Wrap around outside if theta > 0
       stepper_t.setupRelativeMoveInRevolutions(moveRevolutions(theta)); // move relative revolution counter clockwise 
       while(!stepper_t.motionComplete())
       {
@@ -134,6 +167,13 @@ void wrapString(String direction1, float theta){
       while(!stepper_r.motionComplete())
       {
         stepper_r.processMovement();
+      }}
+      else{
+        stepper_r.setupRelativeMoveInMillimeters(-moveRadius(WrapCoordinates[5])); // move relative mm in towards origin
+      while(!stepper_r.motionComplete())
+      {
+        stepper_r.processMovement();
+      }
       }
   }
 }

@@ -57,24 +57,33 @@ def loop_around_peg(current_location, peg_location, half_step, r, peg_location2)
             tL = min(target_location_B, key = lambda loc: abs(loc - loc_B180))
             dtheta = tL - loc_B180
             dr_in = -r*.90 - current_location[0] #!!
+            peg_location2 = peg_location2 + 180
 
         current_location = update_current_location(current_location, [dr_in, dtheta])
         #take into account wrap movement
         current_location = update_current_location(current_location, [0, 2*half_step])
 
         # Calculate dtheta2, which determines how much to wrap based on peg_loc2
-        target_pos = peg_location2 + half_step
-        diff1 = target_pos - current_location[1]
-        diff2 = (360 - abs(diff1)) * (-1*np.sign(diff1))
-
-        if abs(diff1) >= abs(diff2):
-            dtheta2 = diff1
+        if peg_location == peg_location2:
+            dtheta2 = 0
         else:
-            dtheta2 = diff2
+            target_pos = peg_location2
+            diff1 = target_pos - current_location[1]
+            diff2 = (360 - abs(diff1)) * (-1*np.sign(diff1))
+
+            if abs(diff1) <= abs(diff2):
+                dtheta2 = diff1
+            else:
+                dtheta2 = diff2
+
+            if dtheta2 < 0:
+                dtheta2 = dtheta2 - half_step
+            else:
+                dtheta2 = dtheta2 + half_step
 
         command = [dr_in, dtheta, direction, dtheta2]
 
-        commands.append(command)
+        commands.append(command);''
         current_location = update_current_location(current_location, [0, dtheta2])
         #take into account wrap movement
         # current_location = update_current_location(current_location, [0, 2*half_step])
