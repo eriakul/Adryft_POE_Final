@@ -17,7 +17,7 @@ import pdb
 class ImageProcessor:
     """This class takes an image and does the computing to determine where to draw the lines."""
 
-    def __init__(self, file_name, num_pegs = 200, string_thickness = 0.05, max_length = 3000, radius = 11, max_image_size = 512, debug = False):
+    def __init__(self, file_name, num_pegs = 48, string_thickness = 0.05, max_length = 3000, radius = 11, max_image_size = 512, debug = False):
         self.num_pegs = num_pegs                    #unitless
         self.max_length = max_length * 12           #feet -> inches
         self.string_thickness = string_thickness    #inches
@@ -49,15 +49,17 @@ class ImageProcessor:
         self.create_pegs()
         self.pixel_x_coors, self.pixel_y_coors = self.create_pixel_to_inch_mesh()
 
-        self.create_cardioid(2000, 0.5)
+        # self.create_cardioid(2000, 0.5)
+        # self.create_cardioid(2000, 1)
+        self.create_cardioid(48, 1.5)
+        # self.create_cardioid(2000, 2)
+        # self.create_cardioid(2000, 4)
         self.calc_all_paths()
+        self.calc_optimal_path(500 * 12)
+        self.calc_optimal_path(1000*12)
         self.calc_optimal_path(1500 * 12)
-        self.calc_optimal_path(2000 * 12)
-        self.calc_optimal_path(2500 * 12)
-        self.calc_optimal_path(3000 * 12)
-        # self.calc_usable_points(500*12)
-        # self.calc_usable_points(1000*12)
-        # self.calc_usable_points(1500*12)
+        # self.calc_optimal_path(2500 * 12)
+        # self.calc_optimal_path(3000 * 12)
         # self.calc_usable_points(2000*12)
         # self.calc_usable_points(2500*12)
 
@@ -130,7 +132,7 @@ class ImageProcessor:
         norms = np.abs(norms.reshape((n, n)))
 
         #TODO: replace *7 with half the pixel-inch conversion factor
-        valid_points = (norms < self.inch_per_pixel / 1.8)
+        valid_points = (norms < self.string_thickness/self.inch_per_pixel)
         fitness = np.sum(self.np_image[valid_points])
         if self.debug:
             for i, peg in enumerate(self.pegs):
@@ -177,18 +179,18 @@ class ImageProcessor:
             length_used += ((peg1_points[0] - peg2_points[0])**2 + (peg1_points[1] - peg2_points[1])**2)**0.5
             print(length_used)
             self.usable_lines.add(frozenset([peg1, peg2]))
-        #     line_collection.append([(peg1_points[0], peg1_points[1]), (peg2_points[0], peg2_points[1])])
-        #     index += 1
-        #
-        # fig, ax = plt.subplots()
-        # ax.axis([-self.radius, self.radius, -self.radius, self.radius])
-        # for peg in self.pegs:
-        #     plt.plot(peg[0], peg[1], 'ko')
-        #
-        # plt.axis("equal")
-        # lc = mc.LineCollection(line_collection, colors='k', linewidths=self.string_thickness/self.inch_per_pixel)
-        # ax.add_collection(lc)
-        # plt.show()
+            line_collection.append([(peg1_points[0], peg1_points[1]), (peg2_points[0], peg2_points[1])])
+            index += 1
+
+        fig, ax = plt.subplots()
+        ax.axis([-self.radius, self.radius, -self.radius, self.radius])
+        for peg in self.pegs:
+            plt.plot(peg[0], peg[1], 'ko')
+
+        plt.axis("equal")
+        lc = mc.LineCollection(line_collection, colors='k', linewidths=self.string_thickness/self.inch_per_pixel)
+        ax.add_collection(lc)
+        plt.show()
 
     def calc_optimal_path(self, max_length):
         self.calc_usable_points(max_length)
@@ -202,7 +204,7 @@ class ImageProcessor:
         curr_peg = peg_histogram_list[0][0]
         total_lines = len(self.usable_lines)
         print(total_lines, 'TOTAL LINES')
-        sleep(3)
+        sleep(1)
         while sum(self.peg_histogram.values()) > 0:
             index = 0
             next_peg = None
@@ -239,13 +241,18 @@ class ImageProcessor:
 
     def create_cardioid(self, num_lines, order):
         self.final_peg_list = []
+        final_peg_list = []
         curr_peg = 1
         for line in range(num_lines):
             next_peg = floor(curr_peg * order % self.num_pegs)
             self.final_peg_list.append((curr_peg, next_peg, 1))
-            self.final_peg_list.append((curr_peg, curr_peg + 1, 0))
+            self.final_peg_list.append((curr_peg, curr_peg + 1 % self.num_pegs, 0))
+            final_peg_list.append((next_peg, 1))
+            final_peg_list.append(((curr_peg + 1) % self.num_pegs, 0))
             curr_peg = (curr_peg + 1) % self.num_pegs
+        print(final_peg_list)
         self.plot_path()
+
 
     def plot_path(self):
         line_collection = []
@@ -265,4 +272,4 @@ class ImageProcessor:
         plt.show()
 
 if __name__ == "__main__":
-    test = ImageProcessor(file_name="Data/face2.jpeg", debug=False)
+    test = ImageProcessor(file_name="woman.jpeg", debug=False)

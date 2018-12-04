@@ -15,7 +15,7 @@ class System:
 
     """ System is a class that processes the live Pygame display of the string art simulator."""
 
-    def __init__(self, window_size, peg_num = 36, string_thickness = 1, peg_size = 5):
+    def __init__(self, window_size, peg_num = 200, string_thickness = 1, peg_size = 5):
         """Initializes Pygame window with given settings."""
 
         self.window_size = window_size
@@ -150,7 +150,7 @@ class System:
 class ImageProcessor:
     """This class takes an image and does the computing to determine where to draw the lines."""
 
-    def __init__(self, file_name, peg_num = 36, string_thickness = 1, max_lines = 1000, real_radius = .75, max_overlap = 5):
+    def __init__(self, file_name, peg_num = 200, string_thickness = 1, max_lines = 1000, real_radius = .75, max_overlap = 5):
         self.peg_num = peg_num
         self.max_lines = max_lines
         self.string_thickness = string_thickness
@@ -379,9 +379,9 @@ if __name__ == "__main__":
 
     pygame.init()
 
-    file_name = "Data/yinyang.jpeg"
+    file_name = "Data/face2.jpeg"
 
-    peg_num = 90
+    peg_num = 200
     string_thickness = 1
     max_string = 3000
     real_radius = 1
