@@ -17,7 +17,7 @@ import pdb
 class ImageProcessor:
     """This class takes an image and does the computing to determine where to draw the lines."""
 
-    def __init__(self, file_name, num_pegs = 48, string_thickness = 0.05, max_length = 3000, radius = 11, max_image_size = 512, debug = False):
+    def __init__(self, file_name, num_pegs = 200, string_thickness = 0.05, max_length = 3000, radius = 11, max_image_size = 512, debug = False):
         self.num_pegs = num_pegs                    #unitless
         self.max_length = max_length * 12           #feet -> inches
         self.string_thickness = string_thickness    #inches
@@ -30,7 +30,7 @@ class ImageProcessor:
         # Open image in grayscale
         self.image = Image.open(dir_path+"/"+self.file_name).convert('L')
         self.original_image_size = self.image.size
-        self.resize_image()
+        # self.resize_image()
         self.crop_image_to_square()
         self.image_size = self.image.size
         self.crop_image_to_circle()
@@ -51,7 +51,7 @@ class ImageProcessor:
 
         # self.create_cardioid(2000, 0.5)
         # self.create_cardioid(2000, 1)
-        self.create_cardioid(48, 1.5)
+        # self.create_cardioid(48, 1.5)
         # self.create_cardioid(2000, 2)
         # self.create_cardioid(2000, 4)
         self.calc_all_paths()
@@ -150,13 +150,38 @@ class ImageProcessor:
             print("Fitness is: ", fitness)
         return fitness
 
+    def calc_fitness_fast(self, peg1, peg2):
+        peg1_pos = self.pegs[peg1]
+        peg2_pos = self.pegs[peg2]
+        length = int(np.hypot(peg2_pos[0] - peg1_pos[0], peg2_pos[1] - peg1_pos[1]))
+        xs = np.linspace(peg1_pos[0], peg2_pos[0], length).tolist()
+        ys = np.linspace(peg1_pos[1], peg2_pos[1], length).tolist()
+        xs = list(map(int, xs))
+        ys = list(map(int, ys))
+        valid_points = np.asmatrix([xs, ys])
+        if valid_points.shape[1] != 0:
+            fitness = np.sum(self.np_image[valid_points[1], valid_points[0]])
+        else:
+            fitness = 0
+        if self.debug:
+            for x, y in zip(xs, ys):
+                plt.plot(x, y, 'ks')
+            for i, peg in enumerate(self.pegs):
+                if i == peg1 or i == peg2:
+                    plt.plot(peg[0], peg[1], 'ro')
+                else:
+                    plt.plot(peg[0], peg[1], 'ko')
+            plt.axis("equal")
+            plt.show()
+            print("fitness is: ", fitness)
+        return fitness
     def calc_all_paths(self):
         """ Look at all possible paths and evaulate the "fitness" of each """
         self.all_lines = []
         peg_combinations = combinations(range(self.num_pegs), 2)
         for combo in peg_combinations:
             peg1, peg2 = combo;
-            fitness = self.calc_fitness(peg1, peg2)
+            fitness = self.calc_fitness_fast(peg1, peg2)
             self.all_lines.append((fitness, peg1, peg2))
             print(fitness)
         self.all_lines = sorted(self.all_lines, reverse=True)
@@ -175,6 +200,15 @@ class ImageProcessor:
             peg2 = self.all_lines[index][2]
             peg1_points = self.pegs[peg1]
             peg2_points = self.pegs[peg2]
+            if self.debug:
+                for i, peg in enumerate(self.pegs):
+                    if i == peg1 or i == peg2:
+                        plt.plot(peg[0], peg[1], 'ro')
+                    else:
+                        plt.plot(peg[0], peg[1], 'ko')
+                plt.plot([peg1_points[0], peg2_points[0]], [peg1_points[1], peg2_points[1]])
+                plt.show()
+                print("fitness is: ", fitness)
             index += 1
             length_used += ((peg1_points[0] - peg2_points[0])**2 + (peg1_points[1] - peg2_points[1])**2)**0.5
             print(length_used)
@@ -272,4 +306,4 @@ class ImageProcessor:
         plt.show()
 
 if __name__ == "__main__":
-    test = ImageProcessor(file_name="woman.jpeg", debug=False)
+    test = ImageProcessor(file_name="./Data/bird.jpeg", debug=True)
