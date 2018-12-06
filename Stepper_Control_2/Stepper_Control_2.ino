@@ -20,7 +20,7 @@ SpeedyStepper stepper_r;
 
 // Create constant variables regarding mechanical system and stepper deg/step
 const int REV_TO_DEGREE = 360; // degrees in one revolution 
-const float GEAR_RATIO = -4.69; // negative since gear spins opposite direction to motor
+const float GEAR_RATIO = -79/13*1.1429; // negative since gear spins opposite direction to motor
 const float DEG_PER_STEP = 1.8; // obtained from NEMA stepper motor spec sheet
 const float FEET_TO_MM = 25.4*12; // multiply feet by this constant to get mm
 const float STEPS_PER_MM = 100/1.25; // divide expected distance by constant to account for offset
@@ -36,9 +36,11 @@ float Current_Pos = 0;
 String readString;
 String radius1;
 String theta1;
+String dtheta1;
 String direction1;
 float radius2;
 float theta2;
+float dtheta2;
 float direction2;
 
 // moveStep takes in theta value and calculates how many relative revolutions stepper_t should make 
@@ -56,7 +58,7 @@ float moveRadius(float radius){
 
 // function to move r motors to center 
 void toCenter(){
-    stepper_r.setupRelativeMoveInMillimeters(RADIUS_IN_MM/1.038); // move relative mm
+    stepper_r.setupRelativeMoveInMillimeters(RADIUS_IN_MM/1.06); // move relative mm
     while(!stepper_r.motionComplete())
     {
       stepper_r.processMovement();
@@ -64,7 +66,7 @@ void toCenter(){
 }
 
 // function to call motors to wrap string around the peg
-void wrapString(String direction1){
+void wrapString(String direction1, float theta){
   if (direction1.equals("N")){
       stepper_r.setupRelativeMoveInMillimeters(-moveRadius(WrapCoordinates[0])); // move relative mm out from origin
       while(!stepper_r.motionComplete())
@@ -81,6 +83,44 @@ void wrapString(String direction1){
       {
         stepper_r.processMovement();
       }
+
+      //Wrap again for good measure
+      stepper_t.setupRelativeMoveInRevolutions(-moveRevolutions(WrapCoordinates[1])); // move relative revolution counter clockwise 
+      while(!stepper_t.motionComplete())
+      {
+        stepper_t.processMovement();
+      }
+      stepper_r.setupRelativeMoveInMillimeters(-moveRadius(WrapCoordinates[0])); // move relative mm out from origin
+      while(!stepper_r.motionComplete())
+      {
+        stepper_r.processMovement();
+      }
+      stepper_t.setupRelativeMoveInRevolutions(moveRevolutions(WrapCoordinates[1])); // move relative revolution counter clockwise 
+      while(!stepper_t.motionComplete())
+      {
+        stepper_t.processMovement();
+      }
+
+      if(theta != 0){
+        stepper_t.setupRelativeMoveInRevolutions(moveRevolutions(theta)); // move relative revolution counter clockwise 
+        while(!stepper_t.motionComplete())
+        {
+          stepper_t.processMovement();
+        }
+        stepper_r.setupRelativeMoveInMillimeters(-moveRadius(WrapCoordinates[2])); // move relative mm in towards origin
+        while(!stepper_r.motionComplete())
+        {
+          stepper_r.processMovement();
+        }
+      }
+      else{
+        stepper_r.setupRelativeMoveInMillimeters(-moveRadius(WrapCoordinates[2])); // move relative mm in towards origin
+        while(!stepper_r.motionComplete())
+        {
+          stepper_r.processMovement();
+        }
+      }
+      
   }
   else if (direction1.equals("S")){
       stepper_r.setupRelativeMoveInMillimeters(-moveRadius(WrapCoordinates[3])); // move relative mm out from origin
@@ -97,6 +137,43 @@ void wrapString(String direction1){
       while(!stepper_r.motionComplete())
       {
         stepper_r.processMovement();
+      }
+
+      // Wrap again for good measure
+      stepper_t.setupRelativeMoveInRevolutions(-moveRevolutions(WrapCoordinates[4])); // move relative revolution counter clockwise 
+      while(!stepper_t.motionComplete())
+      {
+        stepper_t.processMovement();
+      }
+      stepper_r.setupRelativeMoveInMillimeters(-moveRadius(WrapCoordinates[3])); // move relative mm out from origin
+      while(!stepper_r.motionComplete())
+      {
+        stepper_r.processMovement();
+      }
+      stepper_t.setupRelativeMoveInRevolutions(moveRevolutions(WrapCoordinates[4])); // move relative revolution counter clockwise 
+      while(!stepper_t.motionComplete())
+      {
+        stepper_t.processMovement();
+      }
+
+      if(theta != 0){
+      // Wrap around outside if theta > 0
+      stepper_t.setupRelativeMoveInRevolutions(moveRevolutions(theta)); // move relative revolution counter clockwise 
+      while(!stepper_t.motionComplete())
+      {
+        stepper_t.processMovement();
+      }
+      stepper_r.setupRelativeMoveInMillimeters(-moveRadius(WrapCoordinates[5])); // move relative mm in towards origin
+      while(!stepper_r.motionComplete())
+      {
+        stepper_r.processMovement();
+      }}
+      else{
+        stepper_r.setupRelativeMoveInMillimeters(-moveRadius(WrapCoordinates[5])); // move relative mm in towards origin
+      while(!stepper_r.motionComplete())
+      {
+        stepper_r.processMovement();
+      }
       }
   }
 }
@@ -115,22 +192,31 @@ void setup()
 
     //set up speed and acceleartion for stepper_t
     stepper_t.setStepsPerRevolution(3200);
-    stepper_t.setSpeedInRevolutionsPerSecond(0.3);
-    stepper_t.setAccelerationInRevolutionsPerSecondPerSecond(0.3);
+    stepper_t.setSpeedInRevolutionsPerSecond(0.7);
+    stepper_t.setAccelerationInRevolutionsPerSecondPerSecond(1);
 
     //set up speed and acceleartion for stepper_r
     stepper_r.setStepsPerMillimeter(STEPS_PER_MM); // set the number of steps per millimeter
-    stepper_r.setSpeedInMillimetersPerSecond(70); // set the speed in mm/sec
-    stepper_r.setAccelerationInMillimetersPerSecondPerSecond(50); // set the acceleration in mm/sec^2
+    stepper_r.setSpeedInMillimetersPerSecond(80); // set the speed in mm/sec
+    stepper_r.setAccelerationInMillimetersPerSecondPerSecond(100); // set the acceleration in mm/sec^2
 
-// home the motor by moving until the homing sensor is activated, then set the position to zero
-//    pinMode(R_LIMIT_SWITCH_OUTPUT, INPUT);
-//    Serial.println("HOMING");
-//    stepper_r.moveToHomeInMillimeters(-1, 20, 250, R_LIMIT_SWITCH_OUTPUT);
-//    Serial.println("Found Home");
-    
+//    stepper_t.setupRelativeMoveInRevolutions(-moveRevolutions(360)); // move relative mm
+//    while(!stepper_t.motionComplete())
+//    {
+//      stepper_t.processMovement();
+//    }
+
     // Set up serial port
     Serial.begin(9600);  
+
+    // home the motor by moving until the homing sensor is activated, then set the position to zero
+    pinMode(R_LIMIT_SWITCH_OUTPUT, INPUT_PULLUP);
+    //Serial.println("HOMING");
+      
+    stepper_r.moveToHomeInMillimeters(-1, 20, 250, R_LIMIT_SWITCH_OUTPUT);
+    //delay(100);
+    //Serial.println("Found home");
+   
 }
 
 void loop()
@@ -162,10 +248,14 @@ void loop()
         commands = commands.substring(commaIndex+1);
         commaIndex = commands.indexOf(',');
         theta1 = commands.substring(0,commaIndex);
-        direction1 = commands.substring(commaIndex+1);
+        commands = commands.substring(commaIndex+1);
+        commaIndex = commands.indexOf(',');
+        direction1 = commands.substring(0, commaIndex);
+        dtheta1 = commands.substring(commaIndex+1);
         // Convert strings to float
         radius2 = radius1.toFloat();
         theta2 = theta1.toFloat();
+        dtheta2 = dtheta1.toFloat();
         // Set stepper_t's target position according to theta value
         stepper_t.setupRelativeMoveInRevolutions(moveRevolutions(theta2));
         // Move stepper_r
@@ -175,7 +265,7 @@ void loop()
           stepper_r.processMovement();
           stepper_t.processMovement();
         }
-        wrapString(direction1);
+        wrapString(direction1, dtheta2);
       }
     }
   

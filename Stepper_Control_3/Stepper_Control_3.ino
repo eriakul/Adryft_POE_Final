@@ -82,7 +82,7 @@ void setup()
     digitalWrite(STEPPER_ENABLE_PIN_Z,LOW);
     stepper_r.connectToPins(MOTOR_STEP_PIN_Z, MOTOR_DIRECTION_PIN_Z);
     
-    pinMode(R_LIMIT_SWITCH_OUTPUT, INPUT);
+    pinMode(R_LIMIT_SWITCH_OUTPUT, INPUT_PULLUP);
     
     // Set up serial port
     Serial.begin(9600);
@@ -99,12 +99,15 @@ void setup()
 //     Serial.println(digitalRead(R_LIMIT_SWITCH_OUTPUT));
 //     delay(1000);
 //    }
+
     stepper_r.moveToHomeInMillimeters(-1, 20, 250, R_LIMIT_SWITCH_OUTPUT);
+    
     Serial.println("found home");
 }
 
 void loop()
 {
+  exit(0);
   while(!Serial.available()) {} // Do nothing if no message from python
   // Serial read section
   while(Serial.available()){

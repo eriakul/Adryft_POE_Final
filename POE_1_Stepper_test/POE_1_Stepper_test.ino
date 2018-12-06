@@ -44,17 +44,17 @@ void loop() {
   // Xaxis.setAccelerationInRevolutionsPerSecondPerSecond(1); //why is acceleration 1 shouldn't it be 0 to be have constant speed?
 //  Zaxis.setupRelativeMoveInRevolutions(1);
 //  Xaxis.moveRelativeInRevolutions(1);
-//    Zaxis.setStepsPerMillimeter(100); // set the number of steps per millimeter
-//    Zaxis.setSpeedInMillimetersPerSecond(40); // set the speed in mm/sec
-//    Zaxis.setAccelerationInMillimetersPerSecondPerSecond(30);
-//    Zaxis.moveRelativeInMillimeters(100/1.25);
-//    Zaxis.setupRelativeMoveInMillimeters(moveRadius(radius2)); // move relative mm
+    Zaxis.setStepsPerMillimeter(100); // set the number of steps per millimeter
+    Zaxis.setSpeedInMillimetersPerSecond(40); // set the speed in mm/sec
+    Zaxis.setAccelerationInMillimetersPerSecondPerSecond(30);
+    Zaxis.moveRelativeInMillimeters(100/1.25);
+    Zaxis.setupRelativeMoveInMillimeters(moveRadius(radius2)); // move relative mm
   
-  Yaxis.setStepsPerRevolution(3200);
-  Yaxis.setSpeedInRevolutionsPerSecond(0.3);
-  Yaxis.setAccelerationInRevolutionsPerSecondPerSecond(0.3);
-//  Yaxis.setupRelativeMoveInRevolutions(1);
-  Yaxis.moveRelativeInRevolutions(4.69);
+//  Zaxis.setStepsPerRevolution(3200);
+//  Zaxis.setSpeedInRevolutionsPerSecond(0.3);
+//  Zaxis.setAccelerationInRevolutionsPerSecondPerSecond(0.3);
+////  Yaxis.setupRelativeMoveInRevolutions(1);
+//  Zaxis.moveRelativeInRevolutions(4.69);
   Serial.println("completed");
   delay(30);
   exit(0);
