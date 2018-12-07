@@ -61,6 +61,40 @@
 
         </style>
 
+        <style>
+        .lds-hourglass {
+display: inline-block;
+position: relative;
+width: 64px;
+height: 64px;
+}
+.lds-hourglass:after {
+content: " ";
+display: block;
+border-radius: 50%;
+width: 0;
+height: 0;
+margin: 6px;
+box-sizing: border-box;
+border: 26px solid #fcf;
+border-color: #fcf transparent #fcf transparent;
+animation: lds-hourglass 1.2s infinite;
+}
+@keyframes lds-hourglass {
+0% {
+  transform: rotate(0);
+  animation-timing-function: cubic-bezier(0.55, 0.055, 0.675, 0.19);
+}
+50% {
+  transform: rotate(900deg);
+  animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+}
+100% {
+  transform: rotate(1800deg);
+}
+}
+
+        </style>
 
     </head>
 
@@ -76,6 +110,8 @@
             <div class="preloader">
                 <h2>Unwinding the spool...</h2>
                 <div class="loaded hexdots-loader">Loading...</div>
+
+
             </div><!-- End off Preloader -->
 
 
@@ -136,9 +172,9 @@
                         <div class="maint_portfolio_area">
                             <div class="col-sm-12">
                                 <div class="head_title margin-top-80 wow fadeInUp">
-                                    <h2>our work</h2>
-                                    <p>Loem Ipsum has been the industry's standard dummy text ever since the 1500s,
-                                        when an unknown printer took a galley of type and scrambled it to make</p>
+                                    <h2>The StringoMatic</h2>
+                                    <p>As of six weeks, we now have a working MVP: a polar gantry that
+                                      weaves string across a peg board!</p>
                                 </div>
                             </div>
 
@@ -314,77 +350,7 @@
 
 
 
-            <!-- Contact Section -->
-            <section id="contactus" class="contactus colorsbg">
-                <div class="container">
-                    <div class="row">
-                        <div class="main_service_area main_contactus_area">
-                            <div class="head_title text-center wow fadeInUp">
-                                <h2>Contact us</h2>
-                                <p>Contrary to popular belief, Lorem Ipsum is not simply random text.
-                                    It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old.</p>
-                            </div>
 
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <div class="single_contant_left margin-top-60 margin-bottom-80 wow rollIn">
-                                        <form action="#" id="formid">
-                                            <div class="row">
-                                                <div class="col-sm-12">
-                                                    <div class="form-group">
-                                                        <input type="text" class="form-control" name="name" placeholder="Your Name..." required="">
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-sm-12">
-                                                    <div class="form-group">
-                                                        <input type="email" class="form-control" name="email" placeholder="Your Email Address" required="">
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-12">
-                                                    <div class="form-group">
-                                                        <textarea class="form-control" name="message" rows="8" placeholder="Your Message"></textarea>
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-12 margin-bottom-30">
-                                                    <input type="submit" value="Send message" class="btn btn-primary btn-colors">
-                                                </div>
-
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div><!-- End of col-sm-6 -->
-
-                                <div class="col-sm-6">
-                                    <div class="contact_us_right margin-top-60 margin-bottom-80 wow fadeInLeft">
-                                        <div class="single_contactus">
-                                            <div class="ourmap"></div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-sm-6">
-                                                <div class="single_map_bottom margin-top-30">
-                                                    <p class="text-uppercase">Corporate office</p>
-                                                    <span>Hourse: 14, Road: 17, Sector: 11</span>
-                                                    <span>Uttara Model Town, Dhaka-1230.</span>
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-6">
-                                                <div class="single_map_bottom text-right margin-top-30">
-                                                    <p class="text-uppercase">Corporate office</p>
-                                                    <span>147, Sokuntala, Jaflong</span>
-                                                    <span>NY-25800.</span>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                    </div>
-                                </div><!-- End of col-sm-6 -->
-
-                            </div>
-                        </div>
-                    </div><!-- End of row -->
-                </div><!-- End of container -->
-            </section><!-- End of Contactus Section -->
 
 
             <!-- Contact Section -->

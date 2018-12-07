@@ -8,7 +8,7 @@
    <!--- Basic Page Needs
    ================================================== -->
    <meta charset="utf-8">
-	<title>Sprint TODO: #</title>
+	<title>Sprint 3</title>
 	<meta name="description" content="">
 	<meta name="author" content="">
 
@@ -48,9 +48,6 @@
 
    	<div class="row header-inner">
 
-	      <div class="logo">
-	         <a href="index.html">Adryft.</a>
-	      </div>
 
 	      <nav id="nav-wrap">
 
@@ -65,10 +62,9 @@
 
 	         <ul id="nav" class="nav">
 	            <li><a href="index.html#home">Home.</a></li>
-		         <li class="current"><a href="sprint_TODO_.html">TODO: Sprint #</a></li>
 	            <li><a href="sprint1.html">Sprint 1</a></li>
 	            <li><a href="sprint2.html">Sprint 2</a></li>
-              <li><a href="sprint3.html">Sprint 3</a></li>
+              <li class="current"><a href="sprint3.html">Sprint 3</a></li>
 	         </ul>
 
 	      </nav> <!-- /nav-wrap -->
@@ -86,7 +82,7 @@
 
 			<div class="twelve columns">
 
-				<h1>Sprint<span> TODO: sprint # </span></h1>
+				<h1>Sprint<span> 3</span></h1>
 
 			</div>
 
@@ -106,21 +102,64 @@
 	         <header class="entry-header">
 
 					<h1 class="entry-title">
-							TODO: Week 1 and Week 2.
+							Week 5 and Week 6.
 					</h1>
 
 				</header>
 
 				<div class="entry-content">
-					<p class="lead"> TODO: some abstract thing </p>
-					<p>TODO: Written stuff</p>
-				</div>
+					<p class="lead"> Team Adryft finished the last sprint with a rotating
+             peg board, functional image-processing code, and working Arduino controls. Let's see what they
+           accomplish this week... </p>
+          <h5>Hardware</h5>
+  					<p>As a reminder, here's what we had at the end of Sprint 2.</p>
+            <img src="sprint_images/sprint2/image20.gif">
+            <p>Our next step was to add the string placement manipulator. Our idea was to have a nozzle attached to the
+            r-axis manipulator that would have some give so that the nozzle would not get stuck while passing over previously
+          placed string. This was implemented by making the nozzle tip out of shrink tube.</p>
 
-				<div class="entry-content-media">
-					<div class="post-thumb">
-						<img src="TODO: sprint_images/image_name.jpg">
-					</div>
-				</div>
+            <img src="sprint_images/sprint3/nozzle.jpg">
+
+            <p>One problem we ran into was the nozzle had <b>too</b> much give and was unable to loop the string around
+              pegs. We remedied this by redesigning the nozzle and using plastic tubing rather than a brittle 3d-printed piece.</p>
+
+            <p>This is the new nozzle in action!</p>
+
+            <img src="sprint_images/sprint3/image6.gif">
+
+
+          <h5>Software</h5>
+          <p>Our team discovered that it was hard to get good recognizeable pictures with a resolution of only 48 pegs on the peg board.</p>
+          <p>With just 48 pegs, it was difficult for the simulation to create a comprehensible picture of a simple dog.</p>
+
+          <img src="sprint_images/sprint3/dog.jpg">
+
+          <p>Instead of creating images out of image files, we looked to create cool geometric art based on mathmatical equations. We were impressed
+          with the results.</p>
+
+          <p>These designs were made with a sequence where the the string wrapped around peg number
+          n x constant s starting from n = 0.</p>
+
+          <img src="sprint_images/sprint3/image1.png">
+          <img src="sprint_images/sprint3/image13.png">
+          <img src="sprint_images/sprint3/image11.png">
+          <img src="sprint_images/sprint3/image13.png">
+
+
+          <p>Our team agreed that, not only did these patterns look better than the image-processed designs, but
+          these patterns were a more suitable goal for our MVP. Plus, these designs didn't require 1000+ feet of string!</p>
+
+          <p>With this decision, we made two major changes to the structure of the code.</p>
+          <p>As a reminder, here's what our communication architecture looked like between the Python
+          and Arduino Code.</p>
+          <img src="sprint_images/sprint2/original_architecture.png">
+
+          <p>First, as you might have noticed from the images created from the simulation, our
+          pictures no longer require the pegs to be connected by string across the middle of the board.
+        Instead, the machine can loop around the outside of the board to get to its next peg.</p>
+        <p>Secondly, the size of the peg-drawing data that the Arduino had to process was creatly
+        decreased with these simpler geometric designs. Now, we no longer had to send the commands from Python to Arduino
+      one at a time. </p>
 
 				<div class="pagenav group">
 		  			  <span class="prev"><a href="#" rel="prev">Previous</a></span>
