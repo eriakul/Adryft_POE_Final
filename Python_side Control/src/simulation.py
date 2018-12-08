@@ -379,7 +379,7 @@ if __name__ == "__main__":
 
     pygame.init()
 
-    file_name = "dog_face.jpg"
+    file_name = "shroom.jpeg"
 
     peg_num = 45
     string_thickness = 1
@@ -407,16 +407,16 @@ if __name__ == "__main__":
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 done = True
-                file_name = file_name.split(".")[0] + "_{}_{}".format(peg_num, real_radius).replace(".", "")
-                pygame.image.save(stringomatic.screen, file_name +"_result.jpeg")
+                # file_name = file_name.split(".")[0] + "_{}_{}".format(peg_num, real_radius).replace(".", "")
+                # pygame.image.save(stringomatic.screen, file_name +"_result.jpeg")
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     done = True
                 elif event.key == pygame.K_SPACE:
                     check = not check
-                    if not check:
-                        image.comparison_image.show()
-                        image.plot_mean_squared_error()
+                    # if not check:
+                    #     image.comparison_image.show()
+                    #     image.plot_mean_squared_error()
 
             if event.type == pygame.MOUSEBUTTONDOWN:
                 stringomatic.process_click()

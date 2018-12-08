@@ -154,16 +154,49 @@
           and Arduino Code.</p>
           <img src="sprint_images/sprint2/original_architecture.png">
 
-          <p>First, as you might have noticed from the images created from the simulation, our
+        <p>First, as you might have noticed from the images created from the simulation, our
           pictures no longer require the pegs to be connected by string across the middle of the board.
         Instead, the machine can loop around the outside of the board to get to its next peg.</p>
         <p>Secondly, the size of the peg-drawing data that the Arduino had to process was creatly
         decreased with these simpler geometric designs. Now, we no longer had to send the commands from Python to Arduino
-      one at a time. </p>
+        one at a time. </p>
+        <img src="sprint_images/sprint3/current_architecture.png">
+        <p>Now, a python program generates a geometric peg list with an additional property "move_type". The move_type
+        specifies whether the nozzle moves around the outside of the pegs or across the peg board to wrap the string. </p>
+
+        <p>On the image-processing side of the project, we sought to address the weakness in our pathing algorithm for the string.
+        Our original algorithm computed the line that would cover the most "darkness" in an image starting from the current position of the nozzle.
+        We wrote another algorithm that computed the best line considering all possible start points on the peg board. Unfortunately, this new
+        algorithm did not yield improved results on a peg board of only 48 pegs.</p>
+
+        <h3>Hardware</h3>
+
+        <p>This sprint, we aimed to refine our Stringomatic machine and make it more accurate with sensors. Our first task was to
+        add homing to the r axis with a limit switch. We placed a switch at the base of the gantry.</p>
+
+        <img src="sprint_images/sprint3/limitswitch.jpg">
+
+        <p> Before drawing a pattern, the nozzle inches towards the base until it clicks the limit switch.
+          This way, we consistently start in the same position every run. </p>
+
+        <p>A summary of some things we got done during the third sprint was:</p>
+
+        <ul class="disc">
+           <li><b>D</b>ecreased the gear ratio of the lazy susan</li>
+           <li><b>D</b>esigned spool holder on the nozzle mechanism</li>
+           <li><b>D</b>eveloped limit switch mount</li>
+           <li><b>D</b>e-deconstructed string dispenser</li>
+        </ul>
+
+
+
+        <img src="sprint_images/sprint3/image10.gif">
+
+        <p>MVP achieved! See you next sprint!</p>
 
 				<div class="pagenav group">
-		  			  <span class="prev"><a href="#" rel="prev">Previous</a></span>
-		  			<span class="next"><a href="#" rel="next">Next</a></span>
+		  			  <span class="prev"><a href="sprint2.html" rel="prev">Previous</a></span>
+		  			<span class="next"><a href="sprint4.html" rel="next">Next</a></span>
 	  			</div>
 
 	      </div> <!-- /entry -->
