@@ -17,7 +17,7 @@ import pdb
 class ImageProcessor:
     """This class takes an image and does the computing to determine where to draw the lines."""
 
-    def __init__(self, file_name, num_pegs = 200, string_thickness = 0.05, max_length = 3000, radius = 11, max_image_size = 512, debug = False):
+    def __init__(self, file_name, num_pegs = 96, string_thickness = 0.05, max_length = 3000, radius = 11, max_image_size = 512, debug = False):
         self.num_pegs = num_pegs                    #unitless
         self.max_length = max_length * 12           #feet -> inches
         self.string_thickness = string_thickness    #inches
@@ -51,13 +51,14 @@ class ImageProcessor:
 
         # self.create_cardioid(2000, 0.5)
         # self.create_cardioid(2000, 1)
-        # self.create_cardioid(48, 1.5)
+        self.create_cardioid(96*2, 1.5)
+        self.calc_optimal_path(1000*12)
         # self.create_cardioid(2000, 2)
         # self.create_cardioid(2000, 4)
-        self.calc_all_paths()
-        self.calc_optimal_path(500 * 12)
-        self.calc_optimal_path(1000*12)
-        self.calc_optimal_path(1500 * 12)
+        # self.calc_all_paths()
+        # self.calc_optimal_path(500 * 12)
+        # self.calc_optimal_path(1000*12)
+        # self.calc_optimal_path(1500 * 12)
         # self.calc_optimal_path(2500 * 12)
         # self.calc_optimal_path(3000 * 12)
         # self.calc_usable_points(2000*12)
@@ -227,18 +228,28 @@ class ImageProcessor:
         plt.show()
 
     def calc_optimal_path(self, max_length):
-        self.calc_usable_points(max_length)
+        # self.calc_usable_points(max_length)
         self.peg_histogram = {}
         self.final_peg_list = []
         self.additional_length = 0
         for peg_number in range(self.num_pegs):
             # Get number of connections per peg
-            self.peg_histogram[peg_number] = len([peg_number for combo in self.usable_lines if peg_number in combo])
+            # print([1 for combo in self.usable_lines if peg_number in combo])
+            # for combo in self.usable_lines:
+            #     print(combo)
+            #     pdb.set_trace()
+            #     if peg_number in combo:
+            #         print('hi')
+            #         pdb.set_trace()
+            self.peg_histogram[peg_number] = len([1 for combo in self.usable_lines if peg_number in combo])
+            print(self.peg_histogram)
+            # pdb.set_trace()
         peg_histogram_list = sorted(self.peg_histogram.items(), key=lambda x: x[1], reverse=True)
         curr_peg = peg_histogram_list[0][0]
         total_lines = len(self.usable_lines)
         print(total_lines, 'TOTAL LINES')
         sleep(1)
+        final_peg_list = [];
         while sum(self.peg_histogram.values()) > 0:
             index = 0
             next_peg = None
@@ -259,6 +270,7 @@ class ImageProcessor:
                     index += 1
                     if self.debug: print('nada')
             self.final_peg_list.append((curr_peg, next_peg, direct))
+            final_peg_list.append((next_peg, direct))
             self.peg_histogram[curr_peg] -= 1
             self.peg_histogram[next_peg] -= 1
             if direct:
@@ -269,23 +281,22 @@ class ImageProcessor:
             peg_histogram_list = sorted(self.peg_histogram.items(), key=lambda x: x[1], reverse=True)
             curr_peg = next_peg
 
+        print(final_peg_list)
         print(self.additional_length)
-        print(self.final_peg_list)
+        # print(self.final_peg_list)
         self.plot_path()
 
     def create_cardioid(self, num_lines, order):
         self.final_peg_list = []
-        final_peg_list = []
+        self.usable_lines = set([])
         curr_peg = 1
         for line in range(num_lines):
             next_peg = floor(curr_peg * order % self.num_pegs)
-            self.final_peg_list.append((curr_peg, next_peg, 1))
-            self.final_peg_list.append((curr_peg, curr_peg + 1 % self.num_pegs, 0))
-            final_peg_list.append((next_peg, 1))
-            final_peg_list.append(((curr_peg + 1) % self.num_pegs, 0))
+            self.final_peg_list.append((next_peg, 1))
+            self.usable_lines.add(frozenset([curr_peg, next_peg]))
+            self.final_peg_list.append((curr_peg + 1 % self.num_pegs, 0))
             curr_peg = (curr_peg + 1) % self.num_pegs
-        print(final_peg_list)
-        self.plot_path()
+        # self.plot_path()
 
 
     def plot_path(self):
