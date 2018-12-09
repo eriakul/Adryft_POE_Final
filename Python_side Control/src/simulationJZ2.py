@@ -51,7 +51,7 @@ class ImageProcessor:
 
         # self.create_cardioid(2000, 0.5)
         # self.create_cardioid(2000, 1)
-        self.create_cardioid(96*2, 1.5)
+        self.create_cardioid(96, 1.5)
         self.calc_optimal_path(1000*12)
         # self.create_cardioid(2000, 2)
         # self.create_cardioid(2000, 4)
@@ -245,6 +245,7 @@ class ImageProcessor:
             print(self.peg_histogram)
             # pdb.set_trace()
         peg_histogram_list = sorted(self.peg_histogram.items(), key=lambda x: x[1], reverse=True)
+
         curr_peg = peg_histogram_list[0][0]
         total_lines = len(self.usable_lines)
         print(total_lines, 'TOTAL LINES')
@@ -269,8 +270,9 @@ class ImageProcessor:
                 else:
                     index += 1
                     if self.debug: print('nada')
-            self.final_peg_list.append((curr_peg, next_peg, direct))
-            final_peg_list.append((next_peg, direct))
+            self.final_peg_list.append((next_peg, direct))
+
+            # final_peg_list.append((next_peg, direct))
             self.peg_histogram[curr_peg] -= 1
             self.peg_histogram[next_peg] -= 1
             if direct:
@@ -281,7 +283,7 @@ class ImageProcessor:
             peg_histogram_list = sorted(self.peg_histogram.items(), key=lambda x: x[1], reverse=True)
             curr_peg = next_peg
 
-        print(final_peg_list)
+        # print(final_peg_list)
         print(self.additional_length)
         # print(self.final_peg_list)
         self.plot_path()
@@ -301,11 +303,16 @@ class ImageProcessor:
 
     def plot_path(self):
         line_collection = []
+        curr_peg = 0
         for line in self.final_peg_list:
-            if line[2]:
-                peg1_points = self.pegs[line[0]]
-                peg2_points = self.pegs[line[1]]
+            if line[1]:
+                peg1_points = self.pegs[curr_peg]
+                peg2_points = self.pegs[line[0]]
                 line_collection.append([(peg1_points[0], peg1_points[1]), (peg2_points[0], peg2_points[1])])
+                curr_peg = line[0]
+                # pdb.set_trace()
+            else:
+                curr_peg = line[0]
 
         fig, ax = plt.subplots()
         ax.axis([-self.radius, self.radius, -self.radius, self.radius])
