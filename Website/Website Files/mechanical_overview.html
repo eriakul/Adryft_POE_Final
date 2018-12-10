@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<!--[if lt IE 8 ]><html class="no-js ie ie7" lang="en"> <![endif]-->
+<!--[if IE 8 ]><html class="no-js ie ie8" lang="en"> <![endif]-->
+<!--[if IE 9 ]><html class="no-js ie ie9" lang="en"> <![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!--><html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+
+   <!--- Basic Page Needs
+   ================================================== -->
+   <meta charset="utf-8">
+	<title>Mechanical Overview</title>
+	<meta name="description" content="">
+	<meta name="author" content="">
+
+   <!-- Mobile Specific Metas
+   ================================================== -->
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<!-- CSS
+    ================================================== -->
+   <link rel="stylesheet" href="sprint_css/base.css">
+	<link rel="stylesheet" href="sprint_css/main.css">
+   <link rel="stylesheet" href="sprint_css/media-queries.css">
+
+   <!-- Script
+   =================================================== -->
+	<script src="sprint_js/modernizr.js"></script>
+
+   <!-- Favicons
+	=================================================== -->
+	<link rel="shortcut icon" href="favicon.png" >
+
+</head>
+
+<body>
+
+   <div id="top"></div>
+   <div id="preloader">
+	   <div id="status">
+         <img src="sprint_images/loader.gif" height="60" width="60" alt="">
+         <div class="loader">Loading...</div>
+      </div>
+   </div>
+
+   <!-- Header
+   =================================================== -->
+   <header id="main-header">
+
+   	<div class="row header-inner">
+
+
+	      <nav id="nav-wrap">
+
+	         <a class="mobile-btn" href="#nav-wrap" title="Show navigation">
+	         	<span class='menu-text'>Show Menu</span>
+	         	<span class="menu-icon"></span>
+	         </a>
+         	<a class="mobile-btn" href="#" title="Hide navigation">
+         		<span class='menu-text'>Hide Menu</span>
+         		<span class="menu-icon"></span>
+         	</a>
+
+	         <ul id="nav" class="nav">
+	            <li><a href="index.html#home">Home.</a></li>
+		         <li class="current"><a href="mechanical_overview.html">Mechanical</a></li>
+	            <li><a href="electrical_overview.html">Electrical</a></li>
+              <li><a href="software_overview.html">Software</a></li>
+	         </ul>
+
+	      </nav> <!-- /nav-wrap -->
+
+	   </div> <!-- /header-inner -->
+
+   </header>
+
+
+   <!-- Page Title
+   ================================================== -->
+   <section id="page-title">
+
+		<div class="row">
+
+			<div class="twelve columns">
+
+				<h1>Mechanical Overview</h1>
+
+			</div>
+
+		</div> <!-- /row -->
+
+   </section> <!-- /page-title -->
+
+
+   <!-- Content
+   ================================================== -->
+   <section id="content">
+
+   	<div class="row portfolio-content">
+
+	   	<div class="entry tab-whole nine columns centered">
+
+
+				<div class="entry-content">
+
+        <p>The stringomatic features a variety of pretty neat and clean mechanical features.
+          The two-axis CNC machine has one gantry to facilitate linear motion, and a lazy suzan to
+          facilitate rotational motion. Operating in polar coordinates has multiple advantages.
+          It greatly reduces costs, weight, and complexity of the system, as a rotational axis is
+           much simpler and easier to implement than an additional gantry. Looking at the budget,
+           the total costs for the components for the gantry was almost an order of magnitude more
+            expensive than the components for the rotational bed. The rotational bed gives a pretty
+             unique look to the entire system. The gantry system utilizes precision ground ⅜” steel
+             shafts and linear bearings. It is powered by a single stepper motor and a timing belt.
+             The timing belt system includes a dynamic and fully adjustable tensioner system to finely
+              control the tension within the belt. The rotational bed utilizes a 10” lazy susan, directly driven
+              by a gear connecting to an additional stepper motor.
+            </p>
+
+
+
+      <p>The frame of the stringomatic is built out of MDF and poplar boards, resulting in a consistent,
+         light, clean, and cost-effective frame. Organic materials were exceedingly easy to work with
+         and provided good ways to make effective changes on the fly.
+       </p>
+
+
+       <p>The nozzle on the string manipulator turned out to be an indispensable part even though it wasn’t mechanically very complex.
+         It had to dispense the string reliably. In our first iteration, we 3D-printed the string dispenser in two
+          parts to make the 3D-printing process easier and glued it together afterward. At that point, however, the
+          control of the nozzle was not precise enough to ensure a collision-free steering. The string dispenser kept
+          running into nails and the comparably large lever arm from the nozzle to the ways caused the string dispenser
+          to break right where we glued it together.</p>
+
+      <p>To minimize the risk of breaking, we came up with two solutions. The lower part of the nozzle had to be elastic in order
+        to minimize the torque exerted on the string dispenser so that the string dispenser could run into a nail bend aside.
+        We lifted the tip of the nozzle and extended it with heat shrink tubing that would perfectly bend when hitting a nail but
+        simultaneously jump right back into the correct position after the collision.</p>
+
+      <p>Additionally, we ordered a small tube that would be inserted in the upper part of the string dispenser and dispensed the
+        string close to the pegboard extended with the heat shrink tubing. Using the tube, the string dispenser was sturdy enough to
+        withstand the force of the collision. </p>
+
+       <p>Our project is a bit unique in that we were able to develop most of the mechanical system in about only
+         a week and a half. Despite how quickly progress happened, we were still left with a robust mechanical system
+         that got the job done--we never really needed to go through multiple iterations of the entire system, as our initial
+         design was good enough. We attribute this swift and efficient development to two major design methods.
+       </p>
+
+
+       <p>Right before the day of the first sprint review, we created a CAD model that contained the major subsystem
+         boundaries and the largest physical components. We were able to develop a comprehensive and relatively clean
+         CAD model in just a single night. This is due to the way in which we decided to model and design components of
+         the assembly.</p>
+
+        <p>  We used what we coined as "Master Sketches" in order to simultaneously develop both the larger design of
+          the system, as well as how subsequent components interface with each other. This is the first major design
+          method that helped our agile development. In order to minimize repeated work, we developed a series of sketches
+          in a part file that defined the locations of some of the most integral parts of the entire assembly. When making
+          actual parts, we would import this "Master Sketch" file first, and make any part relative to the locations and
+          sizes defined by the Master Sketch. Any size, dimension, and component that could possibly be referenced by more
+          than just one part would have some kind of representation in the Master Sketch. When defined this way, the CAD is
+          really flexible, as changes that are made to the master sketch propagate down to every derived part. In addition,
+          when parts are made, they are made in such a way that they will always interface well with neighboring parts. The
+          Master Sketch allowed us to design everything at once from a top-down direction.
+        </p>
+
+        <p>Below is an image that shows the "Master Sketch". Notice how the major components of the system can be seen by at least with rudimentary lines.</p>
+
+        <img src="overview_images/image2.png" alt="">
+
+        <p>Below is an image of the final assembly.</p>
+
+        <img src="overview_images/image4.png" alt="">
+        <img src="overview_images/image1.jpg" alt="">
+
+        <p>The second major design principle was always thinking about designing for manufacturing. A mechanical system needs to be
+           built before it can be tested. Because of this significant overhead, it is a lot more important that mechanical designs
+           are well thought out before they are tested. Always thinking about not only how designs would work after we built them, but
+           also how they would be made was super important. In general, we favored designs that would allow us to use rapid prototyping
+           tools such as the 3D printer and the laser cutter in order to quickly make and test parts with a moderate level of precision.
+           This minimized the amount of time that we need to be physically making parts. Taking this emphasis on rapid prototyping even
+           further, we always strove incorporate non-permanent fasteners into the design. This allows for us to test  individual parts
+           in a cohesive system, evaluate desired changes to individual parts, and then make changes to those individual parts without
+           having to remake everything. Whenever possible, we avoided using fasteners such as glue in favor of screws or press-fits.  </p>
+
+
+
+
+
+				</div>
+
+				<div class="pagenav group">
+		  			  <span class="prev"><a href="#" rel="prev">Previous</a></span>
+		  			<span class="next"><a href="sprint2.html" rel="next">Next</a></span>
+	  			</div>
+
+	      </div> <!-- /entry -->
+
+	   </div> <!-- /portfolio-content -->
+
+   </section> <!-- /content -->
+
+
+   <!-- Footer
+   ================================================== -->
+   <footer>
+
+      <div class="row">
+
+         <div id="go-top">
+            <a class="smoothscroll" title="Back to Top" href="#top"><span>Top</span><i class="fa fa-long-arrow-up"></i></a>
+         </div>
+
+      </div> <!-- /row -->
+
+   </footer> <!-- /footer -->
+
+
+   <!-- Java Script
+   ================================================== -->
+   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+   <script>window.jQuery || document.write('<script src="sprint_js/jquery-1.10.2.min.js"><\/script>')</script>
+   <script type="text/javascript" src="sprint_js/jquery-migrate-1.2.1.min.js"></script>
+   <script src="sprint_js/jquery.flexslider.js"></script>
+   <script src="sprint_js/jquery.fittext.js"></script>
+   <script src="sprint_js/backstretch.js"></script>
+   <script src="sprint_js/waypoints.js"></script>
+   <script src="sprint_js/main.js"></script>
+
+</body>
+
+</html>

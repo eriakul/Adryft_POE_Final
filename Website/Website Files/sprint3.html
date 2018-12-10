@@ -114,7 +114,14 @@
           <h5>Hardware</h5>
   					<p>As a reminder, here's what we had at the end of Sprint 2.</p>
             <img src="sprint_images/sprint2/image20.gif">
-            <p>Our next step was to add the string placement manipulator. Our idea was to have a nozzle attached to the
+
+            <p>Sprint 3 was focused on the refinement and finalization of some of the smaller components of the system.
+              Notably, we developed mounting for the spool and integrated that into our carriage. We also developed mounts
+              for different sensors that we want to integrate into the system, notably an infrared sensor for homing the theta axis, and a
+              limit switch for homing the radius axis.
+            </p>
+
+            <p>We first set out to add the string placement manipulator. Our idea was to have a nozzle attached to the
             r-axis manipulator that would have some give so that the nozzle would not get stuck while passing over previously
           placed string. This was implemented by making the nozzle tip out of shrink tube.</p>
 
@@ -126,6 +133,26 @@
             <p>This is the new nozzle in action!</p>
 
             <img src="sprint_images/sprint3/image6.gif">
+
+            <p>In addition, also designed and implemented some additional brackets for the gantry.
+              These brackets would keep the plates rigidly mounted to the poplar beams, as well as keep the plates completely parallel to each other.
+              These were added because there were some minor inconsistencies in how the gantry was mounted to the rest of the frame.
+              In general, they helped a lot to reduce slop in the system, and just made everything a lot more rigid and robust.</p>
+
+              <img src="overview_images/image5.jpg">
+
+            <p>Next, we added a spool holder to the string manipulator.</p>
+
+            <img src="overview_images/image3.png">
+
+              <p>Finally, we added homing to the r axis with a limit switch. We placed a switch at the base of the gantry.</p>
+
+              <img src="sprint_images/sprint3/limitswitch.jpg">
+
+              <p> Before drawing a pattern, the nozzle inches towards the base until it clicks the limit switch.
+                This way, we consistently start in the same position every run. </p>
+
+
 
 
           <h5>Software</h5>
@@ -169,30 +196,15 @@
         We wrote another algorithm that computed the best line considering all possible start points on the peg board. Unfortunately, this new
         algorithm did not yield improved results on a peg board of only 48 pegs.</p>
 
-        <h3>Hardware</h3>
 
-        <p>This sprint, we aimed to refine our Stringomatic machine and make it more accurate with sensors. Our first task was to
-        add homing to the r axis with a limit switch. We placed a switch at the base of the gantry.</p>
 
-        <img src="sprint_images/sprint3/limitswitch.jpg">
 
-        <p> Before drawing a pattern, the nozzle inches towards the base until it clicks the limit switch.
-          This way, we consistently start in the same position every run. </p>
-
-        <p>A summary of some things we got done during the third sprint was:</p>
-
-        <ul class="disc">
-           <li><b>D</b>ecreased the gear ratio of the lazy susan</li>
-           <li><b>D</b>esigned spool holder on the nozzle mechanism</li>
-           <li><b>D</b>eveloped limit switch mount</li>
-           <li><b>D</b>e-deconstructed string dispenser</li>
-        </ul>
 
 
 
         <img src="sprint_images/sprint3/image10.gif">
 
-        <p>MVP achieved! See you next sprint!</p>
+        <p>MVP achieved! Check out our <a href="mechanical_overview.html">Project Overview</a> for the final product!</p>
 
 				<div class="pagenav group">
 		  			  <span class="prev"><a href="sprint2.html" rel="prev">Previous</a></span>
