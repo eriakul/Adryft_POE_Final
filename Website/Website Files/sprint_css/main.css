@@ -1,15 +1,15 @@
 /* =================================================================== */
-/* 
+/*
 /*  Puremedia v1.0 Main Stylesheet
 /*  url:styleshout.com
 /*  10-10-2014
 /*
-/*  ------------------------------------------------------------------ 
+/*  ------------------------------------------------------------------
 
-    TOC: 
+    TOC:
     a. Webfonts and Iconfonts
     b. Document Setup
-    c. Forms  
+    c. Forms
     d. Preloader
     e. Buttons
     f. Other Components
@@ -28,14 +28,14 @@
 
 /* =================================================================== */
 
-/* 
+/*
 /* a. Webfonts and Iconfonts
 /* =================================================================== */
 @import url("fonts.css");
 @import url("font-awesome/css/font-awesome.min.css");
 @import url("simple-line-icons/simple-line-icons.css");
 
-/* 
+/*
 /* b. Document Setup
 /* =================================================================== */
 
@@ -234,7 +234,7 @@ img.pull-left {
 	margin: 12px 18px 0px 0px;
 }
 
-/* 
+/*
 /* c. Forms
 /* =================================================================== */
 form {
@@ -248,10 +248,10 @@ fieldset {
 input, button {
 	-webkit-font-smoothing: antialiased;
 }
-input[type="text"], 
-input[type="password"], 
-input[type="email"], 
-textarea, 
+input[type="text"],
+input[type="password"],
+input[type="email"],
+textarea,
 select {
 	display: block;
 	padding: 12px 15px;
@@ -271,9 +271,9 @@ select {
 textarea {
 	min-height: 162px;
 }
-input[type="text"]:focus, 
-input[type="password"]:focus, 
-input[type="email"]:focus, 
+input[type="text"]:focus,
+input[type="password"]:focus,
+input[type="email"]:focus,
 textarea:focus {
 	background: white;
 }
@@ -295,7 +295,7 @@ input[type="checkbox"] {
 	display: inline;
 }
 
-/* 
+/*
 /* d. Preloader
 /* =================================================================== */
 #preloader {
@@ -372,14 +372,14 @@ input[type="checkbox"] {
 }
 
 
-/* 
+/*
 /* e. Buttons
 /* =================================================================== */
-.button, 
-.button:visited, 
-button, 
-input[type="submit"], 
-input[type="reset"], 
+.button,
+.button:visited,
+button,
+input[type="submit"],
+input[type="reset"],
 input[type="button"] {
 	display: inline-block;
 	font: 15px/30px "raleway-bold", sans-serif;
@@ -394,17 +394,17 @@ input[type="button"] {
 	border: none;
 	border-radius: 3px;
 	-webkit-appearance: none;
-	-webkit-font-smoothing: inherit;	
+	-webkit-font-smoothing: inherit;
 	-moz-transition: all 0.3s ease-in-out;
 	-o-transition: all 0.3s ease-in-out;
 	-webkit-transition: all 0.3s ease-in-out;
 	-ms-transition: all 0.3s ease-in-out;
 	transition: all 0.3s ease-in-out;
 }
-.button:hover, 
-button:hover, 
-input[type="submit"]:hover, 
-input[type="reset"]:hover, 
+.button:hover,
+button:hover,
+input[type="submit"]:hover,
+input[type="reset"]:hover,
 input[type="button"]:hover {
 	background: #647495;
 	color: white;
@@ -570,7 +570,7 @@ button::-moz-focus-inner, input::-moz-focus-inner {
 }
 
 
-/* 
+/*
 /* f. Other Components
 /* ================================================================== */
 
@@ -660,7 +660,7 @@ button::-moz-focus-inner, input::-moz-focus-inner {
 	content: counter(definitions, decimal) ". ";
 }
 
-/* 
+/*
 /*  Pull Quotes Markup
 /*
 
@@ -700,7 +700,7 @@ button::-moz-focus-inner, input::-moz-focus-inner {
 	content: none;
 }
 
-/* 
+/*
 /*  Stats Tab Markup
 
 <ul class="stats-tabs">
@@ -784,7 +784,7 @@ button::-moz-focus-inner, input::-moz-focus-inner {
 	color: #a3a4a6;
 }
 
-/* 
+/*
 /* g. Header Styles
 /* =================================================================== */
 header {
@@ -865,7 +865,7 @@ header .logo a {
 }
 ul#nav {
 	min-height: 72px;
-	width: auto; 
+	width: auto;
 
 	/* left align the menu */
 	text-align: left;
@@ -900,7 +900,7 @@ ul#nav li.current a {
 }
 
 
-/* 
+/*
 /* h. Content Styles
 /* =================================================================== */
 
@@ -1032,7 +1032,7 @@ ul#nav li.current a {
 }
 
 
-/* 
+/*
 /* i. Footer Styles
 /* =================================================================== */
 footer {
@@ -1041,7 +1041,7 @@ footer {
 	font-size: 13px;
 	line-height: 24px;
 	position: relative;
-	color: #3C4142;	
+	color: #3C4142;
 }
 footer a, footer a:visited {
 	color: #a43b0a;
@@ -1118,7 +1118,7 @@ footer #go-top a:hover {
 }
 
 
-/* 
+/*
 /* j. Common and shared styles
 /* =================================================================== */
 
@@ -1174,7 +1174,7 @@ hr {
 	color: white;
 	letter-spacing: -1px;
 	margin-bottom: 0;
-	text-shadow: 0 0px 5px rgba(0, 0, 0, 0.5);	
+	text-shadow: 0 0px 5px rgba(0, 0, 0, 0.5);
 }
 #page-title h1 span {
 	color: #f26522;
@@ -1197,7 +1197,7 @@ hr {
 	background: transparent;
 	text-align: left;
 }
-.entry header h1 {	
+.entry header h1 {
 	font: 30px/36px "raleway-bold", sans-serif;
 	margin-bottom: 6px;
 }
@@ -1241,7 +1241,7 @@ hr {
 	text-shadow: none;
 	color: transparent;
 }
-.pagenav a[rel="next"]:after, 
+.pagenav a[rel="next"]:after,
 .pagenav a[rel="prev"]:before {
 	float: left;
 	text-align: center;
@@ -1274,7 +1274,7 @@ hr {
 	margin-top: -18px;
 }
 
-/* 
+/*
 /* k. Hero Section
 /* =================================================================== */
 #hero {
@@ -1370,13 +1370,13 @@ hr {
 	margin-bottom: 36px;
 	text-shadow: 0 0px 5px rgba(0, 0, 0, 0.5);
 }
-#hero-slider .flex-caption h1 span, 
+#hero-slider .flex-caption h1 span,
 #hero-slider .flex-caption h1 a {
 	color: white;
 	display: inline-block;
 	border-bottom: 1px solid #a43b0a;
 }
-#hero-slider .flex-caption h1 span:hover, 
+#hero-slider .flex-caption h1 span:hover,
 #hero-slider .flex-caption h1 a:hover {
 	border-color: #9a9103;
 }
@@ -1438,7 +1438,7 @@ hr {
 	cursor: default;
 }
 
-/* 
+/*
 /* l. Portfolio Section
 /* =================================================================== */
 #portfolio {
@@ -1481,7 +1481,7 @@ hr {
 	-o-transition: opacity 0.3s ease-in-out;
 	-webkit-transition: opacity 0.3s ease-in-out;
 	-ms-transition: opacity 0.3s ease-in-out;
-	transition: opacity 0.3s ease-in-out;	
+	transition: opacity 0.3s ease-in-out;
 }
 .item .item-wrap img {
 	vertical-align: bottom;
@@ -1538,7 +1538,7 @@ hr {
 	transform: scale(1.2);
 }
 
-/* 
+/*
 /*  m. Services Section
 /* =================================================================== */
 #services {
@@ -1575,7 +1575,7 @@ hr {
 }
 
 
-/* 
+/*
 /*  n. About Section
 /* =================================================================== */
 
@@ -1672,7 +1672,7 @@ hr {
 }
 
 
-/* 
+/*
 /*  o. Journal Section
 /* =================================================================== */
 #journal {
@@ -1711,7 +1711,7 @@ hr {
 }
 
 
-/* 
+/*
 /*  p. Contact Section
 /* =================================================================== */
 #contact {
@@ -1741,8 +1741,8 @@ hr {
 	color: #f26522;
 	display: inline-block;
 }
-#contact input, 
-#contact textarea, 
+#contact input,
+#contact textarea,
 #contact select {
 	padding: 18px 20px;
 	margin-bottom: 42px;
@@ -1754,8 +1754,8 @@ hr {
 #contact textarea {
 	height: 252px;
 }
-#contact input:focus, 
-#contact textarea:focus, 
+#contact input:focus,
+#contact textarea:focus,
 #contact select:focus {
 	color: white;
 	border-color: white;
@@ -1833,7 +1833,7 @@ hr {
 }
 
 
-/* 
+/*
 /* q. Blog Entry
 /* =================================================================== */
 
@@ -1916,7 +1916,7 @@ hr {
 }
 .commentlist li ul.children li {
 	padding-left: 5%;
-	padding-top: 18px;	
+	padding-top: 18px;
 }
 
 /* comment form
@@ -1935,8 +1935,8 @@ hr {
 #comments form div {
 	margin: 12px 0 18px 0;
 }
-#comments form input, 
-#comments form textarea, 
+#comments form input,
+#comments form textarea,
 #comments form select {
 	width: 58.33333%;
 	float: left;
@@ -1966,7 +1966,7 @@ hr {
 }
 
 
-/* 
+/*
 /* r. Portfolio Entry
 /* =================================================================== */
 
@@ -1985,6 +1985,17 @@ hr {
 .portfolio-content .entry .pagenav a[rel="next"]:after {
 	float: right;
 }
+
+.img-box{
+	width:100%;
+	text-align: center;
+}
+.img-box img{
+	max-height:500px;
+	width:auto;
+	margin: auto;
+}
+
 
 /* more projects
 /* ------------------------------------------------------------------- */
