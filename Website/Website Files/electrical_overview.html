@@ -118,6 +118,15 @@
          A circuit diagram showing how the electronics connect to the Arduino is below.
       </p>
 
+      <img src="diagrams/circuit.png">
+
+          <p>
+            The circuit diagram above details how the stepper motors are connected to the Arduino Mega. The bipolar stepper motors are connected to the A4988 stepper motor drivers via 1A, 1B, 2A, 2B pins. Each driver is connected to the Arduino Mega via the ground, power, enable, stepper, and direction pins. We use a RAMPS 1.4 Controller which we place on top of the Mega. The Controller allows us to connect the stepper drivers to our 12V power supply. The capacitor, VMOT, and GND pins are integrated with the Controller.   
+          </p>
+          <p>
+             The limit switch is connected to digital pin 32 and ground on the Arduino Mega. 
+          </p>
+
       <p>
          The <a href="https://github.com/eriakul/Adryft_POE_Final/blob/master/Stepper_Control/Stepper_Control.ino">Stepper_Control.ino</a> script acts as a bridge between the hardware and software. Here is its general code workflow:
       </p>
