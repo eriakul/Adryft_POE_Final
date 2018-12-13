@@ -137,15 +137,21 @@
 
           <p>Even though we ran into issues, we got most of the mechanical system fabricated and working this sprint. Because most of the components of the system are made using rapid prototyping techniques, namely laser cutting and 3D printing, we were able to independently make most of the components ourselves. We getting ready to test and refine the system in the upcoming sprint. </p>
 
-          <p>On the electrical side, we tested stepper motors with an Arduino Uno and Adafruit Motorshield but the board would over heat and the motors would jitter.
-          We found that a RAMPS 1.4 Controller on an Arduino Mega2560 board worked much more smoothly.</p>
+          <p>On the electrical side, we first attempted to control one stepper motor with an Arduino Uno and Adafruit Motorshield, but one of the components on the Motorshield was temperature sensitive and turned off when the system got too hot, resulting in a jittering motion. At the time, we did not have any heat sink to place over the component, and another POE team, who had a working stepper motor control system, was working right next to us. After talking with the other members, we decided to follow their recommendation and purchased the OSOYOO 3D printer kit. The 3D printer kit included an Arduino Mega2560, a RAMPS 1.4 Controller (with space for 5 motor drivers), and A4988 stepper motor drivers. We quickly tested out the new electronics and figured out how to control two stepper motors. Even with a few obstacles in the beginning (i.e. thinking we accidentally fried the Mega), the motor control process went very smoothly, allowing us to focus on other things such as calibration.</p>
 
           <p>The RAMPS 1.4 Controller Board: </p>
           <img src="sprint_images/sprint2/image18.jpg">
 
+          <p>
+            The circuit diagram above details how the stepper motors were connected to the Arduino Mega... 
+          </p>
+
         <h5>Software</h5>
-        <p>Within the Arduino control code of the system, we tested our motors with the AccelMotor library but later found that SpeedyStepper library,
-        made by Instructor Stan Reifel suited our needs much better and had better documentation.  </p>
+        <p>While trying to control the stepper motors with the Adafruit Motorshield, we used the AccelMotor library. When we switched to the RAMPS 1.4 Controller and A4988 motor drivers, we had to find an alternative stepper control library. After some research, we decided to use the SpeedyStepper library, made by instructor Stan Reifel. SpeedyStepper had very comprehensive documentation and was relatively straightforward to use. </p> 
+        <p>
+          We decided to move the theta motor in terms of revolutions and the radius motor in terms of millimeters. In order to initialize them, we had to find the steps per revolution and steps per mm values. Through some initial experimentation, we found that the theta motor requires 3200 steps to complete one revolution and the radius motor requires 100 steps to move one mm. We did further calibration to verify the gear ratio and to test the accuracy of our radius motor. The expected gear ratio in CAD is 4.64, and after testing we found that 4.69 is a more accurate ratio. We found this by having our theta motor move 4.64 revolutions to see whether the pegboard moved one revolution. While testing the accuracy of the radius motor, we observed that the actual distances were around 1.25 times greater than the expected distances. As a result, we adjusted our 100 steps per mm constant to 80. With calibration, we were able to precisely execute given motor commands.
+        </p>
+
         <p>We also created a string art simulator in Pygame to test our image processing algorithm. The simulator processes a normal image into one drawn by criss-crossing
         straight lines. This is an example of one of our outputs: </p>
         <img src="sprint_images/sprint2/image14.jpg">
@@ -218,9 +224,15 @@
             the Arduino code, and the Python code could tell us which pegs to loop strings around. Here's a diagram of our communication architecture; we have Python calculate and send commands to Arduino one at a time
             because the Arduino cannot hold too much variable information at once.</p>
 
-        <img src="sprint_images/sprint2/original_architecture.png">
+        <div class="img-box"><img src="diagrams/diag1.png"></div>
+        <p>
+          We also wrote a python to Arduino communication script that connected the software to the electronics. We used the python serial library to send the Arduino messages via serial port communication. Messages would consist of individual polar coordinates. (The coordinates included moving to a new peg and wrapping around it.) The Arduino side would receive a coordinate and then just move the appropriate motors. (dr would be in feet and dtheta would be in degrees, so we wrote simple functions to convert dr to mm and dtheta to revolutions.) After executing the motor motion, the Arduino would send a response message, which would initiate python to send the next coordinate. The process would continue until all motor commands were executed.
+        </p>       
+        <p>
+          By the end of sprint 2, the serial communication protocol was working as intended. However, we wanted to focus on increasing the efficiency of the Stringomatic by either sending more commands at a time or making the Arduino compute a few of the coordinates on its own.
+        </p>
 
-        <p>  Anyway, to get straight to it, take a look at this!</p>
+        <p>Anyway, to get straight to it, take a look at this!</p>
 
 
         <img src="sprint_images/sprint2/image20.gif">
