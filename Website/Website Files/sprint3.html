@@ -46,30 +46,44 @@
    =================================================== -->
    <header id="main-header">
 
-   	<div class="row header-inner">
+     <link rel="stylesheet" type="text/css" href="sprint_css/menumaker.css">
+     <div id="cssmenu">
+       <ul>
+         <li><a href="index.html">Home</a></li>
 
+         <li>
+           <a href="general_overview.html">Overviews</a>
+           <ul>
+             <li><a href="general_overview.html">General</a></li>
+             <li><a href="mechanical_overview.html">Mechanical</a></li>
+             <li><a href="electrical_overview.html">Electrical</a></li>
+             <li><a href="software_overview.html">Software</a></li>
+           </ul>
+         </li>
 
-	      <nav id="nav-wrap">
+         <li>
+           <a href="sprint1.html">Sprints</a>
+           <ul>
+             <li><a href="sprint1.html">Sprint 1</a></li>
+             <li><a href="sprint2.html">Sprint 2</a></li>
+             <li><a href="sprint3.html">Sprint 3</a></li>
+             <li><a href="sprint4.html">Sprint 4</a></li>
 
-	         <a class="mobile-btn" href="#nav-wrap" title="Show navigation">
-	         	<span class='menu-text'>Show Menu</span>
-	         	<span class="menu-icon"></span>
-	         </a>
-         	<a class="mobile-btn" href="#" title="Hide navigation">
-         		<span class='menu-text'>Hide Menu</span>
-         		<span class="menu-icon"></span>
-         	</a>
+           </ul>
+         </li>
+         <li><a href="budget.html">Budget</a></li>
+         <li><a href="https://github.com/eriakul/Adryft_POE_Final">Code</a></li>
+       </ul>
+     </div>
 
-	         <ul id="nav" class="nav">
-	            <li><a href="index.html#home">Home.</a></li>
-	            <li><a href="sprint1.html">Sprint 1</a></li>
-	            <li><a href="sprint2.html">Sprint 2</a></li>
-              <li class="current"><a href="sprint3.html">Sprint 3</a></li>
-	         </ul>
-
-	      </nav> <!-- /nav-wrap -->
-
-	   </div> <!-- /header-inner -->
+     <script src="js/jquery-1.8.3.min.js"></script>
+     <script src="js/menumaker.js"></script>
+     <script type="text/javascript">
+       $("#cssmenu").menumaker({
+         title: "Menu",
+         format: "multitoggle"
+       });
+     </script>
 
    </header>
 
@@ -181,7 +195,7 @@
           <div class="img-box"><img src="diagrams/diag1.png"></div>
 
         <p>As you might have noticed from the images created from the simulation, our pictures no longer require all of the pegs to be connected by a string across the middle of the board. Instead, the machine can loop around the outside of the board to get to its next peg.</p>
-        <p>In order to account for the wrap around movement, we implemented two movement types for our string dispenser and modified our peg list to include tuples (detailed in the diagram below). A move_type of 1 corresponds to moving across the pegboard. (In sprint 2, everything had a move_type of 1.) A move_type of 0 corresponds to moving around the pegboard. 
+        <p>In order to account for the wrap around movement, we implemented two movement types for our string dispenser and modified our peg list to include tuples (detailed in the diagram below). A move_type of 1 corresponds to moving across the pegboard. (In sprint 2, everything had a move_type of 1.) A move_type of 0 corresponds to moving around the pegboard.
         </p>
         <div class="img-box"><img src="diagrams/diag2.png"></div>
         <p>Another noteworthy change in our diagram involves the wrap commands. In sprint 2, the wrap commands were sent one by one for each peg, resulting in significant delay times. To make our system more efficient, we send a series of wrap commands before moving to the first peg. There are two versions of wrap commands (north and south) for each side of the pegboard. When we send our commands, we add an element (‘N’ or ‘S’) indicating which wrap method to use.</p>
@@ -190,7 +204,7 @@
         </p>
 
         <p>
-          For sprint 4, we want to make our computations more general, so the peg list does not need to be made up of move type pairs. We would also like to eliminate the double wrapping feature to increase the efficiency of our system. 
+          For sprint 4, we want to make our computations more general, so the peg list does not need to be made up of move type pairs. We would also like to eliminate the double wrapping feature to increase the efficiency of our system.
         </p>
 
         <p>On the image-processing side of the project, we sought to address the weakness in our pathing algorithm for the string.
