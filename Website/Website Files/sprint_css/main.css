@@ -2002,13 +2002,13 @@ hr {
 	margin: auto;
 }
 
-.code-box{
+code{
 	display: block;
 	font-family: 'Courier New', Courier, monospace;
-	white-space: pre-line;
+	white-space: pre-wrap;
 	color: #383838;
 	background-color: #ffdebf;
-	padding: 30px;
+	padding: 0px 30px;
 }
 
 
