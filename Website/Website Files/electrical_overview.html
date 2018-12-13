@@ -154,12 +154,15 @@
          Each stepper motor is associated with three pins, the enable pin, the motor step pin, and the motor direction pin. The following code snippet shows how to initialize the theta axis motor, stepper_t (a very similar process is completed to initialize the radius motor):
       </p>
 
-      <p>
+      <code>
          SpeedyStepper stepper_t;
+         <br>
          pinMode(STEPPER_ENABLE_PIN_T, OUTPUT);
+         <br>
          digitalWrite(STEPPER_ENABLE_PIN_T,LOW);
+         <br>
          stepper_t.connectToPins(MOTOR_STEP_PIN_T, MOTOR_DIRECTION_PIN_T);
-      </p>
+      </code>
 
       <p>
          The first line involves declaring a SpeedyStepper object, which allows us to use the SpeedyStepper functions. The second and third lines set the enable pin as an output with an initial state of LOW. The enable pin allows for manual control but is not required to run the stepper motors, which is why we keep it set to LOW. The fourth line involves actually initializing stepper_t with the relevant step and motor direction pins. The step pin is used to control the steps of the motor, while the direction pin controls the rotation direction. After initialization, we can then set the speeds of the motors and start executing our motor commands. Our theta motor moves in units of revolutions, while our radius motor moves in units of mm.
@@ -171,19 +174,21 @@
          move_to_peg() converts the next and current peg numbers into degrees, resulting in next_peg_loc and curr_peg_loc. It then calculates and finds the minimum (min_diff1) of the following differences
       </p>
 
-      <p>
+      <code>
          diff1 = next_peg_loc - curr_peg_loc
+         <br>
          diff2 = (360 - abs(diff1))*sign(diff1)
-      </p>
+      </code>
 
       <p>
          If the move_type is 0, then the theta motor is moved by min_diff1. If the move_type is 1, then we need to decide whether to cross the pegboard or not. To do this, we find curr_peg_loc_across which is the location of the current peg subtracted by 180 degrees. The minimum (min_diff2) of the following differences is found
       </p>
 
-      <p>
+      <code>
          diff3 = next_peg_loc - curr_peg_loc_across
+         <br>
          diff4 = (360 - abs(diff3))*sign(diff3)
-      </p>
+      </code>
 
       <p>
          If min_diff1 is greater than 90 degrees, then we cross the pegboard (theta motor is moved by min_diff2, and radius motor is moved by the diameter of pegboard). Else, we don’t cross the pegboard (theta motor is moved by min_diff1, and radius motor is moved by nothing). move_to_peg() ends by calling wrapAround().
