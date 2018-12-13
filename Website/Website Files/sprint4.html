@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<!--[if lt IE 8 ]><html class="no-js ie ie7" lang="en"> <![endif]-->
+<!--[if IE 8 ]><html class="no-js ie ie8" lang="en"> <![endif]-->
+<!--[if IE 9 ]><html class="no-js ie ie9" lang="en"> <![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!--><html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+
+   <!--- Basic Page Needs
+   ================================================== -->
+   <meta charset="utf-8">
+	<title>Sprint 4</title>
+	<meta name="description" content="">
+	<meta name="author" content="">
+
+   <!-- Mobile Specific Metas
+   ================================================== -->
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+	<!-- CSS
+    ================================================== -->
+   <link rel="stylesheet" href="sprint_css/base.css">
+	<link rel="stylesheet" href="sprint_css/main.css">
+   <link rel="stylesheet" href="sprint_css/media-queries.css">
+
+   <!-- Script
+   =================================================== -->
+	<script src="sprint_js/modernizr.js"></script>
+
+   <!-- Favicons
+	=================================================== -->
+	<link rel="shortcut icon" href="favicon.png" >
+
+</head>
+
+<body>
+
+   <div id="top"></div>
+   <div id="preloader">
+	   <div id="status">
+         <img src="sprint_images/loader.gif" height="60" width="60" alt="">
+         <div class="loader">Loading...</div>
+      </div>
+   </div>
+
+   <!-- Header
+   =================================================== -->
+   <header id="main-header">
+
+   	<div class="row header-inner">
+
+
+	      <nav id="nav-wrap">
+
+	         <a class="mobile-btn" href="#nav-wrap" title="Show navigation">
+	         	<span class='menu-text'>Show Menu</span>
+	         	<span class="menu-icon"></span>
+	         </a>
+         	<a class="mobile-btn" href="#" title="Hide navigation">
+         		<span class='menu-text'>Hide Menu</span>
+         		<span class="menu-icon"></span>
+         	</a>
+
+	         <ul id="nav" class="nav">
+	            <li><a href="index.html#home">Home.</a></li>
+	            <li><a href="sprint1.html">Sprint 1</a></li>
+	            <li><a href="sprint2.html">Sprint 2</a></li>
+              <li><a href="sprint3.html">Sprint 3</a></li>
+              <li class="current"><a href="sprint4.html">Sprint 4</a></li>
+	         </ul>
+
+	      </nav> <!-- /nav-wrap -->
+
+	   </div> <!-- /header-inner -->
+
+   </header>
+
+
+   <!-- Page Title
+   ================================================== -->
+   <section id="page-title">
+
+		<div class="row">
+
+			<div class="twelve columns">
+
+				<h1>Sprint<span> 4</span></h1>
+
+			</div>
+
+		</div> <!-- /row -->
+
+   </section> <!-- /page-title -->
+
+
+   <!-- Content
+   ================================================== -->
+   <section id="content">
+
+   	<div class="row portfolio-content">
+
+	   	<div class="entry tab-whole nine columns centered">
+
+	         <header class="entry-header">
+
+					<h1 class="entry-title">
+							Week 7 and Week 8.
+					</h1>
+
+				</header>
+
+				<div class="entry-content">
+					<p class="lead"> Team Adryft finished the last sprint with a rotating
+             peg board, functional image-processing code, and working Arduino controls. Let's see what they
+           accomplish this week... </p>
+          <h5>Hardware</h5>
+  					<p>As a reminder, here's what we had at the end of Sprint 2.</p>
+            <img src="sprint_images/sprint2/image20.gif">
+
+            <p>Sprint 3 was focused on the refinement and finalization of some of the smaller components of the system.
+              Notably, we developed mounting for the spool and integrated that into our carriage. We also developed mounts
+              for different sensors that we want to integrate into the system, notably an infrared sensor for homing the theta axis, and a
+              limit switch for homing the radius axis.
+            </p>
+
+            <p>We first set out to add the string placement manipulator. Our idea was to have a nozzle attached to the
+            r-axis manipulator that would have some give so that the nozzle would not get stuck while passing over previously
+          placed string. This was implemented by making the nozzle tip out of shrink tube.</p>
+
+            <img src="sprint_images/sprint3/nozzle.jpg">
+
+            <p>One problem we ran into was the nozzle had <b>too</b> much give and was unable to loop the string around
+              pegs. We remedied this by redesigning the nozzle and using plastic tubing rather than a brittle 3d-printed piece.</p>
+
+            <p>This is the new nozzle in action!</p>
+
+            <img src="sprint_images/sprint3/image6.gif">
+
+            <p>In addition, also designed and implemented some additional brackets for the gantry.
+              These brackets would keep the plates rigidly mounted to the poplar beams, as well as keep the plates completely parallel to each other.
+              These were added because there were some minor inconsistencies in how the gantry was mounted to the rest of the frame.
+              In general, they helped a lot to reduce slop in the system, and just made everything a lot more rigid and robust.</p>
+
+              <img src="overview_images/image5.jpg">
+
+            <p>Next, we added a spool holder to the string manipulator.</p>
+
+            <img src="overview_images/image3.png">
+
+              <p>Finally, we added homing to the r axis with a limit switch. We placed a switch at the base of the gantry.</p>
+
+              <img src="sprint_images/sprint3/limitswitch.jpg">
+
+              <p> Before drawing a pattern, the nozzle inches towards the base until it clicks the limit switch.
+                This way, we consistently start in the same position every run. </p>
+
+
+
+
+          <h5>Software</h5>
+          <p>Our team discovered that it was hard to get good recognizeable pictures with a resolution of only 48 pegs on the peg board.</p>
+          <p>With just 48 pegs, it was difficult for the simulation to create a comprehensible picture of a simple dog.</p>
+
+          <img src="sprint_images/sprint3/dog.jpg">
+
+          <p>Instead of creating images out of image files, we looked to create cool geometric art based on mathmatical equations. We were impressed
+          with the results.</p>
+
+          <p>These designs were made with a sequence where the the string wrapped around peg number
+          n x constant s starting from n = 0.</p>
+
+          <img src="sprint_images/sprint3/image1.png">
+          <img src="sprint_images/sprint3/image13.png">
+          <img src="sprint_images/sprint3/image11.png">
+          <img src="sprint_images/sprint3/image13.png">
+
+
+          <p>Our team agreed that, not only did these patterns look better than the image-processed designs, but
+          these patterns were a more suitable goal for our MVP. Plus, these designs didn't require 1000+ feet of string!</p>
+
+          <p>With this decision, we made two major changes to the structure of the code.</p>
+          <p>As a reminder, here's what our communication architecture looked like between the Python
+          and Arduino Code.</p>
+          <img src="sprint_images/sprint2/original_architecture.png">
+
+        <p>First, as you might have noticed from the images created from the simulation, our
+          pictures no longer require the pegs to be connected by string across the middle of the board.
+        Instead, the machine can loop around the outside of the board to get to its next peg.</p>
+        <p>Secondly, the size of the peg-drawing data that the Arduino had to process was creatly
+        decreased with these simpler geometric designs. Now, we no longer had to send the commands from Python to Arduino
+        one at a time. </p>
+        <img src="sprint_images/sprint3/current_architecture.png">
+        <p>Now, a python program generates a geometric peg list with an additional property "move_type". The move_type
+        specifies whether the nozzle moves around the outside of the pegs or across the peg board to wrap the string. </p>
+
+        <p>On the image-processing side of the project, we sought to address the weakness in our pathing algorithm for the string.
+        Our original algorithm computed the line that would cover the most "darkness" in an image starting from the current position of the nozzle.
+        We wrote another algorithm that computed the best line considering all possible start points on the peg board. Unfortunately, this new
+        algorithm did not yield improved results on a peg board of only 48 pegs.</p>
+
+
+
+
+
+
+
+        <img src="sprint_images/sprint3/image10.gif">
+
+        <p>MVP achieved! Check out our <a href="mechanical_overview.html">Project Overview</a> for the final product!</p>
+
+				<div class="pagenav group">
+		  			  <span class="prev"><a href="sprint3.html" rel="prev">Previous</a></span>
+		  			<span class="next"><a href="sprint4.html" rel="next">Next</a></span>
+	  			</div>
+
+	      </div> <!-- /entry -->
+
+	   </div> <!-- /portfolio-content -->
+
+   </section> <!-- /content -->
+
+
+   <!-- Footer
+   ================================================== -->
+   <footer>
+
+      <div class="row">
+
+         <div id="go-top">
+            <a class="smoothscroll" title="Back to Top" href="#top"><span>Top</span><i class="fa fa-long-arrow-up"></i></a>
+         </div>
+
+      </div> <!-- /row -->
+
+   </footer> <!-- /footer -->
+
+
+   <!-- Java Script
+   ================================================== -->
+   <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+   <script>window.jQuery || document.write('<script src="sprint_js/jquery-1.10.2.min.js"><\/script>')</script>
+   <script type="text/javascript" src="sprint_js/jquery-migrate-1.2.1.min.js"></script>
+   <script src="sprint_js/jquery.flexslider.js"></script>
+   <script src="sprint_js/jquery.fittext.js"></script>
+   <script src="sprint_js/backstretch.js"></script>
+   <script src="sprint_js/waypoints.js"></script>
+   <script src="sprint_js/main.js"></script>
+
+</body>
+
+</html>

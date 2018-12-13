@@ -23,6 +23,8 @@ class System:
         self.text_position = [window_size[0]//10, window_size[1]//10]
 
         self.peg_num = peg_num
+
+        #initializing properties needed to render Pygame display
         self.screen_properties = dict(
             board_color = pygame.Color(255, 255, 255, 255),
             board_radius = floor(window_size[1]/2*.9),
@@ -35,7 +37,10 @@ class System:
             string_thickness = string_thickness
             )
 
+        #Set screen to window_size
         self.screen = pygame.display.set_mode(window_size)
+
+        #Draw initial GUI screen
         pygame.display.set_caption("String Art Simulation")
         pygame.draw.circle(self.screen,
                             self.screen_properties["board_color"],
@@ -48,10 +53,13 @@ class System:
 
 
     def update_window(self):
+        """Updates Pygame Display"""
         pygame.display.flip()
 
 
     def create_pegs(self):
+        """Creates list of peg locations during System initialization in screen_properties["pegs"]"""
+
         angle_steps = 2*pi/self.peg_num
         peg_locations = []
         radius = self.screen_properties["board_radius"]
@@ -68,6 +76,8 @@ class System:
         self.current_peg = self.screen_properties["pegs"][0]
 
     def refresh_pegs(self):
+        """Redraws pegs on display so they are not covered by lines"""
+
         for location in self.screen_properties["pegs"]:
             pygame.draw.circle(self.screen,
                                 self.screen_properties["peg_color"],
@@ -80,6 +90,7 @@ class System:
                             self.screen_properties["peg_size"])
 
     def process_click(self):
+        """Draws line to the peg closest to mouse click"""
         x, y = event.pos
         closest_peg = min(self.screen_properties["pegs"],
         key = lambda pos: hypot(pos[0]-x, pos[1]-y))
@@ -92,6 +103,7 @@ class System:
         self.update_window()
 
     def draw_line_to(self, peg_index):
+        """Draws line to given peg"""
         last_peg = self.current_peg
         current_peg = self.screen_properties["pegs"][peg_index]
         # pygame.draw.line(self.screen, self.screen_properties["string_color"],
@@ -103,6 +115,7 @@ class System:
         self.refresh_pegs()
 
     def update_string_used(self, string_used):
+        """Updates string used metric on display"""
         string_used = "{} ft".format(round(string_used, 1))
         new_display = self.font.render(string_used, False, (255, 255, 255, 255), (0,0,0,0))
         self.screen.blit(new_display, self.text_position)
@@ -125,6 +138,8 @@ class System:
         self.update_window()
 
     def draw_mesh_live(self, ImageProcessor):
+        """Function to run in live loop. Draws line to next peg calculated by ImageProcessor object"""
+
         next_peg = ImageProcessor.find_next_peg()
 
         if next_peg == self.current_peg:
@@ -141,8 +156,12 @@ class System:
         return True, next_peg
 
     def add_to_histogram(self, peg_1, peg_2):
+        """Tracks which pegs have lines drawn across them already to avoid too much overlap"""
+
         self.histogram[frozenset([peg_1, peg_2])] = self.histogram.get(frozenset([peg_1, peg_2]), 0) + 1
+
     def add_image_information(self, ImageProcessor):
+        """Adds information to Pygame GUI"""
         data = "{} pegs : {} ft radius : {} max-overlap".format(self.peg_num, ImageProcessor.real_radius, ImageProcessor.max_overlap)
         new_display = self.font.render(data, False, (255, 255, 255, 255), (0,0,0,0))
         self.screen.blit(new_display, [int(.1/10*self.window_size[0]), int(0/10*self.window_size[1])])
@@ -151,6 +170,8 @@ class ImageProcessor:
     """This class takes an image and does the computing to determine where to draw the lines."""
 
     def __init__(self, file_name, peg_num = 36, string_thickness = 1, max_lines = 1000, real_radius = .75, max_overlap = 5):
+        """Initializes ImageProcessor Object"""
+
         self.peg_num = peg_num
         self.max_lines = max_lines
         self.string_thickness = string_thickness
@@ -158,6 +179,7 @@ class ImageProcessor:
         self.total_string_cost = 0 #How much string we've used so far in feet
         self.max_overlap = max_overlap
 
+        #Open image file
         dir_path = os.path.dirname(os.path.realpath(__file__))
         self.image = Image.open(dir_path+"/"+file_name)
         self.image_size = self.image.size
@@ -191,12 +213,13 @@ class ImageProcessor:
         self.error_plot = figure( title="Image Error")
         self.error_plot.xaxis.axis_label = 'String Used'
 
-        # self.image_center = [floor(self.image_size[0]/2), floor(self.image_size[1]/2)]
-        # print("Image Center: ", self.image_center)
+
     def create_blank_image(self):
+        """Creates a blank image to compare against the original image to calculate error"""
         self.comparison_image = Image.new('L', self.image_size, 255)
 
     def draw_line_on_comparison(self, peg_index):
+        """Draws lines on comparison image for error calculation"""
         draw = ImageDraw.Draw(self.comparison_image)
         draw.line([self.pegs[self.current_index], self.pegs[peg_index]], fill=0, width = self.string_thickness)
 
@@ -206,11 +229,6 @@ class ImageProcessor:
                         (self.image_size[0]+self.diameter)//2,
                         (self.image_size[1]+self.diameter)//2)
         self.image = self.image.crop(crop_rectangle)
-
-        # new_res = self.peg_num*2
-        # if self.diameter > new_res:
-        #     self.image = self.image.resize((new_res,new_res),Image.ANTIALIAS)
-        #     self.diameter = new_res
         self.image_size = self.image.size
         self.image_center = [self.image.size[0]//2, self.image.size[1]//2]
 
@@ -229,6 +247,7 @@ class ImageProcessor:
         self.image = Image.composite(self.image, black_image, mask)
 
     def create_pegs(self):
+        """Creates a list of peg locations on the circular image"""
         angle_steps = 2*pi/self.peg_num
         peg_locations = []
         radius = self.diameter//2
@@ -243,10 +262,13 @@ class ImageProcessor:
         self.pegs = peg_locations
 
     def show_pegs(self):
+        """Show where pegs are positioned on the image (for debugging)"""
         draw = ImageDraw.Draw(self.image)
         draw.point(self.pegs, fill=255)
 
     def compute_lines(self):
+        """Compute possible lines across pegs and create a dictionary of lengths to keep track of string costsself.
+            Lines are computed as lists of point indexes."""
 
         peg_combinations = combinations(range(self.peg_num), 2)
         self.line_dict = {}
@@ -267,6 +289,7 @@ class ImageProcessor:
             self.histogram[frozenset([index_set[0], index_set[1]])] = 0
 
     def compute_best_path(self):
+        """Uses the greedy algorithm and finds the path across the peg board that covers the most pixel value."""
         best_line = 0
         best_index = 0
         for index in range(self.peg_num):
@@ -280,10 +303,10 @@ class ImageProcessor:
                     best_line = line_fit
                     best_index = index
 
-
         return best_index
 
     def draw_line(self, peg_index):
+        """Draws line across the image, erasing value along the line."""
         draw = ImageDraw.Draw(self.image)
         draw.line([self.pegs[self.current_index], self.pegs[peg_index]], fill=0, width = self.string_thickness)
 
@@ -300,6 +323,7 @@ class ImageProcessor:
 
 
     def find_peg_list(self):
+        """Create a peg list"""
         line_num = 0
         peg_list = [0]
         while line_num < self.max_lines:
@@ -312,10 +336,10 @@ class ImageProcessor:
             self.draw_line(best_peg)
             peg_list.append(best_peg)
 
-
         return peg_list
 
     def find_next_peg(self):
+        """Function to run in live loop. Calculates the next peg to be drawn by the System object."""
         best_peg = self.compute_best_path()
         if best_peg != self.current_index:
             self.draw_line(best_peg)
@@ -365,6 +389,7 @@ class ImageProcessor:
             print("M2Error = ", err)
 
     def plot_mean_squared_error(self):
+        """Shows the bokeh error plot"""
         xs = [i[0] for i in self.M2Error_list]
         ys = [i[1] for i in self.M2Error_list]
         self.error_plot.line(xs, ys, color='#A6CEE3', legend='Error')
