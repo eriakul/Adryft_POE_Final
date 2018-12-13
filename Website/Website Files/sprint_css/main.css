@@ -1996,6 +1996,22 @@ hr {
 	margin: auto;
 }
 
+.large img{
+	max-height:800px;
+	width:auto;
+	margin: auto;
+}
+
+.code-box{
+	display: block;
+	font-family: 'Courier New', Courier, monospace;
+	white-space: pre-line;
+	color: #383838;
+	background-color: #ffdebf;
+	padding: 30px;
+}
+
+
 
 /* more projects
 /* ------------------------------------------------------------------- */
