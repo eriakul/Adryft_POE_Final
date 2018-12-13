@@ -25,6 +25,9 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="apple-touch-icon" href="apple-touch-icon.png">
         <link rel="icon" type="image/png" href="myicon.png">
+        <link rel="stylesheet" type="text/css" href="css/component2.css" />
+        <script src="js/modernizr-2.6.2.min.js"></script>
+
 
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
@@ -58,6 +61,16 @@
 
         <!--Old browser  JS-->
         <script src="assets/js/vendor/modernizr-2.8.3-respond-1.4.2.min.js"></script>
+        <script type="text/javascript">
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-7243260-2']);
+        _gaq.push(['_trackPageview']);
+        (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+        </script>
 
 
         <style>
@@ -139,7 +152,7 @@ animation: lds-hourglass 1.2s infinite;
                             <div class="main_home text-center colorstext wow fadeInUp" data-wow-duration="700ms">
                                 <h2> We are Team <font color = "#f26522">Adryft</font></h2>
                                 <p>As part of Olin's Principles of Engineering curriculum, we designed and fabricated a CNC string art machine.</p>
-                                <a href="mechanical_overview.html" class="btn btn-default waves-effect waves-orange">Project Overview</a>
+                                <a href="general_overview.html" class="btn btn-default waves-effect waves-orange">Project Overview</a>
 
                             </div>
 
@@ -242,55 +255,48 @@ animation: lds-hourglass 1.2s infinite;
 
             <section id="progress" class="service colorsbg">
                 <div class="container">
-                    <div class="row">
                         <div class="main_service_area text-center padding-bottom-80">
+
                             <div class="head_title text-center wow fadeInUp">
                                 <h2>Our Progress</h2>
-                                <p>We divided our 6-week work period into 2-week long "sprints". You can explore what
+                                <p>We divided our 8-week work period into 2-week long "sprints". You can explore what
                                 we accomplished during each sprint below.</p>
                             </div>
 
-                            <div class="col-sm-4 wow fadeInLeft">
-                                <div class="single_service margin-top-40">
-                                    <div class="single_service_img">
-                                        <img src="assets/images/service1.png" alt="" />
-                                    </div>
-                                    <div class="service_btn">
-                                        <a href="sprint1.html" class="btn btn-larg">Sprint 1</a>
-                                    </div>
-                                </div>
-                            </div><!-- End of col-sm-4 -->
-
-                            <div class="col-sm-4 wow fadeInUp">
-                                <div class="single_service margin-top-40">
-                                    <div class="single_service_img">
-                                        <img src="assets/images/service2.png" alt="" />
-                                    </div>
-                                    <div class="service_btn">
-                                        <a href="sprint2.html" class="btn btn-larg">Sprint 2</a>
-                                    </div>
-                                </div>
-                            </div><!-- End of col-sm-4 -->
-
-                            <div class="col-sm-4 wow fadeInRight">
-                                <div class="single_service margin-top-40">
-                                    <div class="single_service_img">
-                                        <img src="assets/images/service3.png" alt="" />
-                                    </div>
-                                    <div class="service_btn">
-                                        <a href="sprint3.html" class="btn btn-larg">Sprint 3</a>
-                                    </div>
-                                </div>
-                            </div><!-- End of col-sm-4 -->
+                            <div class="head_title text-center wow fadeInUp" height = "300px">
+                            </div>
 
 
-                            <!-- <div class="service_more_btn padding-top-80 text-center">
-                                <a href="" class="btn btn-primary">see more</a>
-                            </div> -->
+                            <div class="circ-container">
+
+
+                                      <div class="component">
+                                        <!-- Start Nav Structure -->
+                                        <button class="cn-button" id="cn-button">Menu</button>
+                                        <div class="cn-wrapper" id="cn-wrapper">
+                                          <ul>
+                                            <li><a href="sprint1.html"><span>Sprint 1</span></a></li>
+                                            <li><a href="sprint2.html"><span>Sprint 2</span></a></li>
+                                            <li><a href="sprint3.html"><span>Sprint 3</span></a></li>
+                                            <li><a href="sprint4.html"><span>Sprint 4</span></a></li>
+
+                                           </ul>
+                                        </div>
+                                        <!-- End of Nav Structure -->
+                                      </div>
+
+
+                                    <script src="js/polyfills.js"></script>
+                                    <script src="js/demo2.js"></script>
+
+                              </div>
 
                         </div><!-- End of main service area -->
-                    </div><!-- End of row -->
                 </div><!-- End of container -->
+
+
+
+
             </section><!-- End of Service Section -->
 
 
