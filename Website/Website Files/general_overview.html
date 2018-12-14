@@ -46,31 +46,44 @@
    =================================================== -->
    <header id="main-header">
 
-   	<div class="row header-inner">
+     <link rel="stylesheet" type="text/css" href="sprint_css/menumaker.css">
+     <div id="cssmenu">
+       <ul>
+         <li><a href="index.html">Home</a></li>
 
-
-	      <nav id="nav-wrap">
-
-	         <a class="mobile-btn" href="#nav-wrap" title="Show navigation">
-	         	<span class='menu-text'>Show Menu</span>
-	         	<span class="menu-icon"></span>
-	         </a>
-         	<a class="mobile-btn" href="#" title="Hide navigation">
-         		<span class='menu-text'>Hide Menu</span>
-         		<span class="menu-icon"></span>
-         	</a>
-
-	         <ul id="nav" class="nav">
-	            <li><a href="index.html#home">Home.</a></li>
-		         <li class = "current"><a href="generall_overview.html">General</a></li>
+         <li>
+           <a href="general_overview.html">Overviews</a>
+           <ul>
+             <li><a href="general_overview.html">General</a></li>
              <li><a href="mechanical_overview.html">Mechanical</a></li>
-	            <li><a href="electrical_overview.html">Electrical</a></li>
-              <li><a href="software_overview.html">Software</a></li>
-	         </ul>
+             <li><a href="electrical_overview.html">Electrical</a></li>
+             <li><a href="software_overview.html">Software</a></li>
+           </ul>
+         </li>
 
-	      </nav> <!-- /nav-wrap -->
+         <li>
+           <a href="sprint1.html">Sprints</a>
+           <ul>
+             <li><a href="sprint1.html">Sprint 1</a></li>
+             <li><a href="sprint2.html">Sprint 2</a></li>
+             <li><a href="sprint3.html">Sprint 3</a></li>
+             <li><a href="sprint4.html">Sprint 4</a></li>
 
-	   </div> <!-- /header-inner -->
+           </ul>
+         </li>
+         <li><a href="budget.html">Budget</a></li>
+         <li><a href="https://github.com/eriakul/Adryft_POE_Final">Code</a></li>
+       </ul>
+     </div>
+
+     <script src="js/jquery-1.8.3.min.js"></script>
+     <script src="js/menumaker.js"></script>
+     <script type="text/javascript">
+       $("#cssmenu").menumaker({
+         title: "Menu",
+         format: "multitoggle"
+       });
+     </script>
 
    </header>
 
@@ -104,7 +117,7 @@
 				<div class="entry-content">
 
       <p>
-         The Stringomatic is a CNC string art machine that consists of significant software, electrical, and mechanical components. The diagrams below describe how the components are connected to each other. They also display two different workflows of how the Stringomatic operates. 
+         The Stringomatic is a CNC string art machine that consists of significant software, electrical, and mechanical components. The diagrams below describe how the components are connected to each other. They also display two different workflows of how the Stringomatic operates.
       </p>
 
       <div class="img-box large"><img src="diagrams/diag4.png"></div>
@@ -112,7 +125,7 @@
       <div class="img-box large"><img src="diagrams/diag5.png"></div>
 
       <p>
-         The mechanical, electrical, and software pages provide more details on how each component works independently. The difference between the two diagrams is that one workflow generates the peg_list using a geometrical pattern while the other workflow generates the peg_list from an inputted image. 
+         The mechanical, electrical, and software pages provide more details on how each component works independently. The difference between the two diagrams is that one workflow generates the peg_list using a geometrical pattern while the other workflow generates the peg_list from an inputted image.
       </p>
 
 

@@ -863,6 +863,7 @@ header .logo a {
 #nav-wrap > a {
 	display: none;
 }
+
 ul#nav {
 	min-height: 72px;
 	width: auto;
@@ -888,6 +889,10 @@ ul#nav li a {
 	-ms-transition: all 0.2s ease-in-out;
 	transition: all 0.2s ease-in-out;
 }
+
+
+
+
 ul#nav li a:hover {
 	color: white;
 }

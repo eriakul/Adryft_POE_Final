@@ -46,30 +46,44 @@
    =================================================== -->
    <header id="main-header">
 
-   	<div class="row header-inner">
+     <link rel="stylesheet" type="text/css" href="sprint_css/menumaker.css">
+     <div id="cssmenu">
+       <ul>
+         <li><a href="index.html">Home</a></li>
 
+         <li>
+           <a href="general_overview.html">Overviews</a>
+           <ul>
+             <li><a href="general_overview.html">General</a></li>
+             <li><a href="mechanical_overview.html">Mechanical</a></li>
+             <li><a href="electrical_overview.html">Electrical</a></li>
+             <li><a href="software_overview.html">Software</a></li>
+           </ul>
+         </li>
 
-	      <nav id="nav-wrap">
+         <li>
+           <a href="sprint1.html">Sprints</a>
+           <ul>
+             <li><a href="sprint1.html">Sprint 1</a></li>
+             <li><a href="sprint2.html">Sprint 2</a></li>
+             <li><a href="sprint3.html">Sprint 3</a></li>
+             <li><a href="sprint4.html">Sprint 4</a></li>
 
-	         <a class="mobile-btn" href="#nav-wrap" title="Show navigation">
-	         	<span class='menu-text'>Show Menu</span>
-	         	<span class="menu-icon"></span>
-	         </a>
-         	<a class="mobile-btn" href="#" title="Hide navigation">
-         		<span class='menu-text'>Hide Menu</span>
-         		<span class="menu-icon"></span>
-         	</a>
+           </ul>
+         </li>
+         <li><a href="budget.html">Budget</a></li>
+         <li><a href="https://github.com/eriakul/Adryft_POE_Final">Code</a></li>
+       </ul>
+     </div>
 
-	         <ul id="nav" class="nav">
-	            <li><a href="index.html#home">Home.</a></li>
-	            <li><a href="sprint1.html">Sprint 1</a></li>
-	            <li><a href="sprint2.html">Sprint 2</a></li>
-              <li class="current"><a href="sprint3.html">Sprint 3</a></li>
-	         </ul>
-
-	      </nav> <!-- /nav-wrap -->
-
-	   </div> <!-- /header-inner -->
+     <script src="js/jquery-1.8.3.min.js"></script>
+     <script src="js/menumaker.js"></script>
+     <script type="text/javascript">
+       $("#cssmenu").menumaker({
+         title: "Menu",
+         format: "multitoggle"
+       });
+     </script>
 
    </header>
 
@@ -113,7 +127,10 @@
            accomplish this sprint... </p>
           <h5>Hardware</h5>
   					<p>As a reminder, here's what we had at the end of Sprint 2.</p>
-            <img src="sprint_images/sprint2/image20.gif">
+
+            <div class="img-box">
+              <img src="sprint_images/sprint2/image20.gif">
+            </div>
 
             <p>Sprint 3 was focused on the refinement and finalization of some of the smaller components of the system.
               Notably, we developed mounting for the spool and integrated that into our carriage. We also developed mounts
@@ -125,25 +142,35 @@
             r-axis manipulator that would have some give so that the nozzle would not get stuck while passing over previously
           placed string. This was implemented by making the nozzle tip out of shrink tube.</p>
 
-            <img src="sprint_images/sprint3/nozzle.jpg">
+            <div class="img-box">
+              <img src="sprint_images/sprint3/nozzle.jpg">
+            </div>
 
             <p>One problem we ran into was the nozzle had <b>too</b> much give and was unable to loop the string around
               pegs. We remedied this by redesigning the nozzle and using plastic tubing rather than a brittle 3d-printed piece.</p>
 
             <p>This is the new nozzle in action!</p>
 
-            <img src="sprint_images/sprint3/image6.gif">
+            <div class="img-box">
+              <img src="sprint_images/sprint3/image6.gif">
+            </div>
 
             <p>In addition, also designed and implemented some additional brackets for the gantry.
               These brackets would keep the plates rigidly mounted to the poplar beams, as well as keep the plates completely parallel to each other.
               These were added because there were some minor inconsistencies in how the gantry was mounted to the rest of the frame.
               In general, they helped a lot to reduce slop in the system, and just made everything a lot more rigid and robust.</p>
 
-              <img src="overview_images/image5.jpg">
+              <div class="img-box">
+                <img src="overview_images/image5.jpg">
+              </div>
 
             <p>Next, we added a spool holder to the string manipulator.</p>
 
-            <img src="overview_images/image3.png">
+
+            <div class="img-box">
+              <img src="overview_images/image3.png">
+            </div>
+
 
               <p>Finally, we 3d printed a limit switch mount for the radius axis as displayed below. A Gikfun V-153-1C25 micro limit switch was used with a digital and ground pin. The digital pin was initiated in the Arduino setup function with the following code statement:</p>
 
@@ -151,7 +178,10 @@
 
               <p>where R_LIMIT_SWITCH_OUTPUT corresponds to the digital pin (outputs 0 when pressed and 1 otherwise) and INPUT_PULLUP indicates the pin mode (acts as a pull-up resistor, which inverts the behavior of the input mode).</p>
 
-              <img src="sprint_images/sprint3/limitswitch.jpg">
+              <div class="img-box">
+                <img src="sprint_images/sprint3/limitswitch.jpg">
+              </div>
+
 
               <p> The SpeedyStepper moveToHomeInMillimeters() function allows us to calibrate our system before each run. moveToHomeInMillimeters() keeps moving in an inputted direction until the limit switch is activated (after which, the ending position is set as the new zero position). In sprint 3, we used the radius limit switch mount to reach the edge of the pegboard before moving to the center and executing the motor commands. This enabled us to consistently start in the same position for every run.</p>
 
@@ -159,7 +189,9 @@
           <p>Our team discovered that it was hard to get good recognizeable pictures with a resolution of only 48 pegs on the peg board.</p>
           <p>With just 48 pegs, it was difficult for the simulation to create a comprehensible picture of a simple dog.</p>
 
-          <img src="sprint_images/sprint3/dog.jpg">
+          <div class="img-box">
+            <img src="sprint_images/sprint3/dog.jpg">
+          </div>
 
           <p>Instead of creating images out of image files, we looked to create cool geometric art based on mathmatical equations. We were impressed
           with the results.</p>
@@ -167,11 +199,18 @@
           <p>These designs were made with a sequence where the the string wrapped around peg number
           n x constant s starting from n = 0.</p>
 
-          <img src="sprint_images/sprint3/image1.png">
-          <img src="sprint_images/sprint3/image13.png">
-          <img src="sprint_images/sprint3/image11.png">
-          <img src="sprint_images/sprint3/image13.png">
-
+          <div class="img-box">
+            <img src="sprint_images/sprint3/image1.png">
+          </div>
+          <div class="img-box">
+            <img src="sprint_images/sprint3/image13.png">
+          </div>
+          <div class="img-box">
+            <img src="sprint_images/sprint3/image11.png">
+          </div>
+          <div class="img-box">
+            <img src="sprint_images/sprint3/image3.png">
+          </div>
 
           <p>Our team agreed that, not only did these patterns look better than the image-processed designs, but
           these patterns were a more suitable goal for our MVP. Plus, these designs didn't require 1000+ feet of string!</p>
@@ -181,7 +220,7 @@
           <div class="img-box"><img src="diagrams/diag1.png"></div>
 
         <p>As you might have noticed from the images created from the simulation, our pictures no longer require all of the pegs to be connected by a string across the middle of the board. Instead, the machine can loop around the outside of the board to get to its next peg.</p>
-        <p>In order to account for the wrap around movement, we implemented two movement types for our string dispenser and modified our peg list to include tuples (detailed in the diagram below). A move_type of 1 corresponds to moving across the pegboard. (In sprint 2, everything had a move_type of 1.) A move_type of 0 corresponds to moving around the pegboard. 
+        <p>In order to account for the wrap around movement, we implemented two movement types for our string dispenser and modified our peg list to include tuples (detailed in the diagram below). A move_type of 1 corresponds to moving across the pegboard. (In sprint 2, everything had a move_type of 1.) A move_type of 0 corresponds to moving around the pegboard.
         </p>
         <div class="img-box"><img src="diagrams/diag2.png"></div>
         <p>Another noteworthy change in our diagram involves the wrap commands. In sprint 2, the wrap commands were sent one by one for each peg, resulting in significant delay times. To make our system more efficient, we send a series of wrap commands before moving to the first peg. There are two versions of wrap commands (north and south) for each side of the pegboard. When we send our commands, we add an element (‘N’ or ‘S’) indicating which wrap method to use.</p>
@@ -190,7 +229,7 @@
         </p>
 
         <p>
-          For sprint 4, we want to make our computations more general, so the peg list does not need to be made up of move type pairs. We would also like to eliminate the double wrapping feature to increase the efficiency of our system. 
+          For sprint 4, we want to make our computations more general, so the peg list does not need to be made up of move type pairs. We would also like to eliminate the double wrapping feature to increase the efficiency of our system.
         </p>
 
         <p>On the image-processing side of the project, we sought to address the weakness in our pathing algorithm for the string.
@@ -202,9 +241,9 @@
 
 
 
-
-
-        <img src="sprint_images/sprint3/image10.gif">
+        <div class="img-box">
+          <img src="sprint_images/sprint3/image10.gif">
+        </div>
 
         <p>MVP achieved! Check out our <a href="mechanical_overview.html">Project Overview</a> for the final product!</p>
 

@@ -55,29 +55,44 @@
    =================================================== -->
    <header id="main-header">
 
-   	<div class="row header-inner">
+     <link rel="stylesheet" type="text/css" href="sprint_css/menumaker.css">
+     <div id="cssmenu">
+       <ul>
+         <li><a href="index.html">Home</a></li>
 
-	      <nav id="nav-wrap">
+         <li>
+           <a href="general_overview.html">Overviews</a>
+           <ul>
+             <li><a href="general_overview.html">General</a></li>
+             <li><a href="mechanical_overview.html">Mechanical</a></li>
+             <li><a href="electrical_overview.html">Electrical</a></li>
+             <li><a href="software_overview.html">Software</a></li>
+           </ul>
+         </li>
 
-	         <a class="mobile-btn" href="#nav-wrap" title="Show navigation">
-	         	<span class='menu-text'>Show Menu</span>
-	         	<span class="menu-icon"></span>
-	         </a>
-         	<a class="mobile-btn" href="#" title="Hide navigation">
-         		<span class='menu-text'>Hide Menu</span>
-         		<span class="menu-icon"></span>
-         	</a>
+         <li>
+           <a href="sprint1.html">Sprints</a>
+           <ul>
+             <li><a href="sprint1.html">Sprint 1</a></li>
+             <li><a href="sprint2.html">Sprint 2</a></li>
+             <li><a href="sprint3.html">Sprint 3</a></li>
+             <li><a href="sprint4.html">Sprint 4</a></li>
 
-	         <ul id="nav" class="nav">
-	            <li><a href="index.html#home">Home.</a></li>
-	            <li><a href="sprint1.html">Sprint 1</a></li>
-	            <li class="current"><a href="sprint2.html">Sprint 2</a></li>
-              <li><a href="sprint3.html">Sprint 3</a></li>
-	         </ul>
+           </ul>
+         </li>
+         <li><a href="budget.html">Budget</a></li>
+         <li><a href="https://github.com/eriakul/Adryft_POE_Final">Code</a></li>
+       </ul>
+     </div>
 
-	      </nav> <!-- /nav-wrap -->
-
-	   </div> <!-- /header-inner -->
+     <script src="js/jquery-1.8.3.min.js"></script>
+     <script src="js/menumaker.js"></script>
+     <script type="text/javascript">
+       $("#cssmenu").menumaker({
+         title: "Menu",
+         format: "multitoggle"
+       });
+     </script>
 
    </header>
 
@@ -145,11 +160,11 @@
           <img src="diagrams/circuit2.png">
 
           <p>
-            The circuit diagram above details how the stepper motors were connected to the Arduino Mega. The bipolar stepper motors were connected to the A4988 stepper motor drivers via 1A, 1B, 2A, 2B pins. Each driver was connected to the Arduino Mega via the ground, power, enable, stepper, and direction pins. We used a RAMPS 1.4 Controller which we placed on top of the Mega. The Controller allowed us to connect the stepper drivers to our 12V power supply. The capacitor, VMOT, and GND pins were integrated with the Controller.   
+            The circuit diagram above details how the stepper motors were connected to the Arduino Mega. The bipolar stepper motors were connected to the A4988 stepper motor drivers via 1A, 1B, 2A, 2B pins. Each driver was connected to the Arduino Mega via the ground, power, enable, stepper, and direction pins. We used a RAMPS 1.4 Controller which we placed on top of the Mega. The Controller allowed us to connect the stepper drivers to our 12V power supply. The capacitor, VMOT, and GND pins were integrated with the Controller.
           </p>
 
         <h5>Software</h5>
-        <p>While trying to control the stepper motors with the Adafruit Motorshield, we used the AccelMotor library. When we switched to the RAMPS 1.4 Controller and A4988 motor drivers, we had to find an alternative stepper control library. After some research, we decided to use the SpeedyStepper library, made by instructor Stan Reifel. SpeedyStepper had very comprehensive documentation and was relatively straightforward to use. </p> 
+        <p>While trying to control the stepper motors with the Adafruit Motorshield, we used the AccelMotor library. When we switched to the RAMPS 1.4 Controller and A4988 motor drivers, we had to find an alternative stepper control library. After some research, we decided to use the SpeedyStepper library, made by instructor Stan Reifel. SpeedyStepper had very comprehensive documentation and was relatively straightforward to use. </p>
         <p>
           We decided to move the theta motor in terms of revolutions and the radius motor in terms of millimeters. In order to initialize them, we had to find the steps per revolution and steps per mm values. Through some initial experimentation, we found that the theta motor requires 3200 steps to complete one revolution and the radius motor requires 100 steps to move one mm. We did further calibration to verify the gear ratio and to test the accuracy of our radius motor. The expected gear ratio in CAD is 4.64, and after testing we found that 4.69 is a more accurate ratio. We found this by having our theta motor move 4.64 revolutions to see whether the pegboard moved one revolution. While testing the accuracy of the radius motor, we observed that the actual distances were around 1.25 times greater than the expected distances. As a result, we adjusted our 100 steps per mm constant to 80. With calibration, we were able to precisely execute given motor commands.
         </p>
@@ -229,7 +244,7 @@
         <div class="img-box"><img src="diagrams/diag1.png"></div>
         <p>
           We also wrote a python to Arduino communication script that connected the software to the electronics. We used the python serial library to send the Arduino messages via serial port communication. Messages would consist of individual polar coordinates. (The coordinates included moving to a new peg and wrapping around it.) The Arduino side would receive a coordinate and then just move the appropriate motors. (dr would be in feet and dtheta would be in degrees, so we wrote simple functions to convert dr to mm and dtheta to revolutions.) After executing the motor motion, the Arduino would send a response message, which would initiate python to send the next coordinate. The process would continue until all motor commands were executed.
-        </p>       
+        </p>
         <p>
           By the end of sprint 2, the serial communication protocol was working as intended. However, we wanted to focus on increasing the efficiency of the Stringomatic by either sending more commands at a time or making the Arduino compute a few of the coordinates on its own.
         </p>

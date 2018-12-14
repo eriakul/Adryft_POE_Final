@@ -46,31 +46,44 @@
    =================================================== -->
    <header id="main-header">
 
-   	<div class="row header-inner">
+     <link rel="stylesheet" type="text/css" href="sprint_css/menumaker.css">
+     <div id="cssmenu">
+       <ul>
+         <li><a href="index.html">Home</a></li>
 
+         <li>
+           <a href="general_overview.html">Overviews</a>
+           <ul>
+             <li><a href="general_overview.html">General</a></li>
+             <li><a href="mechanical_overview.html">Mechanical</a></li>
+             <li><a href="electrical_overview.html">Electrical</a></li>
+             <li><a href="software_overview.html">Software</a></li>
+           </ul>
+         </li>
 
-	      <nav id="nav-wrap">
+         <li>
+           <a href="sprint1.html">Sprints</a>
+           <ul>
+             <li><a href="sprint1.html">Sprint 1</a></li>
+             <li><a href="sprint2.html">Sprint 2</a></li>
+             <li><a href="sprint3.html">Sprint 3</a></li>
+             <li><a href="sprint4.html">Sprint 4</a></li>
 
-	         <a class="mobile-btn" href="#nav-wrap" title="Show navigation">
-	         	<span class='menu-text'>Show Menu</span>
-	         	<span class="menu-icon"></span>
-	         </a>
-         	<a class="mobile-btn" href="#" title="Hide navigation">
-         		<span class='menu-text'>Hide Menu</span>
-         		<span class="menu-icon"></span>
-         	</a>
+           </ul>
+         </li>
+         <li><a href="budget.html">Budget</a></li>
+         <li><a href="https://github.com/eriakul/Adryft_POE_Final">Code</a></li>
+       </ul>
+     </div>
 
-	         <ul id="nav" class="nav">
-	            <li><a href="index.html#home">Home.</a></li>
-	            <li><a href="sprint1.html">Sprint 1</a></li>
-	            <li><a href="sprint2.html">Sprint 2</a></li>
-              <li><a href="sprint3.html">Sprint 3</a></li>
-              <li class="current"><a href="sprint4.html">Sprint 4</a></li>
-	         </ul>
-
-	      </nav> <!-- /nav-wrap -->
-
-	   </div> <!-- /header-inner -->
+     <script src="js/jquery-1.8.3.min.js"></script>
+     <script src="js/menumaker.js"></script>
+     <script type="text/javascript">
+       $("#cssmenu").menumaker({
+         title: "Menu",
+         format: "multitoggle"
+       });
+     </script>
 
    </header>
 
@@ -111,7 +124,7 @@
 				<div class="entry-content">
           <h5>Hardware</h5>
   					<p>
-               For a majority of the testing and designing process, we had to hold the string in our hands to feed it into the string dispenser. In order to keep the string art machine running for a long time, we wanted to design a spool holder. We 3D-printed a spool holder that replaced the part of the string dispenser that contained the bearings.    
+               For a majority of the testing and designing process, we had to hold the string in our hands to feed it into the string dispenser. In order to keep the string art machine running for a long time, we wanted to design a spool holder. We 3D-printed a spool holder that replaced the part of the string dispenser that contained the bearings.
             </p>
 
             <p>
@@ -119,7 +132,7 @@
             </p>
 
             <p>
-              Since the spool was located right above the string dispenser, the angle that the string made with the spool holder was too steep. The steep angle created friction at the top of the string dispenser that required higher torque from the theta motor, which it couldn’t provide. To fix the issue of high friction at the string dispenser, we offset the spool holder to the side so that the string could be pulled tangentially through the string dispenser tube. For bigger string spools, we designed a piece that we could attach to the spool holder to counterweight the spool’s weight. 
+              Since the spool was located right above the string dispenser, the angle that the string made with the spool holder was too steep. The steep angle created friction at the top of the string dispenser that required higher torque from the theta motor, which it couldn’t provide. To fix the issue of high friction at the string dispenser, we offset the spool holder to the side so that the string could be pulled tangentially through the string dispenser tube. For bigger string spools, we designed a piece that we could attach to the spool holder to counterweight the spool’s weight.
             </p>
 
             <p>
@@ -132,7 +145,7 @@
 
           <h5>Software</h5>
           <p>
-            For our final sprint, we made significant modifications to our software workflow (reference diagrams below). 
+            For our final sprint, we made significant modifications to our software workflow (reference diagrams below).
           </p>
 
           <p>
@@ -156,7 +169,7 @@
           </p>
 
           <p>
-            We also modified the starting position of our system. Instead of having the radius axis move to the center after hitting the limit switch, it now moves 10 mm inwards, starting at the outer edge of the pegboard. This allows the Stringomatic to immediately start wrapping pegs instead of having to spend time moving to the edge. 
+            We also modified the starting position of our system. Instead of having the radius axis move to the center after hitting the limit switch, it now moves 10 mm inwards, starting at the outer edge of the pegboard. This allows the Stringomatic to immediately start wrapping pegs instead of having to spend time moving to the edge.
           </p>
 
           <p>
@@ -164,7 +177,7 @@
           </p>
 
           <p>
-            The unwind function basically stores the opposite of each motor command into a stack. When python sends the “Finished” message, then the Arduino script will initiate the unwind process, which involves popping commands from the stack and executing them until the stack is empty. The unwind function was very convenient when we ran countless tests.  
+            The unwind function basically stores the opposite of each motor command into a stack. When python sends the “Finished” message, then the Arduino script will initiate the unwind process, which involves popping commands from the stack and executing them until the stack is empty. The unwind function was very convenient when we ran countless tests.
           </p>
 
           <p>
@@ -176,12 +189,12 @@
           </p>
 
           <p>
-            We tested our changes on both the 48 and 96 pegboards, and everything ran smoothly for shorter peg lists. Next, we hope to test our system with larger peg lists for demo day. 
+            We tested our changes on both the 48 and 96 pegboards, and everything ran smoothly for shorter peg lists. Next, we hope to test our system with larger peg lists for demo day.
           </p>
 
 				<div class="pagenav group">
 		  			  <span class="prev"><a href="sprint3.html" rel="prev">Previous</a></span>
-		  			<span class="next"><a href="sprint4.html" rel="next">Next</a></span>
+		  			<span class="next"><a href="budget.html" rel="next">Next</a></span>
 	  			</div>
 
 	      </div> <!-- /entry -->
