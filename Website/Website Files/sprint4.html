@@ -161,7 +161,7 @@
           <div class="img-box"><img src="diagrams/diag3.png"></div>
 
           <p>
-            Instead of having the python send individual peg coordinates to the Arduino, we moved all of the computation to Arduino. Currently, our python code directly sends the peg_list of tuples containing peg numbers and move types through serial port communication. The Arduino script receives the peg_list in the form of a string, splits it into two separate lists (one for peg numbers and one for move types), generates motor commands for each peg number and move type, and executes the commands. While testing a large peg_list, we discovered that Arduino can only read in a string containing information for 20 pegs. As a result, we adapted our python code to split the peg list into subsets of 20. After a subset is sent via serial port communication, the python send_list_and_receive_response() function will wait for a “Task Completed!” message from the Arduino before sending the next subset. This change allowed us to drastically reduce the time spent on serial port communication.
+            Instead of having python send individual peg coordinates to the Arduino, we moved all of the computation to Arduino. Currently, our python code directly sends the peg_list of tuples containing peg numbers and move_types through serial port communication. The Arduino script receives the peg_list in the form of a string, splits it into two separate lists (one for peg numbers and one for move_types), generates motor commands for each peg number and move_type, and executes the commands. While testing a large peg_list, we discovered that Arduino can only read in a string containing information for 20 pegs. As a result, we adapted our python code to split the peg list into subsets of 20. After a subset is sent via serial port communication, the python send_list_and_receive_response() function will wait for a “Task Completed!” message from the Arduino before sending the next subset. This change allowed us to drastically reduce the time spent on serial port communication.
           </p>
 
           <p>
@@ -173,7 +173,7 @@
           </p>
 
           <p>
-            Some of the most significant changes that we were able to complete after adjusting our code structure involve optimizing the wrap feature and adding an unwind function. In sprint 3, we accounted for the possibility of undoing a wrap when transitioning from a move type of 1 to 0 by implementing a double wrap function. However, double wrapping decreased the efficiency of our system and was a nightmare to unwind. When we moved the computations to Arduino, we were able to separate the different move types earlier on and make the wrap commands more versatile so the string dispenser can wrap around in both directions without undoing the previous wrap. We also attempted to make the wrap string movements more smooth, but quickly discovered that the stepper motors can only move in discrete steps, making it exceedingly difficult to get the motors to move around in a circular motion. We then tried to combine the five motor commands into a single command followed by two pairs with the motors in each pair running concurrently. However, the speeds of the two motors were difficult to put in sync and sometimes completely failed at wrapping around the correct peg. As a result, we decided to keep the five motor commands separate and just increase the speeds of the motors within the wrapAround() function.
+            Some of the most significant changes that we were able to complete after adjusting our code structure involve optimizing the wrap feature and adding an unwind function. In sprint 3, we accounted for the possibility of undoing a wrap when transitioning from a move_type of 1 to 0 by implementing a double wrap function. However, double wrapping decreased the efficiency of our system and was a nightmare to unwind. When we moved the computations to Arduino, we were able to separate the different move_types earlier on and make the wrap commands more versatile so the string dispenser can wrap around in both directions without undoing the previous wrap. We also attempted to make the wrap string movements more smooth, but quickly discovered that the stepper motors can only move in discrete steps, making it exceedingly difficult to get the motors to move around in a circular motion. We then tried to combine the five motor commands into a single command followed by two pairs with the motors in each pair running concurrently. However, the speeds of the two motors were difficult to put in sync and sometimes completely failed at wrapping around the correct peg. As a result, we decided to keep the five motor commands separate and just increased the speeds of the motors within the wrapAround() function.
           </p>
 
           <p>
@@ -191,6 +191,8 @@
           <p>
             We tested our changes on both the 48 and 96 pegboards, and everything ran smoothly for shorter peg lists. Next, we hope to test our system with larger peg lists for demo day.
           </p>
+
+          <p>Check out our <a href="general_overview.html">Project Overview</a> for more info on the final product!</p>
 
 				<div class="pagenav group">
 		  			  <span class="prev"><a href="sprint3.html" rel="prev">Previous</a></span>

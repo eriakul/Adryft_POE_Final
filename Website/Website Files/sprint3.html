@@ -134,8 +134,8 @@
 
             <p>Sprint 3 was focused on the refinement and finalization of some of the smaller components of the system.
               Notably, we developed mounting for the spool and integrated that into our carriage. We also developed mounts
-              for different sensors that we want to integrate into the system, notably an infrared sensor for homing the theta axis, and a
-              limit switch for homing the radius axis.
+              for different sensors that we want to integrate into the system, notably a
+              limit switch for homing the radius axis and possibly an infrared sensor for homing the theta axis.
             </p>
 
             <p>We first set out to add the string placement manipulator. Our idea was to have a nozzle attached to the
@@ -155,7 +155,7 @@
               <img src="sprint_images/sprint3/image6.gif">
             </div>
 
-            <p>In addition, also designed and implemented some additional brackets for the gantry.
+            <p>In addition, we also designed and implemented some additional brackets for the gantry.
               These brackets would keep the plates rigidly mounted to the poplar beams, as well as keep the plates completely parallel to each other.
               These were added because there were some minor inconsistencies in how the gantry was mounted to the rest of the frame.
               In general, they helped a lot to reduce slop in the system, and just made everything a lot more rigid and robust.</p>
@@ -225,11 +225,11 @@
         <div class="img-box"><img src="diagrams/diag2.png"></div>
         <p>Another noteworthy change in our diagram involves the wrap commands. In sprint 2, the wrap commands were sent one by one for each peg, resulting in significant delay times. To make our system more efficient, we send a series of wrap commands before moving to the first peg. There are two versions of wrap commands (north and south) for each side of the pegboard. When we send our commands, we add an element (‘N’ or ‘S’) indicating which wrap method to use.</p>
         <p>
-          Since we introduced move_type relatively late in sprint 3, we decided to modify our computations to work specifically for the cardioid peg list, in which every peg with a move_type of 1 was immediately followed by a peg with a move_type of 0. We wanted to incorporate the move types without drastically changing our compute_directions code, so we ended up reading in the peg list as pairs of tuples and adding a dtheta2 component to our commands. Every tuple pair contained (1) a peg number with move_type 1 and (2) a peg number with move_type 0. We found dr and dtheta to get to the first peg number using our computations from sprint 2. We then find dtheta2 by calculating the additional rotation needed to move from the first peg number to the second. On the Arduino side, we would break up the string command, move according to dr and dtheta to get to the first peg, use the N/S element to wrap around the peg, and then move by dtheta2 to reach the second peg. While testing, we found that sometimes dtheta2 would undo the wrap around the previous peg, so we decided to wrap around the pegs twice. With these modifications, we were able to move the string dispenser accurately and create a cardioid.
+          Since we introduced move_type relatively late in sprint 3, we decided to modify our computations to work specifically for the cardioid peg list, in which every peg with a move_type of 1 was immediately followed by a peg with a move_type of 0. We wanted to incorporate the move_types without drastically changing our compute_directions code, so we ended up reading in the peg list as pairs of tuples and adding a dtheta2 component to our commands. Every tuple pair contained (1) a peg number with move_type 1 and (2) a peg number with move_type 0. We found dr and dtheta to get to the first peg number using our computations from sprint 2. We then find dtheta2 by calculating the additional rotation needed to move from the first peg number to the second. On the Arduino side, we would break up the string command, move according to dr and dtheta to get to the first peg, use the N/S element to wrap around the peg, and then move by dtheta2 to reach the second peg. While testing, we found that sometimes dtheta2 would undo the wrap around the previous peg, so we decided to wrap around the pegs twice. With these modifications, we were able to move the string dispenser accurately and create a cardioid.
         </p>
 
         <p>
-          For sprint 4, we want to make our computations more general, so the peg list does not need to be made up of move type pairs. We would also like to eliminate the double wrapping feature to increase the efficiency of our system.
+          For sprint 4, we want to make our computations more general, so the peg list does not need to be made up of move_type pairs. We would also like to eliminate the double wrapping feature to increase the efficiency of our system.
         </p>
 
         <p>On the image-processing side of the project, we sought to address the weakness in our pathing algorithm for the string.
@@ -245,7 +245,7 @@
           <img src="sprint_images/sprint3/image10.gif">
         </div>
 
-        <p>MVP achieved! Check out our <a href="mechanical_overview.html">Project Overview</a> for the final product!</p>
+        <p>MVP achieved! Check out our <a href="sprint4.html">Sprint 4</a> post for more updates!</p>
 
 				<div class="pagenav group">
 		  			  <span class="prev"><a href="sprint2.html" rel="prev">Previous</a></span>
