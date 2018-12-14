@@ -72,7 +72,7 @@ serial_port.write(msg_send)
 time.sleep(1)
 
 # Break up peg_list into sublists of <= 20 elements
-peg_list = peg_list_card2
+peg_list = peg_list_card
 num_msgs = int(len(peg_list)/20)
 print("Number of peg lists", num_msgs)
 print("Length of peg list", len(peg_list))

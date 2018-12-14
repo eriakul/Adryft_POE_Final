@@ -120,7 +120,8 @@ void move_to_peg(int next_peg, int move_type){
       min_diff2 = diff4;
     }
     // Cross if both diff1 and diff2 > 90
-    if (abs(min_diff1) > 90.0){
+    float thresh_angle = 90.00;
+    if (abs(min_diff1) > thresh_angle){
       // Set dtheta to smallest diff with curr_peg_loc_across
       dtheta = min_diff2;
       // Set dr to go across pegboard
